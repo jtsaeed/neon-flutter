@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
 }
 
 // This is like the TableViewDelegate
+// Also makes a state, which is then added to the view controller?
 class Blocks extends StatefulWidget {
   @override
   BlocksState createState() => BlocksState();
@@ -57,6 +59,11 @@ class BlocksState extends State<Blocks> {
   }
 }
 
+class GetTime {
+  DateTime now = DateTime.now();
+  String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
+}
+
 // This is like the TableView
 Widget _buildBlocks() {
   return ListView.builder(
@@ -64,12 +71,38 @@ Widget _buildBlocks() {
       physics: const BouncingScrollPhysics(),
       itemCount: 8,
       itemBuilder: (context, i) {
-        return _buildBlock();
+        if (i == 0) {
+          return ListTile(
+            title: Text(
+              "Today",
+              style: TextStyle(
+                  fontSize: 28,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+              // style: Theme.of(context).textTheme.headline,
+            ),
+          );
+          // Just adding this for now, depends how the arrays etc are worked out
+        } else if (i == 25) {
+          return ListTile(
+            title: Text(
+              "Tomorrow",
+              style: TextStyle(
+                  fontSize: 28,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
+          );
+        }
+
+        return _buildCell();
       });
 }
 
 // This is like the TableViewCell
-Widget _buildBlock() {
+Widget _buildCell() {
   return Container(
     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
     child: Card(
