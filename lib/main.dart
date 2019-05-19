@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
+// So this is basically the main ViewController
 class MyApp extends StatelessWidget {
 
   @override
@@ -18,6 +19,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// This is like the TableViewDelegate
+class Blocks extends StatefulWidget {
+  @override
+  BlocksState createState() => BlocksState();
+}
+
+// This is like the TableViewDataSource
 class BlocksState extends State<Blocks> {
   @override
   Widget build(BuildContext context) {
@@ -25,11 +33,7 @@ class BlocksState extends State<Blocks> {
   }
 }
 
-class Blocks extends StatefulWidget {
-  @override
-  BlocksState createState() => BlocksState();
-}
-
+// This is like the TableView
 Widget _buildBlocks() {
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
@@ -40,6 +44,7 @@ Widget _buildBlocks() {
       });
 }
 
+// This is like the TableViewCell
 Widget _buildBlock() {
   return Container(
     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
