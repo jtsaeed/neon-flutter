@@ -2,8 +2,33 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new MaterialApp(
+//       title: 'Flutter',
+//       theme: new ThemeData(primarySwatch: Colors.yellow),
+//       home: new MyHomePage(),
+//     );
+//   }
+// }
 
+// class MyHomePage extends StatefulWidget {
+//   _MyHomePageState createState() => new _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Scaffold(
+//         appBar: new AppBar(
+//       title: new Text("Today"),
+//     ));
+//   }
+// }
+
+// So this is basically the main ViewController
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -63,7 +88,8 @@ Widget _buildBlock() {
                   ),
                   Text(
                     "Write music",
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.left,
                   ),
                 ],
