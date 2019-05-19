@@ -86,20 +86,23 @@ Widget _buildBlock() {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "5PM",
+                    "5PM", // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    "Write music",
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    "Empty", // ^ similar to time
+                    style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
                 ],
               ),
             ),
-            Icon(Icons.audiotrack, size: 48, color: Colors.grey),
+            // Icon(Icons.add_circle_outline, size: 48, color: Colors.amberAccent),
+            Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
           ],
         ),
       ),
