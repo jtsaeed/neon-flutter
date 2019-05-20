@@ -153,8 +153,17 @@ Widget _buildCell(int i) {
                 ],
               ),
             ),
-            // Icon(Icons.add_circle_outline, size: 48, color: Colors.amberAccent),
-            Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
+            Icon(Icons.add_circle, size: 48, color: Colors.amberAccent ),
+//            Stack(
+//              children: <Widget>[
+//                Positioned(
+////                  left: 1.0,
+//                  top: -1, // Adds a background layer, giving a shadow affect
+//                  child: Icon(Icons.add_circle, size: 48, color: Colors.grey),
+//                ),
+//                Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
+//              ],
+//            ),
           ],
         ),
       ),
