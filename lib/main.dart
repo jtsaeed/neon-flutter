@@ -75,14 +75,29 @@ String getArrayElement(i) {
     'programming languages',
     'shania = binary',
     '>:',
-    ':<'
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':< 23',
   ];
 
   return array[i];
 }
 
 int getArrayLength() =>
-    9; // Can have the array as global so that we can get the length
+    25; // Can have the array as global so that we can get the length
 
 String getHours(i) {
   final time = <String>[];
@@ -122,7 +137,7 @@ Widget _buildBlocks() {
             ),
           );
           // Just adding this for now, depends how the arrays etc are worked out
-        } else if (index == 25) {
+        } else if (index == 24) {
           return ListTile(
             title: Text(
               "Tomorrow",
