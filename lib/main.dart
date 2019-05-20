@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; // Time package
 
 void main() => runApp(MyApp());
 
@@ -61,22 +61,28 @@ class BlocksState extends State<Blocks> {
 
 //class GetTime {
 //  DateTime now = DateTime.now();
-//  String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
+//  String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
 //}
 
 // This is like the TableView
 Widget _buildBlocks() {
-
-  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
-    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina'];
+  final europeanCountries = [
+    'Albania',
+    'Andorra',
+    'Armenia',
+    'Austria',
+    'Azerbaijan',
+    'Belarus',
+    'Belgium',
+    'Bosnia and Herzegovina'
+  ];
   DateTime now = DateTime.now();
-  var date = now.toLocal().toString().substring(0, 10);
+  String date = DateFormat('EEE d MMM').format(now);
 
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
       physics: const BouncingScrollPhysics(),
       itemCount: europeanCountries.length,
-
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -92,7 +98,7 @@ Widget _buildBlocks() {
             subtitle: Text(
               date,
               style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 16,
                   color: Colors.grey,
                   fontWeight: FontWeight.w400),
               textAlign: TextAlign.left,
@@ -112,20 +118,17 @@ Widget _buildBlocks() {
           );
         }
 
-
         return _buildCell(index);
       });
 }
 
 // This is like the TableViewCell
 Widget _buildCell(int i) {
-
   final time = <String>[];
   var x = 0;
   while (x < 25) {
     x++;
     time.add(x.toString());
-
   }
 
   return Container(
@@ -143,9 +146,9 @@ Widget _buildCell(int i) {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   Text(
-                    time[i] + "PM",// Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
+                    time[i] +
+                        "PM", // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
@@ -160,7 +163,7 @@ Widget _buildCell(int i) {
                 ],
               ),
             ),
-            Icon(Icons.add_circle, size: 48, color: Colors.amberAccent ),
+            Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
 //            Stack(
 //              children: <Widget>[
 //                Positioned(
