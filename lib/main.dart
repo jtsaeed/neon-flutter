@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+//      title: 'Welcome to Flutter',
       home: Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -69,6 +69,8 @@ Widget _buildBlocks() {
 
   final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
     'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina'];
+  DateTime now = DateTime.now();
+  var date = now.toLocal().toString().substring(0, 10);
 
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
@@ -88,7 +90,7 @@ Widget _buildBlocks() {
               // style: Theme.of(context).textTheme.headline,
             ),
             subtitle: Text(
-              "I cant revise so lets code flutter 2 days before my exam",
+              date,
               style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -117,10 +119,15 @@ Widget _buildBlocks() {
 
 // This is like the TableViewCell
 Widget _buildCell(int i) {
+
   final time = <String>[];
-  for (var i = 0; i < 25; i++) {
-    time.add(i.toString());
+  var x = 0;
+  while (x < 25) {
+    x++;
+    time.add(x.toString());
+
   }
+
   return Container(
     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
     child: Card(
