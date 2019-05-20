@@ -30,6 +30,7 @@ void main() => runApp(MyApp());
 
 // So this is basically the main ViewController
 class MyApp extends StatelessWidget {
+  // Stateless are immutable / "FINAL"
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
 // This is like the TableViewDelegate
 // Also makes a state, which is then added to the view controller?
 class Blocks extends StatefulWidget {
+  // Stateful are mutable / Can change
   @override
   BlocksState createState() => BlocksState();
 }
@@ -59,30 +61,45 @@ class BlocksState extends State<Blocks> {
   }
 }
 
-//class GetTime {
-//  DateTime now = DateTime.now();
-//  String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
-//}
+String GetTime() {
+  DateTime now = DateTime.now();
+  return DateFormat('EEE d MMM').format(now).toString();
+}
+
+String getArrayElement(i) {
+  final array = [
+    'dont ',
+    'rate',
+    'girls',
+    'by',
+    'programming languages',
+    'shania = binary',
+    '>:',
+    ':<'
+  ];
+
+  return array[i];
+}
+
+int getArrayLength() =>
+    9; // Can have the array as global so that we can get the length
+
+String getHours(i) {
+  final time = <String>[];
+  var x = 0;
+  while (x < 25) {
+    time.add(x.toString());
+    x++;
+  }
+  return time[i];
+}
 
 // This is like the TableView
 Widget _buildBlocks() {
-  final europeanCountries = [
-    'Albania',
-    'Andorra',
-    'Armenia',
-    'Austria',
-    'Azerbaijan',
-    'Belarus',
-    'Belgium',
-    'Bosnia and Herzegovina'
-  ];
-  DateTime now = DateTime.now();
-  String date = DateFormat('EEE d MMM').format(now);
-
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
       physics: const BouncingScrollPhysics(),
-      itemCount: europeanCountries.length,
+      itemCount: getArrayLength(),
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -96,7 +113,7 @@ Widget _buildBlocks() {
               // style: Theme.of(context).textTheme.headline,
             ),
             subtitle: Text(
-              date,
+              GetTime(),
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -124,13 +141,6 @@ Widget _buildBlocks() {
 
 // This is like the TableViewCell
 Widget _buildCell(int i) {
-  final time = <String>[];
-  var x = 0;
-  while (x < 25) {
-    x++;
-    time.add(x.toString());
-  }
-
   return Container(
     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
     child: Card(
@@ -147,13 +157,13 @@ Widget _buildCell(int i) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    time[i] +
+                    getHours(i) +
                         "PM", // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    "Empty", // ^ similar to time
+                    getArrayElement(i - 1), // ^ similar to time
                     style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
