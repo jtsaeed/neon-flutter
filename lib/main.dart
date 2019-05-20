@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -59,10 +59,10 @@ class BlocksState extends State<Blocks> {
   }
 }
 
-class GetTime {
-  DateTime now = DateTime.now();
-  String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
-}
+//class GetTime {
+//  DateTime now = DateTime.now();
+//  String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
+//}
 
 // This is like the TableView
 Widget _buildBlocks() {
@@ -81,6 +81,14 @@ Widget _buildBlocks() {
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
               // style: Theme.of(context).textTheme.headline,
+            ),
+            subtitle: Text(
+              "I cant revise so lets code flutter 2 days before my exam",
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w400),
+              textAlign: TextAlign.left,
             ),
           );
           // Just adding this for now, depends how the arrays etc are worked out
