@@ -66,12 +66,17 @@ class BlocksState extends State<Blocks> {
 
 // This is like the TableView
 Widget _buildBlocks() {
+
+  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
+    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina'];
+
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
       physics: const BouncingScrollPhysics(),
-      itemCount: 8,
-      itemBuilder: (context, i) {
-        if (i == 0) {
+      itemCount: europeanCountries.length,
+
+      itemBuilder: (context, index) {
+        if (index == 0) {
           return ListTile(
             title: Text(
               "Today",
@@ -92,7 +97,7 @@ Widget _buildBlocks() {
             ),
           );
           // Just adding this for now, depends how the arrays etc are worked out
-        } else if (i == 25) {
+        } else if (index == 25) {
           return ListTile(
             title: Text(
               "Tomorrow",
@@ -105,12 +110,17 @@ Widget _buildBlocks() {
           );
         }
 
-        return _buildCell();
+
+        return _buildCell(index);
       });
 }
 
 // This is like the TableViewCell
-Widget _buildCell() {
+Widget _buildCell(int i) {
+  final time = <String>[];
+  for (var i = 0; i < 25; i++) {
+    time.add(i.toString());
+  }
   return Container(
     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
     child: Card(
@@ -126,8 +136,9 @@ Widget _buildCell() {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+
                   Text(
-                    "5PM", // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
+                    time[i] + "PM",// Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
