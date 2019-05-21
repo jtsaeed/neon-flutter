@@ -61,9 +61,10 @@ class BlocksState extends State<Blocks> {
   }
 }
 
-String GetTime() {
-  DateTime now = DateTime.now();
-  return DateFormat('EEE d MMM').format(now).toString();
+String GetDate(index) {
+  DateTime date = DateTime.now();
+  var prevMonth = new DateTime(date.year, date.month, date.day + index);
+  return DateFormat('EEE d MMM').format(prevMonth).toString();
 }
 
 String getArrayElement(i) {
@@ -90,21 +91,51 @@ String getArrayElement(i) {
     '>:',
     ':<',
     '>:',
-    ':< 23',
+    ':< Element 22',
+    'dont ',
+    'rate',
+    'girls',
+    'by',
+    'programming languages',
+    'shania = binary',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':<',
+    ':<',
+    '>:',
+    ':<',
+    '>:',
+    ':< Element 47?',
   ];
 
   return array[i];
 }
 
 int getArrayLength() =>
-    25; // Can have the array as global so that we can get the length
+    47; // Can have the array as global so that we can get the length
 
 String getHours(i) {
   final time = <String>[];
   var x = 0;
-  while (x < 25) {
-    time.add(x.toString());
-    x++;
+  while (x < 47) {
+    var y = x + 1;
+    x = x % 24;
+
+    if (y > 24 && y < 37)
+      time.add(x.toString() + "AM");
+    else
+      time.add(x.toString() + "PM");
+
+    x = y;
   }
   return time[i];
 }
@@ -128,7 +159,7 @@ Widget _buildBlocks() {
               // style: Theme.of(context).textTheme.headline,
             ),
             subtitle: Text(
-              GetTime(),
+              GetDate(0),
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -145,6 +176,14 @@ Widget _buildBlocks() {
                   fontSize: 28,
                   color: Colors.black,
                   fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
+            subtitle: Text(
+              GetDate(1),
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w400),
               textAlign: TextAlign.left,
             ),
           );
@@ -172,8 +211,8 @@ Widget _buildCell(int i) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    getHours(i) +
-                        "PM", // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
+                    getHours(
+                        i), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
@@ -189,16 +228,6 @@ Widget _buildCell(int i) {
               ),
             ),
             Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
-//            Stack(
-//              children: <Widget>[
-//                Positioned(
-////                  left: 1.0,
-//                  top: -1, // Adds a background layer, giving a shadow affect
-//                  child: Icon(Icons.add_circle, size: 48, color: Colors.grey),
-//                ),
-//                Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
-//              ],
-//            ),
           ],
         ),
       ),
