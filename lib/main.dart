@@ -131,10 +131,9 @@ String getHours(i) {
     var y = x + 1;
     x = x % 24;
 
-    if (y > 24 && y < 37)
-      time.add(x.toString() + "AM");
-    else
-      time.add(x.toString() + "PM");
+    (y > 24 && y < 37)
+        ? time.add(x.toString() + "AM")
+        : time.add(x.toString() + "PM");
 
     x = y;
   }
