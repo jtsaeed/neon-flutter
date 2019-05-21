@@ -114,19 +114,20 @@ String getArrayElement(i) {
     '>:',
     ':<',
     '>:',
-    ':< Element 47?',
+    ':<',
+    ':< Element 48?',
   ];
 
   return array[i];
 }
 
 int getArrayLength() =>
-    47; // Can have the array as global so that we can get the length
+    48; // Can have the array as global so that we can get the length
 
 String getHours(i) {
   final time = <String>[];
   var x = 0;
-  while (x < 47) {
+  while (x < 48) {
     var y = x + 1;
     x = x % 24;
 
