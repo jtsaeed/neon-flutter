@@ -61,68 +61,24 @@ class BlocksState extends State<Blocks> {
   }
 }
 
-String GetDate(index) {
+String getDate(index) {
   DateTime date = DateTime.now();
   var prevMonth = new DateTime(date.year, date.month, date.day + index);
   return DateFormat('EEE d MMM').format(prevMonth).toString();
 }
 
 String getArrayElement(i) {
-  final array = [
-    'dont ',
-    'rate',
-    'girls',
-    'by',
-    'programming languages',
-    'shania = binary',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':< Element 22',
-    'dont ',
-    'rate',
-    'girls',
-    'by',
-    'programming languages',
-    'shania = binary',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    ':<',
-    '>:',
-    ':<',
-    '>:',
-    ':<',
-    ':< Element 48?',
-  ];
-
+  DateTime getTime = DateTime.now();
+  int currntHour = getTime.hour;
+  print(currntHour);
+  final array = [];
+  for (int i = 0; i < 48; i++) {
+    array.add("Empty");
+  }
   return array[i];
 }
 
-int getArrayLength() =>
-    48; // Can have the array as global so that we can get the length
+int getArrayLength() => 48; // Can have the array as global so that we can get the length
 
 String getHours(i) {
   final time = <String>[];
@@ -159,7 +115,7 @@ Widget _buildBlocks() {
               // style: Theme.of(context).textTheme.headline,
             ),
             subtitle: Text(
-              GetDate(0),
+              getDate(0),
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -179,7 +135,7 @@ Widget _buildBlocks() {
               textAlign: TextAlign.left,
             ),
             subtitle: Text(
-              GetDate(1),
+              getDate(1), // Increments the day
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -211,8 +167,7 @@ Widget _buildCell(int i) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    getHours(
-                        i), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
+                    getHours(i), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
