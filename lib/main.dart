@@ -14,36 +14,6 @@ void main() => runApp(MyApp());
 //   }
 // }
 
-// class MyHomePage extends StatefulWidget {
-//   _MyHomePageState createState() => new _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return new Scaffold(
-//         appBar: new AppBar(
-//       title: new Text("Today"),
-//     ));
-//   }
-// }
-
-// So this is basically the main ViewController
-class MyApp extends StatelessWidget {
-  // Stateless are immutable / "FINAL"
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-//      title: 'Welcome to Flutter',
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Blocks(),
-        ),
-      ),
-    );
-  }
-}
 
 // This is like the TableViewDelegate
 // Also makes a state, which is then added to the view controller?
@@ -67,9 +37,9 @@ String getDate(index) {
   return DateFormat('EEE d MMM').format(prevMonth).toString();
 }
 
-String getArrayElement(i) {
+String createArrayElements(i) {
+  // Gets the cells
   final array = [];
-
   // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
   for (int i = getCurrentHour(); i < 48; i++) {
     array.add("Empty");
@@ -77,15 +47,15 @@ String getArrayElement(i) {
   return array[i];
 }
 
-// Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
 int getCurrentHour() {
   DateTime getTime = DateTime.now();
-  return getTime.hour - 1; // Ro
+  return getTime.hour -
+      1; // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
 }
 
 int getArrayLength() =>
     48 -
-    getCurrentHour(); // Can have the array as global so that we can get the length
+    getCurrentHour(); // Gets current amount of cells (From current time until tomorrows 23pm)
 
 String getHours(i) {
   final time = <String>[];
@@ -109,16 +79,15 @@ String getHours(i) {
 
 // This is like the TableView
 Widget _buildBlocks() {
-  int currentHour = getCurrentHour() - 1 % 24; // Ro
-  print(currentHour);
-
+  int currentHour = getCurrentHour() - 1 % 24;
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
       physics: const BouncingScrollPhysics(),
       itemCount: getArrayLength(),
       itemBuilder: (context, index) {
         currentHour += 1;
-        // print(currentHour);
+        print(currentHour);
+
         if (index == 0) {
           return ListTile(
             title: Text(
@@ -188,7 +157,7 @@ Widget _buildCell(int i) {
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    getArrayElement(i - 1), // ^ similar to time
+                    createArrayElements(i), // ^ similar to time
                     style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
