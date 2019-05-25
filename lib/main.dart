@@ -68,41 +68,57 @@ String getDate(index) {
 }
 
 String getArrayElement(i) {
-  DateTime getTime = DateTime.now();
-  int currntHour = getTime.hour;
-  print(currntHour);
   final array = [];
-  for (int i = 0; i < 48; i++) {
+
+  // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
+  for (int i = getCurrentHour(); i < 48; i++) {
     array.add("Empty");
   }
   return array[i];
 }
 
-int getArrayLength() => 48; // Can have the array as global so that we can get the length
+// Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
+int getCurrentHour() {
+  DateTime getTime = DateTime.now();
+  return getTime.hour - 1; // Ro
+}
+
+int getArrayLength() =>
+    48 -
+    getCurrentHour(); // Can have the array as global so that we can get the length
 
 String getHours(i) {
   final time = <String>[];
-  var x = 0;
-  while (x < 48) {
-    var y = x + 1;
-    x = x % 24;
 
-    (y > 24 && y < 37)
-        ? time.add(x.toString() + "AM")
-        : time.add(x.toString() + "PM");
+  // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
+  int currentHour = getCurrentHour();
 
-    x = y;
+  while (currentHour < 48) {
+    var y = currentHour + 1; // Store the actual count
+    currentHour = currentHour % 24; // keep number between 0 & 24
+
+    (y > 24 && y < 37) //
+        ? time.add(currentHour.toString() +
+            "AM") // if Between midnight hours (12am - 12pm)
+        : time.add(currentHour.toString() + "PM"); // Else it is PM
+
+    currentHour = y; // Reassign the count
   }
   return time[i];
 }
 
 // This is like the TableView
 Widget _buildBlocks() {
+  int currentHour = getCurrentHour() - 1 % 24; // Ro
+  print(currentHour);
+
   return ListView.builder(
       padding: const EdgeInsets.all(32.0),
       physics: const BouncingScrollPhysics(),
       itemCount: getArrayLength(),
       itemBuilder: (context, index) {
+        currentHour += 1;
+        // print(currentHour);
         if (index == 0) {
           return ListTile(
             title: Text(
@@ -124,7 +140,7 @@ Widget _buildBlocks() {
             ),
           );
           // Just adding this for now, depends how the arrays etc are worked out
-        } else if (index == 24) {
+        } else if (currentHour == 24) {
           return ListTile(
             title: Text(
               "Tomorrow",
@@ -144,7 +160,6 @@ Widget _buildBlocks() {
             ),
           );
         }
-
         return _buildCell(index);
       });
 }
@@ -167,7 +182,8 @@ Widget _buildCell(int i) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    getHours(i), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
+                    getHours(
+                        i), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.left,
                   ),
