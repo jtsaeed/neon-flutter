@@ -18,6 +18,18 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+//
+//class MyApp extends StatelessWidget {
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      title: 'Flutter Demo',
+//      debugShowCheckedModeBanner: false,
+//      home: TextFieldAlertDialog(),
+//    );
+//  }
+//}
 
 String getDate(index) {
   DateTime date = DateTime.now();
@@ -76,6 +88,49 @@ class BodyLayout extends StatefulWidget {
   }
 }
 
+
+class TextFieldAlertDialog extends StatelessWidget {
+  TextEditingController _textFieldController = TextEditingController();
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('TextField in Dialog'),
+            content: TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "TextField in Dialog"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('TextField in AlertDialog'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('Show Alert Dialog'),
+          color: Colors.red,
+          onPressed: () => _displayDialog(context),
+        ),
+      ),
+    );
+  }
+}
+
 List<String> array = [];
 int x = 0;
 
@@ -85,8 +140,6 @@ int makeArray() {
       array.add("Empty");
       x = i;
     }
-    print("DONE");
-    print(x);
   }
 }
 
@@ -163,7 +216,6 @@ class BodyLayoutState extends State<BodyLayout> {
                 textAlign: TextAlign.left,
               ),
               subtitle: Text(
-                // "ee",
                 array[index],
                 style: TextStyle(
                     fontSize: 24.0,
@@ -171,20 +223,14 @@ class BodyLayoutState extends State<BodyLayout> {
                     color: Colors.grey),
                 textAlign: TextAlign.left,
               ),
+
               onTap: () {
-                //                                  <-- onTap
                 setState(() {
                   array[index] = "test";
                   print(array);
                   print(array.length);
                 });
               },
-              // onLongPress: () {
-              //   //                            <-- onLongPress
-              //   setState(() {
-              //     array.removeAt(index);
-              //   });
-              // },
             ),
           );
 
