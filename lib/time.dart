@@ -13,18 +13,27 @@ int getCurrentHour() {
 
 int getArrayLength() => 48 - getCurrentHour(); // Gets current amount of cells (From current time until tomorrows 23pm)
 
+
+final time = <String>[];
+
 String getHours(i) {
-  final time = <String>[];
   int currentHour = getCurrentHour();
 
-  while (currentHour < getArrayLength()) {
+  while (currentHour < 48) {
     var y = currentHour + 1; // Store the actual count
     currentHour = currentHour % 24; // keep number between 0 & 24
-    (y > 22 && y < 37 || y < 13)
-        ? time.add(currentHour.toString() + "AM") // if Between midnight hours (12am - 12pm)
-        : time.add(currentHour.toString() + "PM"); // Else it is PM
+
+    if (y > 24 && y < 37 && time.length != getArrayLength()) {
+      currentHour = currentHour - 1 % 25; // keep number between 0 & 24
+      currentHour == 0 ? currentHour = 12 : "";
+      time.add(currentHour.toString() + 'AM');
+    }
+    else if (time.length != getArrayLength()) {
+      time.add(currentHour.toString() + 'PM');
+    }
     currentHour = y; // Reassign the count
 
   }
   return time[i];
 }
+
