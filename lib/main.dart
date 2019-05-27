@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Time package
+import "time.dart";
+import "array.dart";
 
 void main() => runApp(MyApp());
 
@@ -7,7 +8,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // title: 'Welcome to Flutter',
       home: Scaffold(
         backgroundColor: Colors.white,
         // body: Center(
@@ -18,51 +18,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-//
-//class MyApp extends StatelessWidget {
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: 'Flutter Demo',
-//      debugShowCheckedModeBanner: false,
-//      home: TextFieldAlertDialog(),
-//    );
-//  }
-//}
 
-String getDate(index) {
-  DateTime date = DateTime.now();
-  var prevMonth = new DateTime(date.year, date.month, date.day + index);
-  return DateFormat('EEE d MMM').format(prevMonth).toString();
-}
 
-int getCurrentHour() {
-  DateTime getTime = DateTime.now();
-  return getTime.hour -
-      1; // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
-}
-
-int getArrayLength() =>
-    48 -
-    getCurrentHour(); // Gets current amount of cells (From current time until tomorrows 23pm)
-
-String getHours(i) {
-  final time = <String>[];
-
-  // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
-  int currentHour = getCurrentHour();
-  while (currentHour < 48) {
-    var y = currentHour + 1; // Store the actual count
-    currentHour = currentHour % 24; // keep number between 0 & 24
-    (y > 24 && y < 37) //
-        ? time.add(currentHour.toString() +
-            "AM") // if Between midnight hours (12am - 12pm)
-        : time.add(currentHour.toString() + "PM"); // Else it is PM
-    currentHour = y; // Reassign the count
-  }
-  return time[i];
-}
 
 // This is like the TableViewDelegate
 // Also makes a state, which is then added to the view controller?
@@ -88,61 +45,6 @@ class BodyLayout extends StatefulWidget {
   }
 }
 
-
-class TextFieldAlertDialog extends StatelessWidget {
-  TextEditingController _textFieldController = TextEditingController();
-
-  _displayDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('TextField in Dialog'),
-            content: TextField(
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: "TextField in Dialog"),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text('CANCEL'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('TextField in AlertDialog'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Show Alert Dialog'),
-          color: Colors.red,
-          onPressed: () => _displayDialog(context),
-        ),
-      ),
-    );
-  }
-}
-
-List<String> array = [];
-int x = 0;
-
-int makeArray() {
-  if (x < 47) {
-    for (int i = getCurrentHour(); i < 48; i++) {
-      array.add("Empty");
-      x = i;
-    }
-  }
-}
-
 class BodyLayoutState extends State<BodyLayout> {
   @override
   Widget build(BuildContext context) {
@@ -151,7 +53,6 @@ class BodyLayoutState extends State<BodyLayout> {
 
 // This is like the TableView
   Widget _myListView() {
-    print("hello");
     makeArray();
 
     int currentHour = getCurrentHour() - 1 % 24;
@@ -165,9 +66,6 @@ class BodyLayoutState extends State<BodyLayout> {
           currentHour += 1;
           if (index == 0) {
             return ListTile(
-              onTap: () {
-                print('Moon');
-              },
               title: Text(
                 "Today",
                 style: TextStyle(
@@ -186,7 +84,6 @@ class BodyLayoutState extends State<BodyLayout> {
                 textAlign: TextAlign.left,
               ),
             );
-            // Just adding this for now, depends how the arrays etc are worked out
           } else if (currentHour == 24) {
             return ListTile(
               title: Text(
@@ -223,7 +120,6 @@ class BodyLayoutState extends State<BodyLayout> {
                     color: Colors.grey),
                 textAlign: TextAlign.left,
               ),
-
               onTap: () {
                 setState(() {
                   array[index] = "test";
