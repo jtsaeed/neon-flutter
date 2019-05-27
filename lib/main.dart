@@ -19,17 +19,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-
-// This is like the TableViewDelegate
-// Also makes a state, which is then added to the view controller?
-class Blocks extends StatefulWidget {
-  // Stateful are mutable / Can change
+/* This is like the TableViewDelegate
+ */
+// Also makes a state/Object/Widget, which is then added to the view controller?
+class Blocks extends StatefulWidget {// Stateful are mutable / Can change
   @override
   BlocksState createState() => BlocksState();
 }
 
-// This is like the TableViewDataSource
+/* This is like the TableViewDataSource
+ */
 class BlocksState extends State<Blocks> {
   @override
   Widget build(BuildContext context) {
@@ -51,13 +50,13 @@ class BodyLayoutState extends State<BodyLayout> {
     return _myListView();
   }
 
-// This is like the TableView
+/*This is like the TableView
+ */
   Widget _myListView() {
     makeArray();
-
     int currentHour = getCurrentHour() - 1 % 24;
-    // Makes the cells
 
+    // Makes the cells
     return ListView.builder(
         padding: const EdgeInsets.all(32.0),
         physics: const BouncingScrollPhysics(),
@@ -107,8 +106,7 @@ class BodyLayoutState extends State<BodyLayout> {
           return Card(
             child: ListTile(
               title: Text(
-                getHours(
-                    index), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
+                getHours(index),
                 style: TextStyle(fontSize: 14, color: Colors.grey),
                 textAlign: TextAlign.left,
               ),
