@@ -1,12 +1,12 @@
 import "time.dart";
 
-List<String> array = [];
+List<String> cells = [];
 int x = 0;
 
 void makeArray() {
   if (x < 47) {
     for (int i = getCurrentHour(); i < 48; i++) {
-      array.add("Empty");
+      cells.add("Empty");
       x = i;
     }
   }

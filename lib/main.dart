@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import "time.dart";
-import "array.dart";
+import 'time.dart';
+import 'array.dart';
+//import 'dialogs.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,14 +9,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+
       home: Scaffold(
+
         backgroundColor: Colors.white,
         // body: Center(
         body: BodyLayout(),
+       
         // child: Blocks(),
         // ),
       ),
     );
+
   }
 }
 
@@ -111,19 +117,24 @@ class BodyLayoutState extends State<BodyLayout> {
                 textAlign: TextAlign.left,
               ),
               subtitle: Text(
-                array[index],
+                cells[index],
                 style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
                 textAlign: TextAlign.left,
               ),
+
               onTap: () {
+                Dialogs();
+                build(context);
+
                 setState(() {
-                  array[index] = "test";
-                  print(array);
-                  print(array.length);
+                  cells[index] = "test";
+                  print("dialog!");
+                  Dialogs();
                 });
+
               },
             ),
           );
@@ -132,6 +143,50 @@ class BodyLayoutState extends State<BodyLayout> {
         });
   }
 }
+
+
+
+
+class Dialogs extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    print("222");
+    return MaterialApp(
+      home: TextFieldAlertDialog(),
+    );
+  }
+}
+
+
+class TextFieldAlertDialog extends StatelessWidget {
+   TextEditingController _textFieldController = TextEditingController();
+
+  _displayDialog(BuildContext context) async {
+    print("11");
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('TextField in Dialog'),
+            content: TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "TextField in Dialog"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+}
+
 // This is like the TableViewCell
 // Widget _buildCell(int i) {
 //   return Container(
