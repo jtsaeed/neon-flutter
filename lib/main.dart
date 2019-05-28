@@ -11,13 +11,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Hour Blocks",
       debugShowCheckedModeBanner: false,
-
       home: Scaffold(
-
         backgroundColor: Colors.white,
-        // body: Center(
         body: BodyLayout(),
-       
+
+        // body: Center(
         // child: Blocks(),
         // ),
       ),
@@ -39,16 +37,14 @@ class Blocks extends StatefulWidget {// Stateful are mutable / Can change
 class BlocksState extends State<Blocks> {
   @override
   Widget build(BuildContext context) {
-    // return _buildBlocks(context);
+//     return _buildBlocks(context);
   }
 }
 
 // -------
 class BodyLayout extends StatefulWidget {
   @override
-  BodyLayoutState createState() {
-    return new BodyLayoutState();
-  }
+  BodyLayoutState createState() => BodyLayoutState();
 }
 
 class BodyLayoutState extends State<BodyLayout> {
@@ -130,6 +126,7 @@ class BodyLayoutState extends State<BodyLayout> {
                 setState(() {
                   cells[index] = "test";
                   print(cells);
+                  _showDialog(context);
                 });
 
               },
@@ -142,47 +139,48 @@ class BodyLayoutState extends State<BodyLayout> {
 }
 
 
+// user defined function
+void _showDialog(context) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text('Whats in for today?'),
+        content: new Text("Alert Dialog body"),
+        actions: <Widget>[
 
 
-//class Dialogs extends StatelessWidget {
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    print("222");
-//    return MaterialApp(
-//      home: TextFieldAlertDialog(),
-//    );
-//  }
-//}
+//          new TextField(
+//            autofocus: true,
+//            child: new Text("Add"),
+//            onPressed: () {
+//              Navigator.of(context).pop();
+//            },
+//          ),
+//          https://stackoverflow.com/questions/46841637/show-a-text-field-dialog-without-being-covered-by-keyboard
+
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Add"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
 
-//class TextFieldAlertDialog extends StatelessWidget {
-//   TextEditingController _textFieldController = TextEditingController();
-//
-//  _displayDialog(BuildContext context) async {
-//    print("11");
-//
-//    return showDialog(
-//        context: context,
-//        builder: (context) {
-//          return AlertDialog(
-//            title: Text('TextField in Dialog'),
-//            content: TextField(
-//              controller: _textFieldController,
-//              decoration: InputDecoration(hintText: "TextField in Dialog"),
-//            ),
-//            actions: <Widget>[
-//              new FlatButton(
-//                child: new Text('CANCEL'),
-//                onPressed: () {
-//                  Navigator.of(context).pop();
-//                },
-//              )
-//            ],
-//          );
-//        });
-//  }
-//}
 
 // This is like the TableViewCell
 // Widget _buildCell(int i) {

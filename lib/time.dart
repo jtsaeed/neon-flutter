@@ -14,7 +14,7 @@ final time = <String>[];
 String getHours(i) { // Gets the hour labels
   int currentHour = getCurrentHour();
 
-  if  (time.length != getArrayLength()) {
+  if  (time.length != getArrayLength()) { // iI array is full then do not repeat
 
     while (currentHour < 48) {
       var y = currentHour + 1; // Store the actual count
