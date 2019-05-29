@@ -20,41 +20,36 @@ class MyApp extends StatelessWidget {
         // ),
       ),
     );
-
   }
 }
 
-/* This is like the TableViewDelegate
- */
+///*This is like the TableViewDelegate
+
 // Also makes a state/Object/Widget, which is then added to the view controller?
-class Blocks extends StatefulWidget {// Stateful are mutable / Can change
-  @override
-  BlocksState createState() => BlocksState();
-}
+//class Blocks extends StatefulWidget {// Stateful are mutable / Can change
+//  @override
+//  BlocksState createState() => BlocksState();
+//}
+//
+///* This is like the TableViewDataSource
+// */
+//class BlocksState extends State<Blocks> {
+//  @override
+//  Widget build(BuildContext context) {
+////     return _buildBlocks(context);
+//  }
+//}
 
-/* This is like the TableViewDataSource
- */
-class BlocksState extends State<Blocks> {
-  @override
-  Widget build(BuildContext context) {
-//     return _buildBlocks(context);
-  }
-}
-
-// -------
+///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class BodyLayout extends StatefulWidget {
   @override
   BodyLayoutState createState() => BodyLayoutState();
 }
 
+///* This is like the TableViewDataSource / This adds the widget
 class BodyLayoutState extends State<BodyLayout> {
-  @override
-  Widget build(BuildContext context) {
-    return _myListView();
-  }
 
-/*This is like the TableView
- */
+  ///*This is like the TableView
   Widget _myListView() {
     makeArray();
     int currentHour = getCurrentHour() - 1 % 24;
@@ -107,7 +102,11 @@ class BodyLayoutState extends State<BodyLayout> {
             );
           }
           return Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: ListTile(
+              trailing:
+                  Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
               title: Text(
                 getHours(index),
                 style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -121,37 +120,36 @@ class BodyLayoutState extends State<BodyLayout> {
                     color: Colors.grey),
                 textAlign: TextAlign.left,
               ),
-
               onTap: () {
-                setState(() {
-                  print(cells);
-                  _showDialog(context, index);
-                  _myListView();
-                });
-
+                _showDialog(context, index, setState, index);
               },
             ),
           );
-
           // return _buildCell(index);
         });
   }
+
+  @override
+  Widget build(BuildContext context) {
+    // Runs every time AFTER a cell is clicked on and setState is called
+    return _myListView();
+  }
 }
 
-
 // user defined function
-void _showDialog(context, index) {
+void _showDialog(context, index, setState, i) {
 
   String input = "";
 
-  showDialog(   // flutter defined function
-  context: context,
+  showDialog(
+    // flutter defined function
+    context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-
-        title: new Text('Whats in for today?'),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16)),
+        title: new Text('What\'s in store at ${getHours(index)}?'),
         content: new Row(
           children: <Widget>[
             new Expanded(
@@ -161,20 +159,20 @@ void _showDialog(context, index) {
                     labelText: 'Enter', hintText: 'Revise Maths'),
                 onChanged: (value) {
                   input = value; // Update the empty label array with the value they have entered
-                  BodyLayoutState();
                 },
               ),
             )
           ],
         ),
-        actions: <Widget>[ // usually buttons at the bottom of the dialog
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Add"),
             onPressed: () {
               Navigator.of(context).pop();
-              cells[index] = input;
-              BodyLayoutState();
-
+              setState(() {// This should rerun the build widget and return the updated viewList
+                cells[index] = input;
+              });
             },
           ),
           new FlatButton(
@@ -188,8 +186,6 @@ void _showDialog(context, index) {
     },
   );
 }
-
-
 
 // This is like the TableViewCell
 // Widget _buildCell(int i) {
