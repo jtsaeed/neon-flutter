@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'time.dart';
 import 'array.dart';
-//import 'dialogs.dart';
+import 'dialogs.dart';
+import 'cache_data.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +15,6 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.white,
         body: BodyLayout(),
-
         // body: Center(
         // child: Blocks(),
         // ),
@@ -48,7 +48,6 @@ class BodyLayout extends StatefulWidget {
 
 ///* This is like the TableViewDataSource / This adds the widget
 class BodyLayoutState extends State<BodyLayout> {
-
   ///*This is like the TableView
   Widget _myListView() {
     makeArray();
@@ -113,7 +112,7 @@ class BodyLayoutState extends State<BodyLayout> {
                 textAlign: TextAlign.left,
               ),
               subtitle: Text(
-                cells[index],
+                      cells[index],
                 style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
@@ -121,10 +120,13 @@ class BodyLayoutState extends State<BodyLayout> {
                 textAlign: TextAlign.left,
               ),
               onTap: () {
-                _showDialog(context, index, setState, index);
+                _showDialog(context, index, setState);
               },
             ),
+
           );
+
+
           // return _buildCell(index);
         });
   }
@@ -137,8 +139,7 @@ class BodyLayoutState extends State<BodyLayout> {
 }
 
 // user defined function
-void _showDialog(context, index, setState, i) {
-
+void _showDialog(context, index, setState) {
   String input = "";
 
   showDialog(
@@ -147,8 +148,7 @@ void _showDialog(context, index, setState, i) {
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: new Text('What\'s in store at ${getHours(index)}?'),
         content: new Row(
           children: <Widget>[
@@ -172,6 +172,8 @@ void _showDialog(context, index, setState, i) {
               Navigator.of(context).pop();
               setState(() {// This should rerun the build widget and return the updated viewList
                 cells[index] = input;
+                save(cells);
+                print("CELLS ARE $cells");
               });
             },
           ),

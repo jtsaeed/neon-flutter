@@ -11,7 +11,7 @@ int getArrayLength() => 48 - getCurrentHour(); // Gets current amount of cells (
 
 final time = <String>[];
 
-String getHours(i) { // Gets the hour labels
+String getHours(index) { // Gets the hour labels
   int currentHour = getCurrentHour();
 
   if  (time.length != getArrayLength()) { // iI array is full then do not repeat
@@ -19,9 +19,9 @@ String getHours(i) { // Gets the hour labels
     while (currentHour < 48) {
       var y = currentHour + 1; // Store the actual count
       currentHour = currentHour % 24; // keep number between 0 & 24
-      
+      currentHour == 0 ? currentHour = 12 : print('');
+
       if (y <= 12) {
-        currentHour == 0 ? currentHour = 12 : print('');
         time.add(currentHour.toString() + 'AM');
       }
       else if (y > 24 && y < 37) {
@@ -30,14 +30,13 @@ String getHours(i) { // Gets the hour labels
           time.add(currentHour.toString() + 'AM');
       }
 
-      else {
-        currentHour == 0 ? currentHour = 12 : print('');
+      else
         time.add(currentHour.toString() + 'PM');
-      }
+
 
       currentHour = y; // Reassign the count
     }
   }
-  return time[i];
+  return time[index];
 }
 
