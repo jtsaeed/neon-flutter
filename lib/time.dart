@@ -20,9 +20,10 @@ String getHours(i) { // Gets the hour labels
       var y = currentHour + 1; // Store the actual count
       currentHour = currentHour % 24; // keep number between 0 & 24
       
-      if (y <= 12)
+      if (y <= 12) {
+        currentHour == 0 ? currentHour = 12 : print('');
         time.add(currentHour.toString() + 'AM');
-
+      }
       else if (y > 24 && y < 37) {
           currentHour -= 1;
           currentHour == 0 ? currentHour = 12 : print('');

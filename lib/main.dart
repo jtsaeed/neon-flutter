@@ -124,9 +124,9 @@ class BodyLayoutState extends State<BodyLayout> {
 
               onTap: () {
                 setState(() {
-                  cells[index] = "test";
                   print(cells);
-                  _showDialog(context);
+                  _showDialog(context, index);
+                  _myListView();
                 });
 
               },
@@ -140,32 +140,41 @@ class BodyLayoutState extends State<BodyLayout> {
 
 
 // user defined function
-void _showDialog(context) {
-  // flutter defined function
-  showDialog(
-    context: context,
+void _showDialog(context, index) {
+
+  String input = "";
+
+  showDialog(   // flutter defined function
+  context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+
         title: new Text('Whats in for today?'),
-        content: new Text("Alert Dialog body"),
-        actions: <Widget>[
-
-
-//          new TextField(
-//            autofocus: true,
-//            child: new Text("Add"),
-//            onPressed: () {
-//              Navigator.of(context).pop();
-//            },
-//          ),
-//          https://stackoverflow.com/questions/46841637/show-a-text-field-dialog-without-being-covered-by-keyboard
-
-          // usually buttons at the bottom of the dialog
+        content: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new TextField(
+                autofocus: true,
+                decoration: new InputDecoration(
+                    labelText: 'Enter', hintText: 'Revise Maths'),
+                onChanged: (value) {
+                  input = value; // Update the empty label array with the value they have entered
+                  BodyLayoutState();
+                },
+              ),
+            )
+          ],
+        ),
+        actions: <Widget>[ // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Add"),
             onPressed: () {
               Navigator.of(context).pop();
+              cells[index] = input;
+              BodyLayoutState();
+
             },
           ),
           new FlatButton(
