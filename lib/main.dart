@@ -3,6 +3,7 @@ import 'time.dart';
 import 'array.dart';
 import 'dialogs.dart';
 import 'cache_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,15 +47,55 @@ class BodyLayout extends StatefulWidget {
   BodyLayoutState createState() => BodyLayoutState();
 }
 
+
+List<String> cells = [];
+int x = 0;
+
 ///* This is like the TableViewDataSource / This adds the widget
 class BodyLayoutState extends State<BodyLayout> {
   ///*This is like the TableView
+  ///
+  ///
   Widget _myListView() {
-    makeArray();
+
+//    read();
+//    makeArray(setState);
+//    List<String> cells = [];
+
+    _loadArray() async {
+      print("Loading from save");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        cells = (prefs.getStringList('cells'));
+        x = cells.length;
+        print("loaded array length: $x");
+        print(cells);
+      });
+    }
+
+    if (x < getArrayLength()) {
+      print("in If $x");
+      _loadArray();
+      print("in If $x");
+      }
+
+    if (x < 47) {
+      print("Making empty arrays");
+      print("Curent hour ${getCurrentHour()}");
+      for (int i = getCurrentHour(); i < 48; i++) {
+        cells.add('Empty');
+        x = i;
+      }
+      print("x --- $x");
+    }
+
+
+
     int currentHour = getCurrentHour() - 1 % 24;
 
     // Makes the cells
     return ListView.builder(
+
         padding: const EdgeInsets.all(32.0),
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(),
@@ -134,6 +175,7 @@ class BodyLayoutState extends State<BodyLayout> {
   @override
   Widget build(BuildContext context) {
     // Runs every time AFTER a cell is clicked on and setState is called
+
     return _myListView();
   }
 }
@@ -171,9 +213,11 @@ void _showDialog(context, index, setState) {
             onPressed: () {
               Navigator.of(context).pop();
               setState(() {// This should rerun the build widget and return the updated viewList
-                cells[index] = input;
+                cells.insert(index, input);
+//                cells[index] = input;
                 save(cells);
                 print("CELLS ARE $cells");
+                print(cells.length);
               });
             },
           ),
