@@ -4,10 +4,10 @@ import 'main.dart';
 //
 //
 //
-void save(cells) async {
+save(cells) async {
   print("trying to Saving!");
   final prefs = await SharedPreferences.getInstance(); // wait until done
-  prefs.setStringList('cells', cells);
+  prefs.setStringList('cells2', cells);
   print("Saving: $cells");
 }
 
