@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -148,6 +149,7 @@ void _showDialog(context, index, setState) {
     builder: (BuildContext context) {
       return AlertDialog(       // return object of type Dialog
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+<<<<<<< HEAD
         title: new Text('What\'s in store at ${getHours(index)}?.'),
         content: new Row(
           children: <Widget>[
@@ -159,6 +161,28 @@ void _showDialog(context, index, setState) {
                 onChanged: (value) {
                   input = value; // Store the cells input
                 },
+=======
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "5PM",
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    "Write music",
+                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+>>>>>>> parent of 8efcfcd... just some learning with appBar
               ),
             )
           ],
@@ -187,6 +211,7 @@ void _showDialog(context, index, setState) {
       );
     },
   );
+<<<<<<< HEAD
 }
 
 // This is like the TableViewCell
@@ -230,3 +255,6 @@ void _showDialog(context, index, setState) {
 //     ),
 //   );
 // }
+=======
+}
+>>>>>>> parent of 8efcfcd... just some learning with appBar
