@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: TableView(),
+        body: BodyLayout(),
         // body: Center(
         // child: Blocks(),
         // ),
@@ -24,45 +23,79 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+///*This is like the TableViewDelegate
+
 // Also makes a state/Object/Widget, which is then added to the view controller?
 //class Blocks extends StatefulWidget {// Stateful are mutable / Can change
+//  @override
+//  BlocksState createState() => BlocksState();
+//}
+//
+///* This is like the TableViewDataSource
+// */
+//class BlocksState extends State<Blocks> {
+//  @override
+//  Widget build(BuildContext context) {
+////     return _buildBlocks(context);
+//  }
+//}
+
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
-class TableView extends StatefulWidget {
+class BodyLayout extends StatefulWidget {
   @override
-  TableViewState createState() => TableViewState();
+  BodyLayoutState createState() => BodyLayoutState();
 }
 
+
 List<String> cells = [];
-int reachedLimit = 0;
+int x = 0;
 
 ///* This is like the TableViewDataSource / This adds the widget
-class TableViewState extends State<TableView> {
+class BodyLayoutState extends State<BodyLayout> {
   ///*This is like the TableView
+  ///
+  ///
   Widget _myListView() {
 
+//    read();
+//    makeArray(setState);
+//    List<String> cells = [];
+
     _loadArray() async {
-      print('Loading cache array');
+      print("Loading from save");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
-        cells = (prefs.getStringList('cells2') ?? cells);
-        reachedLimit = cells.length;
+        cells = (prefs.getStringList('cells'));
+        x = cells.length;
+        print("loaded array length: $x");
+        print(cells);
       });
     }
 
-    if (reachedLimit < getArrayLength()) {
-      print("Making array");
-      for (int i = getCurrentHour(); i <= getArrayLength(); i++) {
-        cells.insert(i, 'Empty');
-        reachedLimit = i;
-      }
-//      _loadArray();
+    if (x < getArrayLength()) {
+      print("in If $x");
+      _loadArray();
+      print("in If $x");
+    }
 
+    if (x < 47) {
+      print("Making empty arrays");
+      print("Curent hour ${getCurrentHour()}");
+      for (int i = getCurrentHour(); i < 48; i++) {
+        cells.add('Empty');
+        x = i;
+      }
+      print("x --- $x");
     }
 
 
-    int currentHour = getCurrentHour() - 1 % 24; // Keeps the numbers between 1 -24
+
+    int currentHour = getCurrentHour() - 1 % 24;
+
     // Makes the cells
     return ListView.builder(
+
         padding: const EdgeInsets.all(32.0),
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(),
@@ -109,16 +142,18 @@ class TableViewState extends State<TableView> {
             );
           }
           return Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: ListTile(
-              trailing: Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
+              trailing:
+              Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
               title: Text(
                 getHours(index),
                 style: TextStyle(fontSize: 14, color: Colors.grey),
                 textAlign: TextAlign.left,
               ),
               subtitle: Text(
-                      cells[index],
+                cells[index],
                 style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
@@ -129,13 +164,18 @@ class TableViewState extends State<TableView> {
                 _showDialog(context, index, setState);
               },
             ),
+
           );
+
+
           // return _buildCell(index);
         });
   }
 
   @override
-  Widget build(BuildContext context) {///* Runs every time AFTER a cell is clicked on and setState is called
+  Widget build(BuildContext context) {
+    // Runs every time AFTER a cell is clicked on and setState is called
+
     return _myListView();
   }
 }
@@ -144,13 +184,14 @@ class TableViewState extends State<TableView> {
 void _showDialog(context, index, setState) {
   String input = "";
 
-  showDialog(// flutter defined function
+  showDialog(
+    // flutter defined function
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(       // return object of type Dialog
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-<<<<<<< HEAD
-        title: new Text('What\'s in store at ${getHours(index)}?.'),
+      // return object of type Dialog
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: new Text('What\'s in store at ${getHours(index)}?'),
         content: new Row(
           children: <Widget>[
             new Expanded(
@@ -159,43 +200,22 @@ void _showDialog(context, index, setState) {
                 decoration: new InputDecoration(
                     labelText: 'Enter', hintText: 'Revise Maths'),
                 onChanged: (value) {
-                  input = value; // Store the cells input
+                  input = value; // Update the empty label array with the value they have entered
                 },
-=======
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "5PM",
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    "Write music",
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
->>>>>>> parent of 8efcfcd... just some learning with appBar
               ),
             )
           ],
         ),
-        actions: <Widget>[ // usually buttons at the bottom of the dialog
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Add"),
             onPressed: () {
               Navigator.of(context).pop();
               setState(() {// This should rerun the build widget and return the updated viewList
                 cells.insert(index, input);
-//                cells[index] = input; // Updating the array element, setting the state for the array
-                save(cells); // Saving the whole array
+//                cells[index] = input;
+                save(cells);
                 print("CELLS ARE $cells");
                 print(cells.length);
               });
@@ -211,7 +231,6 @@ void _showDialog(context, index, setState) {
       );
     },
   );
-<<<<<<< HEAD
 }
 
 // This is like the TableViewCell
@@ -255,6 +274,3 @@ void _showDialog(context, index, setState) {
 //     ),
 //   );
 // }
-=======
-}
->>>>>>> parent of 8efcfcd... just some learning with appBar
