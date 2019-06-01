@@ -67,16 +67,10 @@ class BodyLayoutState extends State<BodyLayout> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
         cells = (prefs.getStringList('cells'));
-        x = cells.length;
-        print("loaded array length: $x");
-        print(cells);
+//        x = cells.length;
+//        print("loaded array length: $x");
+//        print(cells);
       });
-    }
-
-    if (x < getArrayLength()) {
-      print("in If $x");
-      _loadArray();
-      print("in If $x");
     }
 
     if (x < 47) {
@@ -87,6 +81,13 @@ class BodyLayoutState extends State<BodyLayout> {
         x = i;
       }
       print("x --- $x");
+    }
+
+
+        if (x < getArrayLength()) {
+      print("in If $x");
+      _loadArray();
+      print("in If $x");
     }
 
 
@@ -217,7 +218,7 @@ void _showDialog(context, index, setState) {
 //                cells[index] = input;
                 save(cells);
                 print("CELLS ARE $cells");
-                print(cells.length);
+//                print(cells.length);
               });
             },
           ),
