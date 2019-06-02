@@ -25,17 +25,16 @@ String getHours(index) { // Gets the hour labels
         time.add(currentHour.toString() + 'AM');
       }
       else if (y > 24 && y < 37) {
-        currentHour -= 1;
-        currentHour == 0 ? currentHour = 12 : print('');
-        time.add(currentHour.toString() + 'AM');
+          currentHour -= 1;
+          currentHour == 0 ? currentHour = 12 : print('');
+          time.add(currentHour.toString() + 'AM');
+      } else {
+        time.add((currentHour - 12).toString() + 'PM');
       }
-
-      else
-        time.add(currentHour.toString() + 'PM');
-
 
       currentHour = y; // Reassign the count
     }
   }
   return time[index];
 }
+

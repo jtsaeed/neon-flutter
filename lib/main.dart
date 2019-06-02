@@ -7,11 +7,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
+Color primaryColor = Color(0xffFEAB00);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Hour Blocks",
+      theme: ThemeData(
+        fontFamily: 'GoogleSans',
+        primaryColor: primaryColor,
+      ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
@@ -48,7 +54,11 @@ class BodyLayout extends StatefulWidget {
 }
 
 
-List<String> cells = [];
+List<String> cells = ["--", "Empty", "Empty", "Empty", "Empty", "Empty",
+  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty",
+  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty",
+  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty",
+  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"];
 int x = 0;
 
 ///* This is like the TableViewDataSource / This adds the widget
@@ -62,16 +72,23 @@ class BodyLayoutState extends State<BodyLayout> {
 //    makeArray(setState);
 //    List<String> cells = [];
 
+  /*
     _loadArray() async {
       print("Loading from save");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
         cells = (prefs.getStringList('cells'));
-//        x = cells.length;
-//        print("loaded array length: $x");
-//        print(cells);
+        x = cells.length;
+        print("loaded array length: $x");
+        print(cells);
       });
     }
+
+    if (x < getArrayLength()) {
+      print("in If $x");
+      _loadArray();
+      print("in If $x");
+      }
 
     if (x < 47) {
       print("Making empty arrays");
@@ -84,93 +101,105 @@ class BodyLayoutState extends State<BodyLayout> {
     }
 
 
-        if (x < getArrayLength()) {
-      print("in If $x");
-      _loadArray();
-      print("in If $x");
-    }
 
-
-
+*/
     int currentHour = getCurrentHour() - 1 % 24;
-
     // Makes the cells
     return ListView.builder(
 
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(),
         itemBuilder: (context, index) {
           currentHour += 1;
           if (index == 0) {
             return ListTile(
-              title: Text(
+              subtitle: Text(
                 "Today",
                 style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 34,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.w800),
                 textAlign: TextAlign.left,
                 // style: Theme.of(context).textTheme.headline,
               ),
-              subtitle: Text(
-                getDate(0),
+              title: Text(
+                getDate(0).toUpperCase(),
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.grey,
-                    fontWeight: FontWeight.w400),
+                    fontWeight: FontWeight.w600),
                 textAlign: TextAlign.left,
               ),
             );
           } else if (currentHour == 24) {
             return ListTile(
-              title: Text(
+              subtitle: Text(
                 "Tomorrow",
                 style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 34,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.w800),
                 textAlign: TextAlign.left,
               ),
-              subtitle: Text(
-                getDate(1), // Increments the day
+              title: Text(
+                getDate(1).toUpperCase(), // Increments the day
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.grey,
-                    fontWeight: FontWeight.w400),
+                    fontWeight: FontWeight.w600),
                 textAlign: TextAlign.left,
               ),
             );
           }
-          return Card(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: ListTile(
-              trailing:
-              Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
-              title: Text(
-                getHours(index),
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.left,
-              ),
-              subtitle: Text(
-                cells[index],
-                style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey),
-                textAlign: TextAlign.left,
-              ),
-              onTap: () {
-                _showDialog(context, index, setState);
-              },
-            ),
-
-          );
-
-
-          // return _buildCell(index);
+          return _buildBlock(context, index);
         });
+  }
+
+  Widget _buildBlock(context, index) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      child: Card(
+        color: Colors.white,
+        elevation: 4.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    Text(
+                      getHours(index),
+                      style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.left,
+                    ),
+                    Text(
+                      cells[index],
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+//                  icon: new Image.asset("resources/androidAdd@3x.png"),
+               icon:  Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
+                iconSize: 48,
+                  color: Colors.grey,
+                  onPressed: () {
+                    _showDialog(context, index, setState);
+                  },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -192,14 +221,14 @@ void _showDialog(context, index, setState) {
       // return object of type Dialog
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: new Text('What\'s in store at ${getHours(index)}?'),
+        title: new Text('What\'s in store at ${getHours(index).toLowerCase()}?'),
         content: new Row(
           children: <Widget>[
             new Expanded(
               child: new TextField(
+                cursorColor: Colors.orange,
                 autofocus: true,
-                decoration: new InputDecoration(
-                    labelText: 'Enter', hintText: 'Revise Maths'),
+                decoration: new InputDecoration(hintText: 'Revise Maths'),
                 onChanged: (value) {
                   input = value; // Update the empty label array with the value they have entered
                 },
@@ -210,6 +239,14 @@ void _showDialog(context, index, setState) {
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
           new FlatButton(
+            textColor: Colors.grey,
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          new FlatButton(
+            textColor: primaryColor,
             child: new Text("Add"),
             onPressed: () {
               Navigator.of(context).pop();
@@ -218,14 +255,8 @@ void _showDialog(context, index, setState) {
 //                cells[index] = input;
                 save(cells);
                 print("CELLS ARE $cells");
-//                print(cells.length);
+                print(cells.length);
               });
-            },
-          ),
-          new FlatButton(
-            child: new Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
             },
           ),
         ],
@@ -233,45 +264,3 @@ void _showDialog(context, index, setState) {
     },
   );
 }
-
-// This is like the TableViewCell
-// Widget _buildCell(int i) {
-//   return Container(
-//     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-//     child: Card(
-//       color: Colors.white,
-//       elevation: 4.0,
-//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-//       child: Padding(
-//         padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-//         child: Row(
-//           children: [
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.stretch,
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Text(
-//                     getHours(
-//                         i), // Will be changed into a variable/array for every hour, use the array index or a seperate for loop to do it
-//                     style: TextStyle(fontSize: 14, color: Colors.grey),
-//                     textAlign: TextAlign.left,
-//                   ),
-//                   Text(
-//                     createArrayElements(i), // ^ similar to time
-//                     style: TextStyle(
-//                         fontSize: 24.0,
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.grey),
-//                     textAlign: TextAlign.left,
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
-//           ],
-//         ),
-//       ),
-//     ),
-//   );
-// }
