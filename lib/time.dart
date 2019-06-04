@@ -9,7 +9,7 @@ String getDate(index) { // Gets date
 int getCurrentHour() => DateTime.now().hour - 1; // Rounding down basically, if time is 80:30, we want the 8PM Cell to be their
 int getArrayLength() => 48 - getCurrentHour(); // Gets current amount of cells (From current time until tomorrows 23pm)
 
-final time = <String>[];
+final time = <String>[]; // Stores all the time annotations
 
 String getHours(index) { // Gets the hour labels
   int currentHour = getCurrentHour();
@@ -21,16 +21,16 @@ String getHours(index) { // Gets the hour labels
       currentHour = currentHour % 24; // keep number between 0 & 24
       currentHour == 0 ? currentHour = 12 : print('');
 
-      if (y <= 12) {
+      if (y <= 12)
         time.add(currentHour.toString() + 'AM');
-      }
+
       else if (y > 24 && y < 37) {
           currentHour -= 1;
           currentHour == 0 ? currentHour = 12 : print('');
           time.add(currentHour.toString() + 'AM');
-      } else {
-        time.add((currentHour - 12).toString() + 'PM');
       }
+      else
+        time.add(((currentHour - 12 == 0) ? 12 : currentHour - 12).toString() + 'PM');
 
       currentHour = y; // Reassign the count
     }
