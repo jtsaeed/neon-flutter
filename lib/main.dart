@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: BodyLayout(),
+        body: TableView(),
         // body: Center(
         // child: Blocks(),
         // ),
@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
 }
 
 ///*This is like the TableViewDelegate
-
 // Also makes a state/Object/Widget, which is then added to the view controller?
 //class Blocks extends StatefulWidget {// Stateful are mutable / Can change
 //  @override
@@ -48,21 +47,17 @@ class MyApp extends StatelessWidget {
 //}
 
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
-class BodyLayout extends StatefulWidget {
+class TableView extends StatefulWidget {
   @override
-  BodyLayoutState createState() => BodyLayoutState();
+  TableViewState createState() => TableViewState(); // Creating the tableView widget/state
 }
 
 
-List<String> cells = ["--", "Empty", "Empty", "Empty", "Empty", "Empty",
-  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty",
-  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty",
-  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty",
-  "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"];
+List<String> cells = [];
 int x = 0;
 
-///* This is like the TableViewDataSource / This adds the widget
-class BodyLayoutState extends State<BodyLayout> {
+///* This is like the TableViewDataSource / This handles the widgets data and what is doing
+class TableViewState extends State<TableView> {
   ///*This is like the TableView
   ///
   ///
@@ -72,7 +67,7 @@ class BodyLayoutState extends State<BodyLayout> {
 //    makeArray(setState);
 //    List<String> cells = [];
 
-  /*
+
     _loadArray() async {
       print("Loading from save");
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -83,14 +78,14 @@ class BodyLayoutState extends State<BodyLayout> {
         print(cells);
       });
     }
+//
+//    if (x < getArrayLength()) {
+//      print("in If $x");
+//      _loadArray();
+//      print("in If $x");
+//      }
 
     if (x < getArrayLength()) {
-      print("in If $x");
-      _loadArray();
-      print("in If $x");
-      }
-
-    if (x < 47) {
       print("Making empty arrays");
       print("Curent hour ${getCurrentHour()}");
       for (int i = getCurrentHour(); i < 48; i++) {
@@ -102,7 +97,6 @@ class BodyLayoutState extends State<BodyLayout> {
 
 
 
-*/
     int currentHour = getCurrentHour() - 1 % 24;
     // Makes the cells
     return ListView.builder(
