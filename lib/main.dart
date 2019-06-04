@@ -180,15 +180,14 @@ class BodyLayoutState extends State<BodyLayout> {
                     ),
                     Text(
                       cells[index],
-                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 24.0, color: Colors.grey, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
                   ],
                 ),
               ),
               IconButton(
-//                  icon: new Image.asset("resources/androidAdd@3x.png"),
-               icon:  Icon(Icons.add_circle, size: 48, color: Colors.amberAccent),
+                icon: new Image.asset("resources/androidAdd@3x.png"),
                 iconSize: 48,
                   color: Colors.grey,
                   onPressed: () {
