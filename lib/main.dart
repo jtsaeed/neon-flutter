@@ -30,30 +30,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-///*This is like the TableViewDelegate
-// Also makes a state/Object/Widget, which is then added to the view controller?
-//class Blocks extends StatefulWidget {// Stateful are mutable / Can change
-//  @override
-//  BlocksState createState() => BlocksState();
-//}
-//
-///* This is like the TableViewDataSource
-// */
-//class BlocksState extends State<Blocks> {
-//  @override
-//  Widget build(BuildContext context) {
-////     return _buildBlocks(context);
-//  }
-//}
-
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
   TableViewState createState() => TableViewState(); // Creating the tableView widget/state
 }
 
+//TODO: Make all 48 cells
+//TODO: Filter cells
 
-List<String> cells = [];
+List<String> cells = List.filled(48, 'Empty');
+//List<String> cells = [];
 int x = 0;
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
@@ -85,26 +72,28 @@ class TableViewState extends State<TableView> {
 //      print("in If $x");
 //      }
 
-    if (x < getArrayLength()) {
-      print("Making empty arrays");
-      print("Curent hour ${getCurrentHour()}");
-      for (int i = getCurrentHour(); i < 48; i++) {
-        cells.add('Empty');
-        x = i;
-      }
-      print("x --- $x");
-    }
+
+//    if (x < getArrayLength()) {
+//      print("Making empty arrays");
+//      print("Curent hour ${getCurrentHour()}");
+//      for (int i = getCurrentHour(); i < 48; i++) {
+//        cells.add('Empty');
+//        x = i;
+//      }
+//      print("x --- $x");
+//    }
 
 
 
     int currentHour = getCurrentHour() - 1 % 24;
-    // Makes the cells
-    return ListView.builder(
 
-        padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
+    return ListView.builder(    // Makes the cells
+    padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(),
+
         itemBuilder: (context, index) {
+        print('Index is: ${index}');
           currentHour += 1;
           if (index == 0) {
             return ListTile(
@@ -115,7 +104,6 @@ class TableViewState extends State<TableView> {
                     color: Colors.black,
                     fontWeight: FontWeight.w800),
                 textAlign: TextAlign.left,
-                // style: Theme.of(context).textTheme.headline,
               ),
               title: Text(
                 getDate(0).toUpperCase(),
@@ -146,7 +134,10 @@ class TableViewState extends State<TableView> {
               ),
             );
           }
-          return _buildBlock(context, index);
+
+
+            return _buildBlock(context, index);
+
         });
   }
 
@@ -166,7 +157,6 @@ class TableViewState extends State<TableView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     Text(
                       getHours(index),
                       style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
@@ -185,7 +175,7 @@ class TableViewState extends State<TableView> {
                 iconSize: 48,
                   color: Colors.grey,
                   onPressed: () {
-                    _showDialog(context, index, setState);
+                  cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
                   },
               ),
             ],
@@ -204,56 +194,58 @@ class TableViewState extends State<TableView> {
 }
 
 // user defined function
-void _showDialog(context, index, setState) {
-  String input = "";
-
-  showDialog(
-    // flutter defined function
-    context: context,
-    builder: (BuildContext context) {
-      // return object of type Dialog
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: new Text('What\'s in store at ${getHours(index).toLowerCase()}?'),
-        content: new Row(
-          children: <Widget>[
-            new Expanded(
-              child: new TextField(
-                cursorColor: Colors.orange,
-                autofocus: true,
-                decoration: new InputDecoration(hintText: 'Revise Maths'),
-                onChanged: (value) {
-                  input = value; // Update the empty label array with the value they have entered
-                },
-              ),
-            )
-          ],
-        ),
-        actions: <Widget>[
-          // usually buttons at the bottom of the dialog
-          new FlatButton(
-            textColor: Colors.grey,
-            child: new Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          new FlatButton(
-            textColor: primaryColor,
-            child: new Text("Add"),
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {// This should rerun the build widget and return the updated viewList
-                cells.insert(index, input);
-//                cells[index] = input;
-                save(cells);
-                print("CELLS ARE $cells");
-                print(cells.length);
-              });
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+//  void _showDialog(context, index, setState) {
+//    String input = "";
+//
+//    showDialog(
+//      // flutter defined function
+//      context: context,
+//      builder: (BuildContext context) {
+//        // return object of type Dialog
+//        return AlertDialog(
+//          shape: RoundedRectangleBorder(
+//              borderRadius: BorderRadius.circular(16)),
+//          title: new Text(
+//              'What\'s in store at ${getHours(index).toLowerCase()}?'),
+//          content: new Row(
+//            children: <Widget>[
+//              new Expanded(
+//                child: new TextField(
+//                  cursorColor: Colors.orange,
+//                  autofocus: true,
+//                  decoration: new InputDecoration(hintText: 'Revise Maths'),
+//                  onChanged: (value) {
+//                    input =
+//                        value; // Update the empty label array with the value they have entered
+//                  },
+//                ),
+//              )
+//            ],
+//          ),
+//          actions: <Widget>[ // usually buttons at the bottom of the dialog
+//            new FlatButton(
+//              textColor: Colors.grey,
+//              child: new Text("Close"),
+//              onPressed: () {
+//                Navigator.of(context).pop();
+//              },
+//            ),
+//            new FlatButton(
+//              textColor: primaryColor,
+//              child: new Text("Add"),
+//              onPressed: () {
+//                Navigator.of(context).pop();
+//                setState(() { // This should rerun the build widget and return the updated viewList
+//                  cells[index] = input;
+////                cells[index] = input;
+//                  save(cells);
+//                  print("CELLS ARE $cells");
+//                  print(cells.length);
+//                });
+//              },
+//            ),
+//          ],
+//        );
+//      },
+//    );
+//  }
