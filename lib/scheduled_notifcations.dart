@@ -1,5 +1,5 @@
 import 'package:scheduled_notifications/scheduled_notifications.dart';
-import 'main.dart';
+import 'array.dart';
 import 'time.dart';
 
 scheduleNotification(index, minsToWait) async {
@@ -8,5 +8,4 @@ scheduleNotification(index, minsToWait) async {
       "Ticker text",
       'Reminder for ${cells[index]}',
       time[index]);
-
 }

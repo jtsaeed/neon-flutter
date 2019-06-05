@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'time.dart';
-import 'main.dart';
-import 'scheduled_notifcations.dart';
+import '../time.dart';
+import '../main.dart';
+import '../array.dart';
+import '../scheduled_notifcations.dart';
+
+var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
 
 addDialog(context, index, setState)  {
-      String input = "";
+  String input = "";
 
   return showDialog<void>(
     context: context,
@@ -21,10 +24,8 @@ addDialog(context, index, setState)  {
               child: new TextField(
                 cursorColor: Colors.orange,
                 autofocus: true,
-                decoration: new InputDecoration(hintText: 'Revise Maths'),
-                onChanged: (value) {
-                  input = value; // Update the empty label array with the value they have entered
-                },
+                decoration: new InputDecoration(hintText: edit == true ? cells[index] : 'Revise Maths'),
+                onChanged: (value) => input = value // Update the empty label array with the value they have entered
               ),
             )
           ],
@@ -44,10 +45,10 @@ addDialog(context, index, setState)  {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
                 cells[index] = input;
-//                cells[index] = input;
 //                save(cells);
                 print("CELLS ARE $cells");
                 print(cells.length);
+                edit = false;
               });
             },
           ),
@@ -70,6 +71,7 @@ editDialog(context, index, setState)  {
                   title: new Text('Edit'),
                   onTap: () {
                     Navigator.of(context).pop();
+                    edit = true;
                     addDialog(context, index, setState);
                   }
               ),

@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'time.dart';
 import 'array.dart';
-import 'dialogs.dart';
+import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
-import 'scheduled_notifcations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-
-
 
 
 void main() => runApp(MyApp());
@@ -38,38 +33,33 @@ class MyApp extends StatelessWidget {
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
-  TableViewState createState() => TableViewState(); // Creating the tableView widget/state
+  _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
 }
 
-//TODO: Make all 48 cells
-//TODO: Filter cells
-
-List<String> cells = List.filled(48, 'Empty');
-//List<String> cells = [];
-int x = 0;
-
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
-class TableViewState extends State<TableView> {
-  ///*This is like the TableView
-  ///
+class _TableViewState extends State<TableView> {
+
+   @override
+    Widget build(BuildContext context) {
+      // Runs every time AFTER a cell is clicked on and setState is called
+      return _myListView();
+    }
   ///
   Widget _myListView() {
 
 //    read();
 //    makeArray(setState);
 //    List<String> cells = [];
-
-
-    _loadArray() async {
-      print("Loading from save");
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        cells = (prefs.getStringList('cells'));
-        x = cells.length;
-        print("loaded array length: $x");
-        print(cells);
-      });
-    }
+//    _loadArray() async {
+//      print("Loading from save");
+//      SharedPreferences prefs = await SharedPreferences.getInstance();
+//      setState(() {
+//        cells = (prefs.getStringList('cells'));
+//        x = cells.length;
+//        print("loaded array length: $x");
+//        print(cells);
+//      });
+//    }
 //
 //    if (x < getArrayLength()) {
 //      print("in If $x");
@@ -89,16 +79,15 @@ class TableViewState extends State<TableView> {
 //    }
 
 
-
     int currentHour = getCurrentHour() - 1 % 24;
-
+    ///*This is like the TableView
     return ListView.builder(    // Makes the cells
     padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(),
 
         itemBuilder: (context, index) {
-        print('Index is: ${index}');
+        print('Index is: $index');
           currentHour += 1;
           if (index == 0) {
             return ListTile(
@@ -139,10 +128,7 @@ class TableViewState extends State<TableView> {
               ),
             );
           }
-
-
             return _buildBlock(context, index);
-
         });
   }
 
@@ -189,68 +175,4 @@ class TableViewState extends State<TableView> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    // Runs every time AFTER a cell is clicked on and setState is called
-
-    return _myListView();
-  }
 }
-
-// user defined function
-//  void _showDialog(context, index, setState) {
-//    String input = "";
-//
-//    showDialog(
-//      // flutter defined function
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          shape: RoundedRectangleBorder(
-//              borderRadius: BorderRadius.circular(16)),
-//          title: new Text(
-//              'What\'s in store at ${getHours(index).toLowerCase()}?'),
-//          content: new Row(
-//            children: <Widget>[
-//              new Expanded(
-//                child: new TextField(
-//                  cursorColor: Colors.orange,
-//                  autofocus: true,
-//                  decoration: new InputDecoration(hintText: 'Revise Maths'),
-//                  onChanged: (value) {
-//                    input =
-//                        value; // Update the empty label array with the value they have entered
-//                  },
-//                ),
-//              )
-//            ],
-//          ),
-//          actions: <Widget>[ // usually buttons at the bottom of the dialog
-//            new FlatButton(
-//              textColor: Colors.grey,
-//              child: new Text("Close"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//            new FlatButton(
-//              textColor: primaryColor,
-//              child: new Text("Add"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//                setState(() { // This should rerun the build widget and return the updated viewList
-//                  cells[index] = input;
-////                cells[index] = input;
-//                  save(cells);
-//                  print("CELLS ARE $cells");
-//                  print(cells.length);
-//                });
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
