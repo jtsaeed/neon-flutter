@@ -3,7 +3,12 @@ import 'time.dart';
 import 'array.dart';
 import 'dialogs.dart';
 import 'cache_data.dart';
+import 'scheduled_notifcations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+
 
 void main() => runApp(MyApp());
 

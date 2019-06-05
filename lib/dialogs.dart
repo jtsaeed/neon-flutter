@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'time.dart';
 import 'main.dart';
+import 'scheduled_notifcations.dart';
 
 addDialog(context, index, setState)  {
       String input = "";
@@ -76,7 +77,8 @@ editDialog(context, index, setState)  {
                   trailing: new Icon(Icons.delete),
                 title: new Text('Clear'),
                   onTap: () {
-                    setState(() {cells[index] = 'Empty';});
+//                    setState(() {cells[index] = 'Empty';});
+                  setState(() => cells[index] = 'Empty');
                   Navigator.of(context).pop();
                   }
               ),
@@ -85,12 +87,61 @@ editDialog(context, index, setState)  {
                 title: new Text('set reminder'),
                 onTap: () {
                  Navigator.of(context).pop();
-                  addDialog(context, index, setState);
+                 _setRemainderDialog(context, index);
                   }
               ),
               new ListTile(
                   trailing: new Icon(Icons.cancel),
                 title: new Text('cancel'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  }
+              ),
+            ],
+          ),
+        );
+      }
+  );
+}
+
+
+_setRemainderDialog(context, index)  {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc){
+        return Container(
+          child: new Wrap(
+            children: <Widget>[
+              new ListTile(
+                  title: new Text('60 Minutes'),
+                  onTap: () {
+                    scheduleNotification(index, 60);
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new ListTile(
+                  title: new Text('30 Minutes'),
+                  onTap: () {
+                    scheduleNotification(index, 30);
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new ListTile(
+                  title: new Text('15 Minutes'),
+                  onTap: () {
+                    scheduleNotification(index, 15);
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new ListTile(
+                  title: new Text('5 Minutes'),
+                  onTap: () {
+                    scheduleNotification(index, 5);
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new ListTile(
+                  title: new Text('cancel'),
                   onTap: () {
                     Navigator.of(context).pop();
                   }
