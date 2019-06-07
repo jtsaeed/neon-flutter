@@ -2,7 +2,7 @@ import 'package:intl/intl.dart'; // Time package
 
 String getDate(index) { // Gets date
   DateTime date = DateTime.now();
-  var prevMonth = new DateTime(date.year, date.month, date.day + index);
+  var prevMonth = new DateTime(date.year, date.month, date.day + index); // Increment day
   return DateFormat('EEE d MMM').format(prevMonth).toString();
 }
 
@@ -30,7 +30,7 @@ String getHours(index) { // Gets the hour labels
           time.add(currentHour.toString() + 'AM');
       }
       else
-        time.add(((currentHour - 12 == 0) ? 12 : currentHour - 12).toString() + 'PM');
+        time.add((currentHour - 12 == 0 ? 12 : currentHour - 12).toString() + 'PM');
 
       currentHour = y; // Reassign the count
     }

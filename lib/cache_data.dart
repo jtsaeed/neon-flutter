@@ -1,15 +1,15 @@
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'array.dart';
+import 'array.dart';
 import 'main.dart';
 //
 //
 //
-save(cells) async {
-  print("trying to Saving!");
-  final prefs = await SharedPreferences.getInstance(); // wait until done
-  prefs.setStringList('cells2', cells);
-  print("Saving: $cells");
-}
+//save(cells) async {
+//  print("trying to Saving!");
+//  final prefs = await SharedPreferences.getInstance(); // wait until done
+//  prefs.setStringList('cells2', cells);
+//  print("Saving: $cells");
+//}
 
 //void read() async {
 //  print("trying to load!");
@@ -27,30 +27,57 @@ save(cells) async {
 ////  print('read: $value');
 ////}
 //
-////save(cells) async { // Save the whole array
-////  print("Saving");
-////  print(cells);
-////  final prefs = await SharedPreferences.getInstance();
-////  final key = 'allCells';
-////  final value = cells;
-//// prefs.setStringList(key, value);
-////  print('saved $value');
-////}
-//
-//
-////read(index) async {
-////  final prefs = await SharedPreferences.getInstance();
-////  final key = index;
-////  final value = prefs.getString(key) ?? 'Nothing';
-////  print('read: $value');
-////  return value;
-////}
-//
-////save(index, input) async { // each input with the index passed in (which cell the text should be in)
-////  print("Saving");
-////  final prefs = await SharedPreferences.getInstance();
-////  final key = index.toString();
-////  final value = input.toString();
-////  prefs.setString(key, value);
-////  print('saved $value');
-////}
+
+
+read(index) async {
+  final prefs = await SharedPreferences.getInstance();
+  final key = index;
+  final value = prefs.getString(key) ?? 'Nothing';
+  print('read: $value with key: $key');
+  return value;
+}
+
+loadArray(setState) async {
+
+  print("loading array");
+  print(cells);
+
+  final prefs = await SharedPreferences.getInstance();
+
+  Set<String> allKeys = prefs.getKeys();
+  print('Keys: $allKeys');
+
+//  final value = prefs.getString(key) ?? 'Nothing';
+//  print('read: $value with key: $key');
+
+  List<String> num = [];
+
+
+  // TODO SetState for the array
+
+
+  setState(() {
+    for (int i = 0; i < allKeys.length; i++) {
+      num.add(allKeys.elementAt(i));
+      cells[int.parse(num[i])] = prefs.getString(num.elementAt(i));
+      print(prefs.get(num.elementAt(i)));
+
+//    int.parse
+    }
+  });
+
+  print(cells);
+  
+//  print(num);
+//  print(num[0]);
+
+}
+
+save(index, input) async { // each input with the index passed in (which cell the text should be in)
+  print("Saving");
+  final prefs = await SharedPreferences.getInstance();
+  final key = index;
+  final value = input.toString();
+  prefs.setString(key, value);
+  print('saved $value with key: $key');
+}

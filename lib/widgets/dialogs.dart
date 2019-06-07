@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../time.dart';
 import '../main.dart';
 import '../array.dart';
+import '../cache_data.dart';
+
 import '../scheduled_notifcations.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
@@ -45,9 +47,8 @@ addDialog(context, index, setState)  {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
                 cells[index] = input;
-//                save(cells);
+                save(index, input);
                 print("CELLS ARE $cells");
-                print(cells.length);
                 edit = false;
               });
             },

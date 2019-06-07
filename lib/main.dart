@@ -78,6 +78,7 @@ class _TableViewState extends State<TableView> {
 //      print("x --- $x");
 //    }
 
+    loadArray(setState);
 
     int currentHour = getCurrentHour() - 1 % 24;
     ///*This is like the TableView
@@ -89,7 +90,8 @@ class _TableViewState extends State<TableView> {
         itemBuilder: (context, index) {
         print('Index is: $index');
           currentHour += 1;
-          if (index == 0) {
+
+        if (index == 0) {
             return ListTile(
               subtitle: Text(
                 "Today",
@@ -108,7 +110,9 @@ class _TableViewState extends State<TableView> {
                 textAlign: TextAlign.left,
               ),
             );
-          } else if (currentHour == 24) {
+          }
+
+          else if (currentHour == 24) {
             return ListTile(
               subtitle: Text(
                 "Tomorrow",
@@ -133,6 +137,7 @@ class _TableViewState extends State<TableView> {
   }
 
   Widget _buildBlock(context, index) {
+
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
       child: Card(
