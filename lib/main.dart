@@ -91,7 +91,7 @@ class _TableViewState extends State<TableView> {
         itemCount: getArrayLength(),
 
         itemBuilder: (context, index) {
-        print('Index is: $index');
+//        print('Index is: $index');
           currentHour += 1;
 
         if (index == 0) {

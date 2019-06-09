@@ -29,15 +29,15 @@ import 'main.dart';
 //
 
 
-read(index) async {
-  final prefs = await SharedPreferences.getInstance();
-  final key = index;
-  final value = prefs.getString(key) ?? 'Nothing';
-  print('read: $value with key: $key');
-  return value;
-}
+//read(index) async {
+//  final prefs = await SharedPreferences.getInstance();
+//  final key = index;
+//  final value = prefs.getString(key) ?? 'Nothing';
+//  print('read: $value with key: $key');
+//  return value;
+//}
 
-List<String> num = [];
+List<String> keys = [];
 
 
 loadArray(setState) async {
@@ -48,34 +48,30 @@ loadArray(setState) async {
   final prefs = await SharedPreferences.getInstance();
 //  prefs.clear();
 
-  Set<String> allKeys = prefs.getKeys();
-  print('Keys: $allKeys');
+  Set<String> cachedKeys = prefs.getKeys();
+  print('Keys: $cachedKeys');
 
-//  final value = prefs.getString(key) ?? 'Nothing';
-//  print('read: $value with key: $key');
 
-  print(allKeys.length);
-  print(num.length);
+  print(cachedKeys.length);
+  print(keys.length);
 
-//  if (allKeys.length != num.length) {
+  if (cachedKeys.length != keys.length) {
     setState(() {
-      for (int i = 0; i < allKeys.length; i++) {
-        num.add(allKeys.elementAt(i));
-        cells[int.parse(num[i])] = prefs.getString(num.elementAt(i));
-        print(prefs.get(num.elementAt(i)));
+      for (int i = 0; i < cachedKeys.length; i++) {
+        keys.add(cachedKeys.elementAt(i));
+        cells[int.parse(keys[i])] = prefs.getString(keys.elementAt(i)); // Changing the array with values from the cache
        }
     });
-//  }
+  }
   print(cells);
-//  print(num);
-//  print(num[0]);
+  print('Keys: $keys');
 
 }
 
 save(index, input) async { // each input with the index passed in (which cell the text should be in)
   print("Saving");
   final prefs = await SharedPreferences.getInstance();
-  final key = index;
+  final key = index.toString();
   final value = input.toString();
   prefs.setString(key, value);
   print('saved $value with key: $key');
