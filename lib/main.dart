@@ -30,6 +30,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
+var isTomorrow = false;
+//var currentHour = getCurrentHour() - 1 % 24;
+
+
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
@@ -80,63 +84,89 @@ class _TableViewState extends State<TableView> {
 //    }
 
     loadArray(setState);
+    var currentHour = getCurrentHour() - 1 % 24;
 
 
 
-    int currentHour = getCurrentHour() - 1 % 24;
     ///*This is like the TableView
     return ListView.builder(    // Makes the cells
     padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(),
 
+
         itemBuilder: (context, index) {
         print('Index is: $index');
-          currentHour += 1;
+        currentHour += 1;
+        print('currentHour is: $currentHour');
 
-        if (index == 0) {
-            return ListTile(
-              subtitle: Text(
-                "Today",
-                style: TextStyle(
-                    fontSize: 34,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800),
-                textAlign: TextAlign.left,
-              ),
-              title: Text(
-                getDate(0).toUpperCase(),
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w600),
-                textAlign: TextAlign.left,
-              ),
-            );
-          }
+        isTomorrow = currentHour == 24 ? true : false;
+        if (currentHour >= 47) {
+          print('current hour is > 47');
+          currentHour = getCurrentHour() - 1 % 24;
+        }
 
-          else if (currentHour == 24) {
-            return ListTile(
-              subtitle: Text(
-                "Tomorrow",
-                style: TextStyle(
-                    fontSize: 34,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800),
-                textAlign: TextAlign.left,
-              ),
-              title: Text(
-                getDate(1).toUpperCase(), // Increments the day
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w600),
-                textAlign: TextAlign.left,
-              ),
-            );
-          }
-            return _buildBlock(context, index, currentHour);
-        });
+        if ( getArrayLength() <=  index ) {
+          index = 0;
+
+        }
+
+
+
+    if (currentHour <  cells.length) {
+      if (index == 0) {
+        return ListTile(
+          subtitle: Text(
+            "Today",
+            style: TextStyle(
+                fontSize: 34,
+                color: Colors.black,
+                fontWeight: FontWeight.w800),
+            textAlign: TextAlign.left,
+          ),
+          title: Text(
+            getDate(0).toUpperCase(),
+            style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w600),
+            textAlign: TextAlign.left,
+          ),
+        );
+      }
+
+      else if (currentHour == 24 && isTomorrow == true) {
+        print('TOMROROW');
+        return ListTile(
+          subtitle: Text(
+            "Tomorrow",
+            style: TextStyle(
+                fontSize: 34,
+                color: Colors.black,
+                fontWeight: FontWeight.w800),
+            textAlign: TextAlign.left,
+          ),
+          title: Text(
+            getDate(1).toUpperCase(), // Increments the day
+            style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w600),
+            textAlign: TextAlign.left,
+          ),
+        );
+      }
+      else {
+        isTomorrow = false;
+        return _buildBlock(context, index, currentHour);
+      }
+    }
+
+    else {
+      print('Current hour is to high $currentHour');
+    }
+    });
+
   }
 
   Widget _buildBlock(context, index, currentHour) {
