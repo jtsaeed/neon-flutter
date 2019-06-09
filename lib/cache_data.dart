@@ -46,7 +46,7 @@ loadArray(setState) async {
   print(cells);
 
   final prefs = await SharedPreferences.getInstance();
-//  prefs.clear();
+  prefs.clear();
 
   Set<String> cachedKeys = prefs.getKeys();
   print('Keys: $cachedKeys');

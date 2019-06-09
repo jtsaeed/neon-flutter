@@ -47,7 +47,7 @@ addDialog(context, index, currentHour, setState)  {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
                 cells[currentHour] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
-                save(currentHour, input);
+                save(currentHour,  cells[currentHour]); // Save message and use the hour as the key
                 print("CELLS ARE $cells");
                 edit = false;
               });
