@@ -37,12 +37,16 @@ read(index) async {
   return value;
 }
 
+List<String> num = [];
+
+
 loadArray(setState) async {
 
   print("loading array");
   print(cells);
 
   final prefs = await SharedPreferences.getInstance();
+//  prefs.clear();
 
   Set<String> allKeys = prefs.getKeys();
   print('Keys: $allKeys');
@@ -50,24 +54,19 @@ loadArray(setState) async {
 //  final value = prefs.getString(key) ?? 'Nothing';
 //  print('read: $value with key: $key');
 
-  List<String> num = [];
+  print(allKeys.length);
+  print(num.length);
 
-
-  // TODO SetState for the array
-
-
-  setState(() {
-    for (int i = 0; i < allKeys.length; i++) {
-      num.add(allKeys.elementAt(i));
-      cells[int.parse(num[i])] = prefs.getString(num.elementAt(i));
-      print(prefs.get(num.elementAt(i)));
-
-//    int.parse
-    }
-  });
-
+//  if (allKeys.length != num.length) {
+    setState(() {
+      for (int i = 0; i < allKeys.length; i++) {
+        num.add(allKeys.elementAt(i));
+        cells[int.parse(num[i])] = prefs.getString(num.elementAt(i));
+        print(prefs.get(num.elementAt(i)));
+       }
+    });
+//  }
   print(cells);
-  
 //  print(num);
 //  print(num[0]);
 

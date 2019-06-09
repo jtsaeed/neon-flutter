@@ -39,6 +39,7 @@ class TableView extends StatefulWidget {
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
 
+
    @override
     Widget build(BuildContext context) {
       // Runs every time AFTER a cell is clicked on and setState is called
@@ -79,6 +80,8 @@ class _TableViewState extends State<TableView> {
 //    }
 
     loadArray(setState);
+
+
 
     int currentHour = getCurrentHour() - 1 % 24;
     ///*This is like the TableView
