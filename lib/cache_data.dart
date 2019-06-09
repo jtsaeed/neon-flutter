@@ -55,7 +55,7 @@ loadArray(setState) async {
   print(cachedKeys.length);
   print(keys.length);
 
-  if (cachedKeys.length != keys.length) {
+  if (keys.length < cachedKeys.length) {
     setState(() {
       for (int i = 0; i < cachedKeys.length; i++) {
         keys.add(cachedKeys.elementAt(i));

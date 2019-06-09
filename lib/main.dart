@@ -91,7 +91,7 @@ class _TableViewState extends State<TableView> {
         itemCount: getArrayLength(),
 
         itemBuilder: (context, index) {
-//        print('Index is: $index');
+        print('Index is: $index');
           currentHour += 1;
 
         if (index == 0) {
@@ -135,11 +135,11 @@ class _TableViewState extends State<TableView> {
               ),
             );
           }
-            return _buildBlock(context, index);
+            return _buildBlock(context, index, currentHour);
         });
   }
 
-  Widget _buildBlock(context, index) {
+  Widget _buildBlock(context, index, currentHour) {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -162,7 +162,7 @@ class _TableViewState extends State<TableView> {
                       textAlign: TextAlign.left,
                     ),
                     Text(
-                      cells[index],
+                      cells[currentHour],
                       style: TextStyle(fontSize: 24.0, color: Colors.grey, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
@@ -174,7 +174,7 @@ class _TableViewState extends State<TableView> {
                 iconSize: 48,
                   color: Colors.grey,
                   onPressed: () {
-                  cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
+                    cells[currentHour] == 'Empty' ? addDialog(context, index, currentHour, setState) : editDialog(context, index, currentHour, setState);
                   },
               ),
             ],

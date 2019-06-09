@@ -3,12 +3,12 @@ import '../time.dart';
 import '../main.dart';
 import '../array.dart';
 import '../cache_data.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../scheduled_notifcations.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
 
-addDialog(context, index, setState)  {
+addDialog(context, index, currentHour, setState)  {
   String input = "";
 
   return showDialog<void>(
@@ -26,7 +26,7 @@ addDialog(context, index, setState)  {
               child: new TextField(
                 cursorColor: Colors.orange,
                 autofocus: true,
-                decoration: new InputDecoration(hintText: edit == true ? cells[index] : 'Revise Maths'),
+                decoration: new InputDecoration(hintText: edit == true ? cells[currentHour] : 'Revise Maths'),
                 onChanged: (value) => input = value // Update the empty label array with the value they have entered
               ),
             )
@@ -46,8 +46,8 @@ addDialog(context, index, setState)  {
             onPressed: () {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
-                cells[index] = input;
-                save(index, input);
+                cells[currentHour] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
+                save(currentHour, input);
                 print("CELLS ARE $cells");
                 edit = false;
               });
@@ -60,11 +60,14 @@ addDialog(context, index, setState)  {
 }
 
 
-editDialog(context, index, setState)  {
+editDialog(context, index, currentHourKey, setState) async  {
+  final prefs = await SharedPreferences.getInstance();
+
   showModalBottomSheet(
       context: context,
       builder: (BuildContext bc){
         return Container(
+
           child: new Wrap(
             children: <Widget>[
               new ListTile(
@@ -73,16 +76,21 @@ editDialog(context, index, setState)  {
                   onTap: () {
                     Navigator.of(context).pop();
                     edit = true;
-                    addDialog(context, index, setState);
+                    addDialog(context, index, currentHourKey, setState);
                   }
               ),
               new ListTile(
                   trailing: new Icon(Icons.delete),
                 title: new Text('Clear'),
                   onTap: () {
-//                    setState(() {cells[index] = 'Empty';});
-                  setState(() => cells[index] = 'Empty');
-                  Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    setState(() {
+                        cells[currentHourKey] = 'Empty';
+                        print('currentHourKey');
+                        print(currentHourKey);
+                        prefs.remove(currentHourKey.toString()); // Remove key from cache
+                        keys.remove(currentHourKey.toString());
+                    });
                   }
               ),
               new ListTile(
