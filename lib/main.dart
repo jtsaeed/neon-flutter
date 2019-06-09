@@ -30,146 +30,104 @@ class MyApp extends StatelessWidget {
   }
 }
 
-var isTomorrow = false;
-//var currentHour = getCurrentHour() - 1 % 24;
+var runOnce = false;
 
 
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
   _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
+
+
 }
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
 
 
-   @override
+
+  @override
     Widget build(BuildContext context) {
       // Runs every time AFTER a cell is clicked on and setState is called
       return _myListView();
     }
-  ///
-  Widget _myListView() {
 
-//    read();
-//    makeArray(setState);
-//    List<String> cells = [];
-//    _loadArray() async {
-//      print("Loading from save");
-//      SharedPreferences prefs = await SharedPreferences.getInstance();
-//      setState(() {
-//        cells = (prefs.getStringList('cells'));
-//        x = cells.length;
-//        print("loaded array length: $x");
-//        print(cells);
-//      });
-//    }
-//
-//    if (x < getArrayLength()) {
-//      print("in If $x");
-//      _loadArray();
-//      print("in If $x");
-//      }
+   ///*This is like the TableView
+   Widget _myListView() {
+
+     makeArray();
+     loadArray(setState);
+     var currentHour = getCurrentHour() - 1 % 24;
+
+       return ListView.builder( // Makes the cells
+           padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
+           physics: const BouncingScrollPhysics(),
+           itemCount: getArrayLength(),
+
+           itemBuilder: (context, index) {
 
 
-//    if (x < getArrayLength()) {
-//      print("Making empty arrays");
-//      print("Curent hour ${getCurrentHour()}");
-//      for (int i = getCurrentHour(); i < 48; i++) {
-//        cells.add('Empty');
-//        x = i;
-//      }
-//      print("x --- $x");
-//    }
+             if (index <= getArrayLength()) {
 
-    loadArray(setState);
-    var currentHour = getCurrentHour() - 1 % 24;
+               print('Index is: $index');
+               currentHour += 1;
+               print('currentHour is: $currentHour');
+
+               if (index == 0) {
+                 return ListTile(
+                   subtitle: Text(
+                     "Today",
+                     style: TextStyle(
+                         fontSize: 34,
+                         color: Colors.black,
+                         fontWeight: FontWeight.w800),
+                     textAlign: TextAlign.left,
+                   ),
+                   title: Text(
+                     getDate(0).toUpperCase(),
+                     style: TextStyle(
+                         fontSize: 14,
+                         color: Colors.grey,
+                         fontWeight: FontWeight.w600),
+                     textAlign: TextAlign.left,
+                   ),
+                 );
+               } // if end
+
+               else if (currentHour == 24) {
+                 return ListTile(
+                   subtitle: Text(
+                     "Tomorrow",
+                     style: TextStyle(
+                         fontSize: 34,
+                         color: Colors.black,
+                         fontWeight: FontWeight.w800),
+                     textAlign: TextAlign.left,
+                   ),
+                   title: Text(
+                     getDate(1).toUpperCase(), // Increments the day
+                     style: TextStyle(
+                         fontSize: 14,
+                         color: Colors.grey,
+                         fontWeight: FontWeight.w600),
+                     textAlign: TextAlign.left,
+                   ),
+                 );
+               } // else if end
 
 
-
-    ///*This is like the TableView
-    return ListView.builder(    // Makes the cells
-    padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
-        physics: const BouncingScrollPhysics(),
-        itemCount: getArrayLength(),
-
-
-        itemBuilder: (context, index) {
-        print('Index is: $index');
-        currentHour += 1;
-        print('currentHour is: $currentHour');
-
-        isTomorrow = currentHour == 24 ? true : false;
-        if (currentHour >= 47) {
-          print('current hour is > 47');
-          currentHour = getCurrentHour() - 1 % 24;
-        }
-
-        if ( getArrayLength() <=  index ) {
-          index = 0;
-
-        }
+//               if (index == getArrayLength() - 1) {
+//                 index = getArrayLength() - 1;
+//               }
+               return _buildBlock(context, currentHour);
+             }
 
 
+           } // Item build // end
+       ); //  ListView.builder // end
+   } // Widget _myListView() // end
 
-    if (currentHour <  cells.length) {
-      if (index == 0) {
-        return ListTile(
-          subtitle: Text(
-            "Today",
-            style: TextStyle(
-                fontSize: 34,
-                color: Colors.black,
-                fontWeight: FontWeight.w800),
-            textAlign: TextAlign.left,
-          ),
-          title: Text(
-            getDate(0).toUpperCase(),
-            style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontWeight: FontWeight.w600),
-            textAlign: TextAlign.left,
-          ),
-        );
-      }
-
-      else if (currentHour == 24 && isTomorrow == true) {
-        print('TOMROROW');
-        return ListTile(
-          subtitle: Text(
-            "Tomorrow",
-            style: TextStyle(
-                fontSize: 34,
-                color: Colors.black,
-                fontWeight: FontWeight.w800),
-            textAlign: TextAlign.left,
-          ),
-          title: Text(
-            getDate(1).toUpperCase(), // Increments the day
-            style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontWeight: FontWeight.w600),
-            textAlign: TextAlign.left,
-          ),
-        );
-      }
-      else {
-        isTomorrow = false;
-        return _buildBlock(context, index, currentHour);
-      }
-    }
-
-    else {
-      print('Current hour is to high $currentHour');
-    }
-    });
-
-  }
-
-  Widget _buildBlock(context, index, currentHour) {
+    Widget _buildBlock(context, currentHour) {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -187,7 +145,7 @@ class _TableViewState extends State<TableView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      getHours(index),
+                      getHours(currentHour),
                       style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
@@ -204,7 +162,7 @@ class _TableViewState extends State<TableView> {
                 iconSize: 48,
                   color: Colors.grey,
                   onPressed: () {
-                    cells[currentHour] == 'Empty' ? addDialog(context, index, currentHour, setState) : editDialog(context, index, currentHour, setState);
+                    cells[currentHour] == 'Empty' ? addDialog(context, currentHour, setState) : editDialog(context, currentHour, setState);
                   },
               ),
             ],

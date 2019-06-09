@@ -46,7 +46,7 @@ loadArray(setState) async {
   print(cells);
 
   final prefs = await SharedPreferences.getInstance();
-  prefs.clear();
+//  prefs.clear();
 
   Set<String> cachedKeys = prefs.getKeys();
   print('Keys: $cachedKeys');
@@ -63,13 +63,13 @@ loadArray(setState) async {
        }
     });
   }
+  print('after loading');
   print(cells);
   print('Keys: $keys');
 
 }
 
 save(index, input) async { // each input with the index passed in (which cell the text should be in)
-  print("Saving");
   final prefs = await SharedPreferences.getInstance();
   final key = index.toString();
   final value = input.toString();

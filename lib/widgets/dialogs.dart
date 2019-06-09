@@ -8,7 +8,7 @@ import '../scheduled_notifcations.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
 
-addDialog(context, index, currentHour, setState)  {
+addDialog(context, currentHour, setState)  {
   String input = "";
 
   return showDialog<void>(
@@ -19,7 +19,7 @@ addDialog(context, index, currentHour, setState)  {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
         title: new Text(
-            'What\'s in store at ${getHours(index).toLowerCase()}?'),
+            'What\'s in store at ${getHours(currentHour).toLowerCase()}?'),
         content: new Row(
           children: <Widget>[
             new Expanded(
@@ -60,7 +60,7 @@ addDialog(context, index, currentHour, setState)  {
 }
 
 
-editDialog(context, index, currentHourKey, setState) async  {
+editDialog(context, currentHourKey, setState) async  {
   final prefs = await SharedPreferences.getInstance();
 
   showModalBottomSheet(
@@ -76,7 +76,7 @@ editDialog(context, index, currentHourKey, setState) async  {
                   onTap: () {
                     Navigator.of(context).pop();
                     edit = true;
-                    addDialog(context, index, currentHourKey, setState);
+                    addDialog(context, currentHourKey, setState);
                   }
               ),
               new ListTile(
@@ -86,8 +86,7 @@ editDialog(context, index, currentHourKey, setState) async  {
                     Navigator.of(context).pop();
                     setState(() {
                         cells[currentHourKey] = 'Empty';
-                        print('currentHourKey');
-                        print(currentHourKey);
+                        print('editing cell: $currentHourKey');
                         prefs.remove(currentHourKey.toString()); // Remove key from cache
                         keys.remove(currentHourKey.toString());
                     });
@@ -98,7 +97,7 @@ editDialog(context, index, currentHourKey, setState) async  {
                 title: new Text('set reminder'),
                 onTap: () {
                  Navigator.of(context).pop();
-                 _setRemainderDialog(context, index);
+                 _setRemainderDialog(context, currentHourKey);
                   }
               ),
               new ListTile(
@@ -116,7 +115,10 @@ editDialog(context, index, currentHourKey, setState) async  {
 }
 
 
-_setRemainderDialog(context, index)  {
+_setRemainderDialog(context, cellTime)  {
+  // currentHour = cellTime
+  // we pass the currentHour to get the corresponding cell
+
   showModalBottomSheet(
       context: context,
       builder: (BuildContext bc){
@@ -126,28 +128,28 @@ _setRemainderDialog(context, index)  {
               new ListTile(
                   title: new Text('60 Minutes'),
                   onTap: () {
-                    scheduleNotification(index, 60);
+                    scheduleNotification(cellTime, 60);
                     Navigator.of(context).pop();
                   }
               ),
               new ListTile(
                   title: new Text('30 Minutes'),
                   onTap: () {
-                    scheduleNotification(index, 30);
+                    scheduleNotification(cellTime, 30);
                     Navigator.of(context).pop();
                   }
               ),
               new ListTile(
                   title: new Text('15 Minutes'),
                   onTap: () {
-                    scheduleNotification(index, 15);
+                    scheduleNotification(cellTime, 15);
                     Navigator.of(context).pop();
                   }
               ),
               new ListTile(
                   title: new Text('5 Minutes'),
                   onTap: () {
-                    scheduleNotification(index, 5);
+                    scheduleNotification(cellTime, 5);
                     Navigator.of(context).pop();
                   }
               ),
