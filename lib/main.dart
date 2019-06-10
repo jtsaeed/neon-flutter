@@ -62,10 +62,9 @@ class _TableViewState extends State<TableView> {
        return ListView.builder( // Makes the cells
            padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
            physics: const BouncingScrollPhysics(),
-           itemCount: getArrayLength(),
+           itemCount: getArrayLength(), // from 0 to the amount of cells there should be
 
            itemBuilder: (context, index) {
-
 
              if (index <= getArrayLength()) {
 
@@ -94,7 +93,8 @@ class _TableViewState extends State<TableView> {
                  );
                } // if end
 
-               else if (currentHour == 24) {
+               else if (getTomorrowSection(index) == '-12PM') {
+                 print("24444");
                  return ListTile(
                    subtitle: Text(
                      "Tomorrow",
@@ -114,20 +114,16 @@ class _TableViewState extends State<TableView> {
                    ),
                  );
                } // else if end
-
-
-//               if (index == getArrayLength() - 1) {
-//                 index = getArrayLength() - 1;
-//               }
-               return _buildBlock(context, currentHour);
+               
+               return _buildBlock(context, index, currentHour);
              }
 
 
            } // Item build // end
-       ); //  ListView.builder // end
+       ); // ListView.builder // end
    } // Widget _myListView() // end
 
-    Widget _buildBlock(context, currentHour) {
+    Widget _buildBlock(context, index, currentHour) {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -145,7 +141,7 @@ class _TableViewState extends State<TableView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      getHours(currentHour),
+                      getHours(index + getCurrentHour()),
                       style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),

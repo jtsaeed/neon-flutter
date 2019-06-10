@@ -27,7 +27,8 @@ makeArray() {
       }
       else {
         var y = i % 24;
-        time.add((y-12).toString() + 'PM');
+        time.add((y - 12 == 0 ? 12 : y - 12).toString() + 'PM');
+
       }
     }
   }
@@ -35,7 +36,7 @@ makeArray() {
 // Gets the hour labels
 String getHours(index) => time[index];
 
-
+String getTomorrowSection(index) => time[index + getCurrentHour() % 24];
 
 
 
@@ -63,5 +64,5 @@ String getHours(index) => time[index];
 //      currentHour = y; // Reassign the count
 //    }
 //  }
-//  return time[index];
-//}
+//  return time[index + getCurrentHour()];
+
