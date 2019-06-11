@@ -52,28 +52,33 @@ loadArray(setState) async {
   Set<String> cachedKeys = prefs.getKeys();
   print('Keys: $cachedKeys');
 
-
   print(cachedKeys.length);
   print(keys.length);
 
+  if (keys.length < cachedKeys.length) { // Load in the cache keys into this array
 
-
-
-  if (keys.length < cachedKeys.length) {
     setState(() {
       for (int i = 0; i < cachedKeys.length; i++) {
-        keys.add(cachedKeys.elementAt(i));
+        keys.add(cachedKeys.elementAt(i)); // Store cache element
         cells[int.parse(keys[i])] = prefs.getString(keys.elementAt(i)); // Changing the array with values from the cache
 
-        if (int.parse(keys[i]) < getCurrentHour()) { // Removing any cache data that is before the current time as it is not needed
-          prefs.remove((keys[i]));
-        }
-       }
+        removeOldKeys(prefs, i);
+
+      }
     });
   }
   print('after loading');
   print(cells);
   print('Keys: $keys');
+
+}
+
+// Removing any cache data that is before the current time as it is not needed
+removeOldKeys(prefs, i)  {
+  if (int.parse(keys[i]) < getCurrentHour()) {
+    prefs.remove((keys[i]));
+    keys.removeAt(i);
+  }
 
 }
 
