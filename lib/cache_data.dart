@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'array.dart';
+import 'time.dart';
+
 import 'main.dart';
 //
 //
@@ -47,8 +49,6 @@ loadArray(setState) async {
 
   final prefs = await SharedPreferences.getInstance();
 
-//  prefs.clear();
-
   Set<String> cachedKeys = prefs.getKeys();
   print('Keys: $cachedKeys');
 
@@ -56,11 +56,18 @@ loadArray(setState) async {
   print(cachedKeys.length);
   print(keys.length);
 
+
+
+
   if (keys.length < cachedKeys.length) {
     setState(() {
       for (int i = 0; i < cachedKeys.length; i++) {
         keys.add(cachedKeys.elementAt(i));
         cells[int.parse(keys[i])] = prefs.getString(keys.elementAt(i)); // Changing the array with values from the cache
+
+        if (int.parse(keys[i]) < getCurrentHour()) { // Removing any cache data that is before the current time as it is not needed
+          prefs.remove((keys[i]));
+        }
        }
     });
   }

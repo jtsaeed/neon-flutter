@@ -44,8 +44,6 @@ class TableView extends StatefulWidget {
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
 
-
-
   @override
     Widget build(BuildContext context) {
       // Runs every time AFTER a cell is clicked on and setState is called
@@ -55,18 +53,18 @@ class _TableViewState extends State<TableView> {
    ///*This is like the TableView
    Widget _myListView() {
 
-     makeArray();
-     loadArray(setState);
-     var currentHour = getCurrentHour() - 1 % 24;
+     makeArray(); // Create all 48 cells
+     loadArray(setState); // Load cell data from cache
+     var currentHour = getCurrentHour() - 1 ; // get the current hour
 
        return ListView.builder( // Makes the cells
            padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
            physics: const BouncingScrollPhysics(),
-           itemCount: getArrayLength(), // from 0 to the amount of cells there should be
+           itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
 
            itemBuilder: (context, index) {
 
-             if (index <= getArrayLength()) {
+             if (index <= getArrayLength()) { // While index is less than arraylength, create the cells
 
                print('Index is: $index');
                currentHour += 1;
