@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-var runOnce = false;
+//var currentHour = getCurrentHour() - 1; // get the current hour
 
 
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
@@ -55,7 +55,7 @@ class _TableViewState extends State<TableView> {
 
      makeArray(); // Create all 48 cells
      loadArray(setState); // Load cell data from cache
-     var currentHour = getCurrentHour() - 1 ; // get the current hour
+     var currentHour = getCurrentHour() - 1; // get the current hour
 
        return ListView.builder( // Makes the cells
            padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
@@ -64,7 +64,7 @@ class _TableViewState extends State<TableView> {
 
            itemBuilder: (context, index) {
 
-             if (index <= getArrayLength()) { // While index is less than arraylength, create the cells
+             if (currentHour < 47) { // While index is less than arraylength, create the cells
 
                print('Index is: $index');
                currentHour += 1;

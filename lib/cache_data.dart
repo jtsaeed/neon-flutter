@@ -50,10 +50,10 @@ loadArray(setState) async {
   final prefs = await SharedPreferences.getInstance();
 
   Set<String> cachedKeys = prefs.getKeys();
-  print('Keys: $cachedKeys');
+  print('cached Keys: $cachedKeys');
 
-  print(cachedKeys.length);
-  print(keys.length);
+  print('cache keys length: ${cachedKeys.length}');
+  print('Current keys in temp array ${keys.length}');
 
   if (keys.length < cachedKeys.length) { // Load in the cache keys into this array
 
@@ -69,7 +69,8 @@ loadArray(setState) async {
   }
   print('after loading');
   print(cells);
-  print('Keys: $keys');
+  print('Keys in array: $keys');
+
 
 }
 
@@ -77,7 +78,7 @@ loadArray(setState) async {
 removeOldKeys(prefs, i)  {
   if (int.parse(keys[i]) < getCurrentHour()) {
     prefs.remove((keys[i]));
-    keys.removeAt(i);
+//    keys.removeAt(i);
   }
 
 }
