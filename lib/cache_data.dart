@@ -41,6 +41,7 @@ import 'main.dart';
 
 List<String> keys = [];
 
+bool runOnce = false;
 
 loadArray(setState) async {
 
@@ -48,38 +49,76 @@ loadArray(setState) async {
   print(cells);
 
   final prefs = await SharedPreferences.getInstance();
+//  prefs.clear();
 
+  if (runOnce == false) {
   Set<String> cachedKeys = prefs.getKeys();
   print('cached Keys: $cachedKeys');
 
   print('cache keys length: ${cachedKeys.length}');
-  print('Current keys in temp array ${keys.length}');
+//  print('Current keys in temp array ${keys.length}');
 
-  if (keys.length < cachedKeys.length) { // Load in the cache keys into this array
+//  if (keys.length < cachedKeys.length) { // Load in the cache keys into this array
+
+//    setState(() {
+//      for (int i = 0; i < cachedKeys.length; i++) {
+//        if (keys.contains(cachedKeys.elementAt(i)) == false) {
+//          keys.add(cachedKeys.elementAt(i)); // Store cache element
+//        }
+////        cells[int.parse(keys[i])] = prefs.getString(keys.elementAt(i)); // Changing the array with values from the cache
+////        removeOldKeys(prefs, i);
+//      }
+//    });
+
 
     setState(() {
-      for (int i = 0; i < cachedKeys.length; i++) {
-        keys.add(cachedKeys.elementAt(i)); // Store cache element
-        cells[int.parse(keys[i])] = prefs.getString(keys.elementAt(i)); // Changing the array with values from the cache
+      for (int k = 0; k < cachedKeys.length; k++) {
 
-        removeOldKeys(prefs, i);
+        for (int t = getCurrentHour(); t < time.length; t++) {
+          removeOldKeys(t);
 
+          if (cachedKeys.elementAt(k).toString() == time[t]) {
+            cells[t - getCurrentHour()] = prefs.getString(cachedKeys.elementAt(k));
+            print('With key: ${cachedKeys.elementAt(k)}, storing value:  ${prefs.getString(cachedKeys.elementAt(k))})');
+          }
+        }
       }
     });
+
+    runOnce = true;
   }
+
+
   print('after loading');
   print(cells);
-  print('Keys in array: $keys');
+//  print('Keys in array: $keys');
 
 
 }
 
+final intTime = <int>[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, // the second 12 is the tomorrow title
+                      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+
+
 // Removing any cache data that is before the current time as it is not needed
-removeOldKeys(prefs, i)  {
-  if (int.parse(keys[i]) < getCurrentHour()) {
-    prefs.remove((keys[i]));
-//    keys.removeAt(i);
-  }
+removeOldKeys(i) async {
+
+  final prefs = await SharedPreferences.getInstance();
+
+  if ((intTime[i]) < getCurrentHour()) {
+
+//    if (prefs.get(time[i + getCurrentHour()].toString().toString)) {
+       prefs.remove(time[i + getCurrentHour()].toString()); // Remove key from cache
+    }
+//  }
+
+
+
+  print('Keys are now: ${prefs.getKeys()}');
+
 
 }
 

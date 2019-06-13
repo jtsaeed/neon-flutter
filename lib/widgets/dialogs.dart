@@ -8,7 +8,7 @@ import '../scheduled_notifcations.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
 
-addDialog(context, currentHour, setState)  {
+addDialog(context, index, setState)  {
   String input = "";
 
   return showDialog<void>(
@@ -19,14 +19,14 @@ addDialog(context, currentHour, setState)  {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
         title: new Text(
-            'What\'s in store at ${getHours(currentHour).toLowerCase()}?'),
+            'What\'s in store at ${getHours(index).toLowerCase()}?'),
         content: new Row(
           children: <Widget>[
             new Expanded(
               child: new TextField(
                 cursorColor: Colors.orange,
                 autofocus: true,
-                decoration: new InputDecoration(hintText: edit == true ? cells[currentHour] : 'Revise Maths'),
+                decoration: new InputDecoration(hintText: edit == true ? cells[index] : 'Revise Maths'),
                 onChanged: (value) => input = value // Update the empty label array with the value they have entered
               ),
             )
@@ -46,8 +46,8 @@ addDialog(context, currentHour, setState)  {
             onPressed: () {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
-                cells[currentHour] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
-                save(currentHour,  cells[currentHour]); // Save message and use the hour as the key
+                cells[index] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
+                save(time[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
                 print("CELLS ARE $cells");
                 edit = false;
               });
@@ -87,8 +87,10 @@ editDialog(context, currentHourKey, setState) async  {
                     setState(() {
                         cells[currentHourKey] = 'Empty';
                         print('editing cell: $currentHourKey');
-                        prefs.remove(currentHourKey.toString()); // Remove key from cache
-                        keys.remove(currentHourKey.toString());
+                        prefs.remove(time[currentHourKey + getCurrentHour()].toString()); // Remove key from cache
+                        print('REMOVED: ${time[currentHourKey].toString()}');
+
+
                     });
                   }
               ),

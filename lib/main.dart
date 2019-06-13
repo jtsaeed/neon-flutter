@@ -53,9 +53,8 @@ class _TableViewState extends State<TableView> {
    ///*This is like the TableView
    Widget _myListView() {
 
-     makeArray(); // Create all 48 cells
+//     makeArray(); // Create all 48 time cells
      loadArray(setState); // Load cell data from cache
-     var currentHour = getCurrentHour() - 1; // get the current hour
 
        return ListView.builder( // Makes the cells
            padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
@@ -64,11 +63,8 @@ class _TableViewState extends State<TableView> {
 
            itemBuilder: (context, index) {
 
-             if (currentHour < 47) { // While index is less than arraylength, create the cells
-
                print('Index is: $index');
-               currentHour += 1;
-               print('currentHour is: $currentHour');
+               print(getHours(index));
 
                if (index == 0) {
                  return ListTile(
@@ -91,8 +87,9 @@ class _TableViewState extends State<TableView> {
                  );
                } // if end
 
-               else if (getTomorrowSection(index) == '-12PM') {
-                 print("24444");
+               //               else if (time[index] == '12PM') {
+
+               else if (getHours(index) == '24TOMORROW') {
                  return ListTile(
                    subtitle: Text(
                      "Tomorrow",
@@ -113,15 +110,14 @@ class _TableViewState extends State<TableView> {
                  );
                } // else if end
                
-               return _buildBlock(context, index, currentHour);
-             }
+               return _buildBlock(context, index);
 
 
            } // Item build // end
        ); // ListView.builder // end
    } // Widget _myListView() // end
 
-    Widget _buildBlock(context, index, currentHour) {
+    Widget _buildBlock(context, index) {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -139,12 +135,12 @@ class _TableViewState extends State<TableView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      getHours(index + getCurrentHour()),
+                      getHours(index),
                       style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
                     Text(
-                      cells[currentHour],
+                      cells[index],
                       style: TextStyle(fontSize: 24.0, color: Colors.grey, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
@@ -156,7 +152,7 @@ class _TableViewState extends State<TableView> {
                 iconSize: 48,
                   color: Colors.grey,
                   onPressed: () {
-                    cells[currentHour] == 'Empty' ? addDialog(context, currentHour, setState) : editDialog(context, currentHour, setState);
+                    cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
                   },
               ),
             ],

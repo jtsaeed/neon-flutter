@@ -7,8 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //TODO: Filter cells
 
 
-List<String> cells = List.filled(48, 'Empty');
-
+List<String> cells = List.filled(50, 'Empty');
 int arrayLimit = 0;
 
 //List<String> cells = [];
