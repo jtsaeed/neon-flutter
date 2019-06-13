@@ -2,7 +2,7 @@ import 'package:intl/intl.dart'; // Time package
 import 'array.dart';
 
 // Stores all the time annotations
-final time = <String>['12AM', '1AM', '2AM', '3AM', '4AM', '5AM', '6AM', '7AM', '8AM', '9AM', '10AM', '11AM', '12PM',
+List<String> time = ['12AM', '1AM', '2AM', '3AM', '4AM', '5AM', '6AM', '7AM', '8AM', '9AM', '10AM', '11AM', '12PM',
   '13PM', '14PM', '15PM', '16PM', '17PM', '18PM', '19PM', '20PM', '21PM', '22PM', '23PM', '24TOMORROW',
   '25AM', '26AM', '27AM', '28AM', '29AM', '30AM', '31AM', '32AM', '33AM', '34AM', '35AM', '36AM',
   '37PM', '38PM', '39PM', '40PM', '41PM', '42PM', '43PM', '44PM', '45PM', '46PM', '47PM', '48PM'];
@@ -72,11 +72,13 @@ int getArrayLength() => cells.length - 2 - getCurrentHour(); // Gets current amo
 
 
 String getHours(index) {
-  if ((time[index + getCurrentHour()].length == 3)) {
+
+  if ((time[index + getCurrentHour()].length == 3)) { // 3 letter string
     if (int.parse(time[index + getCurrentHour()].substring(0, 1)) > 24 &&
         int.parse(time[index + getCurrentHour()].substring(0, 1)) < 37) {
       int hour = index + getCurrentHour() - 25;
-      return time[hour] == '24AM' ? '12AM' : time[hour];
+      hour == '24AM' ? '12AM' : time[hour];
+      return time[hour];
     }
     else if (int.parse(time[index + getCurrentHour()].substring(0, 1)) >= 37 &&
         int.parse(time[index + getCurrentHour()].substring(0, 1)) < 48) {
@@ -84,7 +86,7 @@ String getHours(index) {
       return time[x];
     }
   }
-  else {
+  else { // 4 Letter string
     if (int.parse(time[index + getCurrentHour()].substring(0, 2)) > 24 &&
         int.parse(time[index + getCurrentHour()].substring(0, 2)) <= 37) {
       int hour = index + getCurrentHour() - 24;

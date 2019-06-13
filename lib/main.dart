@@ -64,7 +64,7 @@ class _TableViewState extends State<TableView> {
            itemBuilder: (context, index) {
 
                print('Index is: $index');
-               print(getHours(index));
+//               print(getHours(index));
 
                if (index == 0) {
                  return ListTile(
@@ -89,7 +89,7 @@ class _TableViewState extends State<TableView> {
 
                //               else if (time[index] == '12PM') {
 
-               else if (getHours(index) == '24TOMORROW') {
+               else if (time[index + getCurrentHour()] == '24TOMORROW') {
                  return ListTile(
                    subtitle: Text(
                      "Tomorrow",

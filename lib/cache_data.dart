@@ -111,7 +111,7 @@ removeOldKeys(i) async {
   if ((intTime[i]) < getCurrentHour()) {
 
 //    if (prefs.get(time[i + getCurrentHour()].toString().toString)) {
-       prefs.remove(time[i + getCurrentHour()].toString()); // Remove key from cache
+       prefs.remove(time[i - getCurrentHour()].toString()); // Remove key from cache
     }
 //  }
 
