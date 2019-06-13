@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'time.dart';
 import 'array.dart';
+import 'icon_generator.dart';
 import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
 
@@ -8,6 +9,7 @@ import 'cache_data.dart';
 void main() => runApp(MyApp());
 
 Color primaryColor = Color(0xffFEAB00);
+Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 
 class MyApp extends StatelessWidget {
   @override
@@ -57,7 +59,7 @@ class _TableViewState extends State<TableView> {
      loadArray(setState); // Load cell data from cache
 
        return ListView.builder( // Makes the cells
-           padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
+           padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
            physics: const BouncingScrollPhysics(),
            itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
 
@@ -67,22 +69,25 @@ class _TableViewState extends State<TableView> {
 //               print(getHours(index));
 
                if (index == 0) {
-                 return ListTile(
-                   subtitle: Text(
-                     "Today",
-                     style: TextStyle(
-                         fontSize: 34,
-                         color: Colors.black,
-                         fontWeight: FontWeight.w800),
-                     textAlign: TextAlign.left,
-                   ),
-                   title: Text(
-                     getDate(0).toUpperCase(),
-                     style: TextStyle(
-                         fontSize: 14,
-                         color: Colors.grey,
-                         fontWeight: FontWeight.w600),
-                     textAlign: TextAlign.left,
+                 return Padding(
+                   padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+                   child: ListTile(
+                     subtitle: Text(
+                       "Today",
+                       style: TextStyle(
+                           fontSize: 34,
+                           color: Colors.black,
+                           fontWeight: FontWeight.w800),
+                       textAlign: TextAlign.left,
+                     ),
+                     title: Text(
+                       getDate(0).toUpperCase(),
+                       style: TextStyle(
+                           fontSize: 14,
+                           color: Colors.grey,
+                           fontWeight: FontWeight.w600),
+                       textAlign: TextAlign.left,
+                     ),
                    ),
                  );
                } // if end
@@ -90,27 +95,33 @@ class _TableViewState extends State<TableView> {
                //               else if (time[index] == '12PM') {
 
                else if (time[index + getCurrentHour()] == '24TOMORROW') {
-                 return ListTile(
-                   subtitle: Text(
-                     "Tomorrow",
-                     style: TextStyle(
-                         fontSize: 34,
-                         color: Colors.black,
-                         fontWeight: FontWeight.w800),
-                     textAlign: TextAlign.left,
-                   ),
-                   title: Text(
-                     getDate(1).toUpperCase(), // Increments the day
-                     style: TextStyle(
-                         fontSize: 14,
-                         color: Colors.grey,
-                         fontWeight: FontWeight.w600),
-                     textAlign: TextAlign.left,
+                 return Padding(
+                   padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+                   child: ListTile(
+                     subtitle: Text(
+                       "Tomorrow",
+                       style: TextStyle(
+                           fontSize: 34,
+                           color: Colors.black,
+                           fontWeight: FontWeight.w800),
+                       textAlign: TextAlign.left,
+                     ),
+                     title: Text(
+                       getDate(1).toUpperCase(), // Increments the day
+                       style: TextStyle(
+                           fontSize: 14,
+                           color: Colors.grey,
+                           fontWeight: FontWeight.w600),
+                       textAlign: TextAlign.left,
+                     ),
                    ),
                  );
                } // else if end
                
-               return _buildBlock(context, index);
+               return Padding(
+                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                 child: _buildBlock(context, index),
+               );
 
 
            } // Item build // end
@@ -120,10 +131,16 @@ class _TableViewState extends State<TableView> {
     Widget _buildBlock(context, index) {
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      decoration: new BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [new BoxShadow(
+          color: Colors.black.withOpacity(0.075),
+          blurRadius: 8,
+        )]
+      ),
       child: Card(
         color: Colors.white,
-        elevation: 4.0,
+        elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
@@ -141,14 +158,14 @@ class _TableViewState extends State<TableView> {
                     ),
                     Text(
                       cells[index],
-                      style: TextStyle(fontSize: 24.0, color: Colors.grey, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 24.0, color: cells[index] == "Empty" ? Colors.grey : Colors.black, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
                   ],
                 ),
               ),
               IconButton(
-                icon: new Image.asset("resources/androidAdd@3x.png"),
+                icon: cells[index] == 'Empty' ? addIcon : generateIcon(cells[index]),
                 iconSize: 48,
                   color: Colors.grey,
                   onPressed: () {
