@@ -7,5 +7,5 @@ scheduleNotification(cellTime, minsToWait) async {
       new DateTime.now().add(new Duration(minutes: minsToWait)).millisecondsSinceEpoch,
       "Ticker text",
       'Reminder for ${cells[cellTime]}',
-      time[cellTime]);
+      allTimeLabels[cellTime + getCurrentHour()]);
 }

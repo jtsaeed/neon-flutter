@@ -2,130 +2,104 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'array.dart';
 import 'time.dart';
 
-import 'main.dart';
-//
-//
-//
-//save(cells) async {
-//  print("trying to Saving!");
-//  final prefs = await SharedPreferences.getInstance(); // wait until done
-//  prefs.setStringList('cells2', cells);
-//  print("Saving: $cells");
-//}
 
-//void read() async {
-//  print("trying to load!");
-//  final prefs = await SharedPreferences.getInstance(); // Wait to find data
-//  cells = prefs.getStringList('cells') ?? cells;
-//  print("loadding $cells");
-//}
-//
-//
-////read() async {
-////  final prefs = await SharedPreferences.getInstance();
-////  final key = 'allCells';
-////  final value = prefs.getStringList(key) ?? 'Nothing';
-////  cells = value;
-////  print('read: $value');
-////}
-//
+List<int> timeKeys = [ // these are the keys for all the cells
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+  25, 26, 27, 28, 29, 30,31, 32, 33, 34, 35, 36,
+  37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+];
 
+bool runOnce = false; // Used to make loadArray run once
 
-//read(index) async {
-//  final prefs = await SharedPreferences.getInstance();
-//  final key = index;
-//  final value = prefs.getString(key) ?? 'Nothing';
-//  print('read: $value with key: $key');
-//  return value;
-//}
+loadCells(setState) async {
 
-List<String> keys = [];
-
-bool runOnce = false;
-
-loadArray(setState) async {
-
-  print("loading array");
-  print(cells);
 
   final prefs = await SharedPreferences.getInstance();
-//  prefs.clear();
+  prefs.clear(); // Deletes all cache
 
   if (runOnce == false) {
-  Set<String> cachedKeys = prefs.getKeys();
-  print('cached Keys: $cachedKeys');
-
-  print('cache keys length: ${cachedKeys.length}');
-//  print('Current keys in temp array ${keys.length}');
-
-//  if (keys.length < cachedKeys.length) { // Load in the cache keys into this array
-
-//    setState(() {
-//      for (int i = 0; i < cachedKeys.length; i++) {
-//        if (keys.contains(cachedKeys.elementAt(i)) == false) {
-//          keys.add(cachedKeys.elementAt(i)); // Store cache element
-//        }
-////        cells[int.parse(keys[i])] = prefs.getString(keys.elementAt(i)); // Changing the array with values from the cache
-////        removeOldKeys(prefs, i);
-//      }
-//    });
 
 
-    setState(() {
-      for (int k = 0; k < cachedKeys.length; k++) {
+    if (prefs.get('today') == getDate(0)) {
+      print('Same day!');
 
-        for (int t = getCurrentHour(); t < time.length; t++) {
-          removeOldKeys(t);
+      print('cached Keys: ${prefs.getKeys()}');
+      print('cache keys length: ${prefs.getKeys().length}');
+      print('CURRENT HOUR IS: ${getCurrentHour()}');
 
-          if (cachedKeys.elementAt(k).toString() == time[t]) {
-            cells[t - getCurrentHour()] = prefs.getString(cachedKeys.elementAt(k));
-            print('With key: ${cachedKeys.elementAt(k)}, storing value:  ${prefs.getString(cachedKeys.elementAt(k))})');
+      setState(() {
+        for (int k = 0; k < prefs.getKeys().length; k++) {
+          for (int t = getCurrentHour(); t < timeKeys.length; t++) {
+            var currentHour = (t == -1 ? 0 : t); // 24h is = -1, so change this 0
+
+            if (timeKeys[currentHour].toString() == prefs.getKeys().elementAt(k).toString()) { // If the current hour matches a key
+              cells[t - getCurrentHour()] = prefs.getString(prefs.getKeys().elementAt(k)); // Assign the keys value to the cells array
+              print('With key: ${prefs.getKeys().elementAt(k)}, storing value:  ${prefs.getString(prefs.getKeys().elementAt(k))})');
+            }
+            else if (currentHour <= getCurrentHour()) // Removing any cache data that is before the current time as it is not needed
+              prefs.remove(timeKeys[currentHour].toString());
           }
         }
-      }
-    });
+      });
+    }
 
+    else { // Now we are in tomorrow, so tomorrows section cells needs to move into today's section
+
+      print('different day');
+      prefs.remove('today'); // Remove the date key, we reinitialise it after updating the keys
+
+      setState(() {
+        for (int k = 0; k < prefs.getKeys().length; k++) { // for every key
+          print('key: ${prefs.getKeys().elementAt(k)}, stores value:  ${prefs.getString(prefs.getKeys().elementAt(k))})');
+
+          if (int.parse(prefs.getKeys().elementAt(k)) >= 24 ) { // if the key value is above 24h, then we subtract it by 25 (don't ask)
+
+            String tempKey = prefs.getKeys().elementAt(k); // Gets the key
+            int intKey = int.parse(tempKey); // convert to int
+
+            intKey -= 25;
+            // We do this as: (48 / 2 = 24), thus when this is ran again it divides again, 24/24 = 1, but should be really 23
+            intKey = intKey == 1 ? 23 : intKey;
+
+
+            print('key was changed from $tempKey to $intKey');
+            print('Storing:  ${prefs.getString((prefs.getKeys().elementAt(k)))} with key: $intKey');
+
+            prefs.setString(intKey.toString(), prefs.getString((prefs.getKeys().elementAt(k)))); // store old value with new key
+            cells[intKey - getCurrentHour()] =  prefs.getString((prefs.getKeys().elementAt(k))); // Update cell array with new key & old value
+
+            prefs.remove(tempKey); // Remove old key
+
+          }
+        }
+        saveDate('today'); // Save the current data, as this is the today section now
+
+      });
+    }
     runOnce = true;
   }
 
-
+  print('cache keys length: ${prefs.getKeys().length}');
+  print('Keys are now: ${prefs.getKeys()}');
   print('after loading');
   print(cells);
-//  print('Keys in array: $keys');
-
-
 }
 
-final intTime = <int>[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, // the second 12 is the tomorrow title
-                      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-                      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
-
-
-// Removing any cache data that is before the current time as it is not needed
-removeOldKeys(i) async {
-
-  final prefs = await SharedPreferences.getInstance();
-
-  if ((intTime[i]) < getCurrentHour()) {
-
-//    if (prefs.get(time[i + getCurrentHour()].toString().toString)) {
-       prefs.remove(time[i - getCurrentHour()].toString()); // Remove key from cache
-    }
-//  }
-
-
-
-  print('Keys are now: ${prefs.getKeys()}');
-
-
-}
 
 save(index, input) async { // each input with the index passed in (which cell the text should be in)
   final prefs = await SharedPreferences.getInstance();
   final key = index.toString();
   final value = input.toString();
+  prefs.setString(key, value);
+  print('saved $value with key: $key');
+}
+
+saveDate(passedInKey) async { // Saving the data with a key called 'today'
+  final prefs = await SharedPreferences.getInstance();
+  final key = passedInKey;
+  final value = getDate(0); // Save current date
   prefs.setString(key, value);
   print('saved $value with key: $key');
 }

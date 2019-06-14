@@ -39,8 +39,6 @@ class MyApp extends StatelessWidget {
 class TableView extends StatefulWidget {
   @override
   _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
-
-
 }
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
@@ -48,15 +46,14 @@ class _TableViewState extends State<TableView> {
 
   @override
     Widget build(BuildContext context) {
-      // Runs every time AFTER a cell is clicked on and setState is called
+    // Runs every time AFTER a cell is clicked on and setState is called
       return _myListView();
     }
 
    ///*This is like the TableView
    Widget _myListView() {
 
-//     makeArray(); // Create all 48 time cells
-     loadArray(setState); // Load cell data from cache
+     loadCells(setState); // Load cell data from cache
 
        return ListView.builder( // Makes the cells
            padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
@@ -68,7 +65,7 @@ class _TableViewState extends State<TableView> {
                print('Index is: $index');
 //               print(getHours(index));
 
-               if (index == 0) {
+               if (index == 0) { // First element is today section
                  return Padding(
                    padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
                    child: ListTile(
@@ -92,9 +89,7 @@ class _TableViewState extends State<TableView> {
                  );
                } // if end
 
-               //               else if (time[index] == '12PM') {
-
-               else if (time[index + getCurrentHour()] == '24TOMORROW') {
+               else if (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
                  return Padding(
                    padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
                    child: ListTile(

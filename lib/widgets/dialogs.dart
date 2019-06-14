@@ -47,7 +47,8 @@ addDialog(context, index, setState)  {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
                 cells[index] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
-                save(time[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
+                save(timeKeys[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
+               saveDate('today');
                 print("CELLS ARE $cells");
                 edit = false;
               });
@@ -87,8 +88,8 @@ editDialog(context, currentHourKey, setState) async  {
                     setState(() {
                         cells[currentHourKey] = 'Empty';
                         print('editing cell: $currentHourKey');
-                        prefs.remove(time[currentHourKey + getCurrentHour()].toString()); // Remove key from cache
-                        print('REMOVED: ${time[currentHourKey].toString()}');
+                        prefs.remove(timeKeys[currentHourKey + getCurrentHour()].toString()); // Remove key from cache
+                        print('REMOVED: ${timeKeys[currentHourKey].toString()}');
 
 
                     });
@@ -118,8 +119,6 @@ editDialog(context, currentHourKey, setState) async  {
 
 
 _setRemainderDialog(context, cellTime)  {
-  // currentHour = cellTime
-  // we pass the currentHour to get the corresponding cell
 
   showModalBottomSheet(
       context: context,
