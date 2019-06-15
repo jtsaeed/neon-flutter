@@ -26,7 +26,7 @@ addDialog(context, index, setState)  {
               child: new TextField(
                 cursorColor: Colors.orange,
                 autofocus: true,
-                decoration: new InputDecoration(hintText: edit == true ? cells[index] : 'Revise Maths'),
+                decoration: new InputDecoration(hintText: edit == true ? cells[index] : 'e.g. Have breakfast'),
                 onChanged: (value) => input = value // Update the empty label array with the value they have entered
               ),
             )
@@ -97,7 +97,7 @@ editDialog(context, currentHourKey, setState) async  {
               ),
               new ListTile(
                   trailing: new Icon(Icons.timer),
-                title: new Text('set reminder'),
+                title: new Text('Set Reminder'),
                 onTap: () {
                  Navigator.of(context).pop();
                  _setRemainderDialog(context, currentHourKey);
@@ -105,7 +105,7 @@ editDialog(context, currentHourKey, setState) async  {
               ),
               new ListTile(
                   trailing: new Icon(Icons.cancel),
-                title: new Text('cancel'),
+                title: new Text('Cancel'),
                   onTap: () {
                     Navigator.of(context).pop();
                   }
@@ -155,7 +155,7 @@ _setRemainderDialog(context, cellTime)  {
                   }
               ),
               new ListTile(
-                  title: new Text('cancel'),
+                  title: new Text('Cancel'),
                   onTap: () {
                     Navigator.of(context).pop();
                   }

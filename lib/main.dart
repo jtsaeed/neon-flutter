@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'time.dart';
 import 'array.dart';
+import 'palette.dart';
 import 'icon_generator.dart';
 import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
@@ -8,7 +9,6 @@ import 'cache_data.dart';
 
 void main() => runApp(MyApp());
 
-Color primaryColor = Color(0xffFEAB00);
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 
 class MyApp extends StatelessWidget {
@@ -148,12 +148,12 @@ class _TableViewState extends State<TableView> {
                   children: [
                     Text(
                       getHours(index),
-                      style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 14, color: grayColor, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
                     Text(
                       cells[index],
-                      style: TextStyle(fontSize: 24.0, color: cells[index] == "Empty" ? Colors.grey : Colors.black, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 24.0, color: cells[index] == "Empty" ? grayColor : Colors.black, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.left,
                     ),
                   ],
@@ -162,7 +162,7 @@ class _TableViewState extends State<TableView> {
               IconButton(
                 icon: cells[index] == 'Empty' ? addIcon : generateIcon(cells[index]),
                 iconSize: 48,
-                  color: Colors.grey,
+                  color: lightGrayColor,
                   onPressed: () {
                     cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
                   },
