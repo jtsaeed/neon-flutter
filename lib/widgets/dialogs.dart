@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../time.dart';
-import '../main.dart';
+import '../palette.dart';
 import '../array.dart';
 import '../cache_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +49,7 @@ addDialog(context, index, setState)  {
                 cells[index] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
                 save(timeKeys[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
                saveDate('today');
-                print("CELLS ARE $cells");
+//                print("CELLS ARE $cells");
                 edit = false;
               });
             },
@@ -87,9 +87,9 @@ editDialog(context, currentHourKey, setState) async  {
                     Navigator.of(context).pop();
                     setState(() {
                         cells[currentHourKey] = 'Empty';
-                        print('editing cell: $currentHourKey');
+//                        print('editing cell: $currentHourKey');
                         prefs.remove(timeKeys[currentHourKey + getCurrentHour()].toString()); // Remove key from cache
-                        print('REMOVED: ${timeKeys[currentHourKey].toString()}');
+//                        print('REMOVED: ${timeKeys[currentHourKey].toString()}');
 
 
                     });

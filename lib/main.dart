@@ -62,7 +62,7 @@ class _TableViewState extends State<TableView> {
 
            itemBuilder: (context, index) {
 
-               print('Index is: $index');
+//               print('Index is: $index');
 //               print(getHours(index));
 
                if (index == 0) { // First element is today section
@@ -133,44 +133,54 @@ class _TableViewState extends State<TableView> {
           blurRadius: 8,
         )]
       ),
-      child: Card(
-        color: Colors.white,
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      getHours(index),
-                      style: TextStyle(fontSize: 14, color: grayColor, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.left,
-                    ),
-                    Text(
-                      cells[index],
-                      style: TextStyle(fontSize: 24.0, color: cells[index] == "Empty" ? grayColor : Colors.black, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
+      child: GestureDetector(
+        onTap: (){
+          cells[index] == 'Empty' ? empty() : editDialog(context, index, setState);
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        getHours(index),
+                        style: TextStyle(fontSize: 14, color: grayColor, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        cells[index],
+                        style: TextStyle(fontSize: 24.0, color: cells[index] == "Empty" ? grayColor : Colors.black, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                icon: cells[index] == 'Empty' ? addIcon : generateIcon(cells[index]),
-                iconSize: 48,
+                IconButton(
+                  icon: cells[index] == 'Empty' ? addIcon : generateIcon(cells[index]),
+                  iconSize: 48,
                   color: lightGrayColor,
+                  splashColor: Colors.transparent,
                   onPressed: () {
                     cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
                   },
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+empty() {
+  return;
 }
