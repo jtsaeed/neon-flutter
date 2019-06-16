@@ -1,20 +1,26 @@
 PODS:
   - Flutter (1.0.0)
+  - scheduled_notifications (0.0.1):
+    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `.symlinks/flutter/ios`)
+  - scheduled_notifications (from `.symlinks/plugins/scheduled_notifications/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: ".symlinks/flutter/ios"
+  scheduled_notifications:
+    :path: ".symlinks/plugins/scheduled_notifications/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  scheduled_notifications: b4063688ab864a4fc62ceb133ee9aa5501ef7f96
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
 
 PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
