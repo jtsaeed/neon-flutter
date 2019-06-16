@@ -26,6 +26,7 @@ loadCells(setState) async {
 
       for (int k = 0; k < prefs.getKeys().length; k++) {
         for (int currentHour = getCurrentHour(); currentHour < timeKeys.length; currentHour++) {
+          currentHour = currentHour == -1 ? 0 : currentHour ;
           setState(() {
             if (timeKeys[currentHour].toString() == prefs.getKeys().elementAt(k).toString()) { // If the current hour matches a key from cache
               cells[currentHour - getCurrentHour()] = prefs.getString(prefs.getKeys().elementAt(k)); // Assign the key's value to the cells array
@@ -46,14 +47,15 @@ loadCells(setState) async {
 
       print(prefs.getKeys().length);
       print(prefs.getKeys());
-      var cacheLength = prefs.getKeys().length; // We store the original length as when we edit the cache, we affect the length
       var count = 0; // Stores the tempKeys array count, using prefs.getKeys.length is dynamic, count is static (similar issue to the cacheLength)
-      
-        for (int k = 0; k < cacheLength; k++) { // for every key in cache
-          if (int.parse(prefs.getKeys().elementAt(k)) >= 24) { // if the key value is above 24h, then we subtract it by 25 (don't ask)
 
-            tempKeys.add(prefs.getKeys().elementAt(k)); // temporary stores the key
-            prefs.remove(prefs.getKeys().elementAt(k)); // Remove old key
+      Set<String> cacheKeys = prefs.getKeys();
+
+        for (int k = 0; k < cacheKeys.length; k++) { // for every key in cache
+
+          if (int.parse(cacheKeys.elementAt(k)) >= 24) { // if the key value is above 24h, then we subtract it by 25 (don't ask)
+
+            tempKeys.add(cacheKeys.elementAt(k)); // temporary stores the key
 
             print('Inside tempkeys: $tempKeys');
             print(tempKeys[count]);
@@ -61,27 +63,26 @@ loadCells(setState) async {
             int intKey = int.parse(tempKeys[count]); // convert key to Int
             intKey -= 25; // Go back 24 hours (25 due to rounding down)
             // ?? We do this as: (48 / 2 = 24), thus when this is ran again it divides again, 24/24 = 1, but should be really 23
-            intKey = intKey < 0 ? 1 : intKey;
-//            intKey = intKey < 0 ? 23 : intKey;
+//            intKey = intKey < 0 ? 1 : intKey;
+            intKey = intKey < 0 ? 23 : intKey;
 
-            print('key was changed from ${tempKeys[count]} to $intKey, Storing: ${prefs.getString((prefs.getKeys().elementAt(k)))} with key: $intKey');
-            prefs.setString(intKey.toString(), prefs.getString((prefs.getKeys().elementAt(k)))); // store old value with new key
+            print('key was changed from ${tempKeys[count]} to $intKey, Storing: ${prefs.getString(cacheKeys.elementAt(k))} with key: $intKey');
+            prefs.setString(intKey.toString(), prefs.getString((cacheKeys.elementAt(k)))); // store old value with new key
             
             setState(() {
-              cells[intKey - getCurrentHour()] = prefs.getString((prefs.getKeys().elementAt(k))); // Update cell array with new key & old value
+              cells[intKey - getCurrentHour()] = prefs.getString(cacheKeys.elementAt(k)); // Update cell array with new key & old value
             });
 
+            prefs.remove(cacheKeys.elementAt(k)); // Remove old key
             count += 1;
+            saveDate('today'); // Save the current data, as this is the today section now
+
           }
         }
-      
-
-        saveDate('today'); // Save the current data, as this is the today section now
     }
     runOnce = true;
   
 }
-
   print('cache keys length: ${prefs.getKeys().length}');
   print('Keys are now: ${prefs.getKeys()}');
   print('after loading');
