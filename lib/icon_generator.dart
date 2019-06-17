@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Icon generateIcon(String title) {
+Icon generateIcon(String s) {
+  var title = s.toLowerCase();
+
   if (title.contains("bank") || title.contains("finance")) {
     return Icon(Icons.account_balance);
   } else if (title.contains("draw") || title.contains("brush") || title.contains("art") || title.contains("design")) {
