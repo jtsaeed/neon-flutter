@@ -61,10 +61,7 @@ loadCells(setState) async {
             print(tempKeys[count]);
 
             int intKey = int.parse(tempKeys[count]); // convert key to Int
-            intKey -= 25; // Go back 24 hours (25 due to rounding down)
-            // ?? We do this as: (48 / 2 = 24), thus when this is ran again it divides again, 24/24 = 1, but should be really 23
-//            intKey = intKey < 0 ? 1 : intKey;
-            intKey = intKey < 0 ? 23 : intKey;
+            intKey -= 25; // Go back 24 hours (tomorrow section counts as a day, so need to subtract 25, not 24)
 
             print('key was changed from ${tempKeys[count]} to $intKey, Storing: ${prefs.getString(cacheKeys.elementAt(k))} with key: $intKey');
             prefs.setString(intKey.toString(), prefs.getString((cacheKeys.elementAt(k)))); // store old value with new key

@@ -46,9 +46,10 @@ addDialog(context, index, setState)  {
             onPressed: () {
               Navigator.of(context).pop();
               setState(() { // This should rerun the build widget and return the updated viewList
+                input = input[0].toUpperCase() + input.substring(1);
                 cells[index] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
                 save(timeKeys[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
-               saveDate('today');
+                saveDate('today');
                 edit = false;
               });
             },
