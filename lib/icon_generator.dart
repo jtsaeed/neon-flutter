@@ -47,10 +47,7 @@ Icon generateIcon(String s) {
     return Icon(Icons.restaurant);
   } else if (title.contains("game") ||
       title.contains("play") ||
-      title.contains("arcade") ||
-      title.contains("raid") ||
-      title.contains("online") ||
-      title.contains("win")) {
+      title.contains("arcade")) {
     return Icon(Icons.videogame_asset);
   } else if (title.contains("gym") ||
       title.contains("exercise") ||
@@ -61,7 +58,6 @@ Icon generateIcon(String s) {
       title.contains("dentist") ||
       title.contains("meditat") ||
       title.contains("appointment") ||
-      title.contains("nurse") ||
       title.contains("hospital")) {
     return Icon(Icons.local_hospital);
   } else if (title.contains("home") ||
