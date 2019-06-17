@@ -6,7 +6,6 @@ import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
 
 
-List<String> cells = List.filled(50, 'Empty');
 
 void main() => runApp(MyApp());
 

@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'time.dart';
-import 'main.dart';
+
+List<String> cells = List.filled(50, 'Empty');
 
 List<int> timeKeys = [ // these are the keys for all the cells
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
@@ -86,8 +87,7 @@ loadCells(setState) async {
   print(cells);
 }
 
-save(index, input) async {
-  // each input with the index passed in (which cell the text should be in)
+save(index, input) async {// each input with the index passed in (which cell the text should be in)
   final prefs = await SharedPreferences.getInstance();
   final key = index.toString();
   final value = input.toString();
@@ -95,8 +95,7 @@ save(index, input) async {
   print('saved $value with key: $key');
 }
 
-saveDate(passedInKey) async {
-  // Saving the data with a key called 'today'
+saveDate(passedInKey) async {// Saving the data with a key called 'today'
   final prefs = await SharedPreferences.getInstance();
   final key = passedInKey;
   final value = getDate(0); // Save current date
