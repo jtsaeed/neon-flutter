@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-Icon generateIcon(String title) {
-  if (title.contains("bank") || title.contains("finance")) {
+Icon generateIcon(String s) {
+  var title = s.toLowerCase();
+
+
+  if (title.contains("bank") || title.contains("finance") ||  title.contains("money") ||  title.contains("cash") ||  title.contains("pay")) {
     return Icon(Icons.account_balance);
-  } else if (title.contains("draw") || title.contains("brush") || title.contains("art") || title.contains("design")) {
+  } else if (title.contains("draw") || title.contains("brush") || title.contains("art") || title.contains("design") || title.contains("sketch")) {
     return Icon(Icons.brush);
   } else if (title.contains("code") || title.contains("coding") || title.contains("programming") || title.contains("software")) {
     return Icon(Icons.code);
@@ -15,13 +18,13 @@ Icon generateIcon(String title) {
     return Icon(Icons.school);
   } else if (title.contains("breakfast") || title.contains("lunch") || title.contains("dinner") || title.contains("food") || title.contains("meal") || title.contains("eat") || title.contains("snack") || title.contains("brunch")) {
     return Icon(Icons.restaurant);
-  } else if (title.contains("game") || title.contains("play") || title.contains("arcade")) {
+  } else if (title.contains("game") || title.contains("play") || title.contains("arcade") || title.contains("raid") || title.contains("online") || title.contains("win")) {
     return Icon(Icons.videogame_asset);
   } else if (title.contains("gym") || title.contains("exercise") || title.contains("workout") || title.contains("run")) {
     return Icon(Icons.fitness_center);
-  } else if (title.contains("doctor") || title.contains("dentist") || title.contains("meditat")) {
+  } else if (title.contains("doctor") || title.contains("dentist") || title.contains("meditat") || title.contains("appointment") || title.contains("nurse") || title.contains("hospital")) {
     return Icon(Icons.local_hospital);
-  } else if (title.contains("home") || title.contains("chores") || title.contains("clean")) {
+  } else if (title.contains("home") || title.contains("chores") || title.contains("clean") || title.contains("house")) {
     return Icon(Icons.home);
   } else if (title.contains("date") || title.contains("kids") || title.contains("family")) {
     return Icon(Icons.favorite);
