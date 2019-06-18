@@ -1,5 +1,5 @@
 import 'package:scheduled_notifications/scheduled_notifications.dart';
-import 'array.dart';
+import 'main.dart';
 import 'time.dart';
 
 scheduleNotification(cellTime, minsToWait) async {

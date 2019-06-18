@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../time.dart';
-import '../palette.dart';
-import '../array.dart';
-import '../cache_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../scheduled_notifcations.dart';
+import '../time.dart';
+import '../palette.dart';
+import '../main.dart';
+import '../cache_data.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
 
@@ -49,7 +49,6 @@ addDialog(context, index, setState)  {
                 cells[index] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
                 save(timeKeys[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
                saveDate('today');
-//                print("CELLS ARE $cells");
                 edit = false;
               });
             },
@@ -116,7 +115,6 @@ editDialog(context, currentHourKey, setState) async  {
       }
   );
 }
-
 
 _setRemainderDialog(context, cellTime)  {
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'time.dart';
-import 'array.dart';
 import 'palette.dart';
 import 'icon_generator.dart';
 import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
 
+
+List<String> cells = List.filled(50, 'Empty');
 
 void main() => runApp(MyApp());
 

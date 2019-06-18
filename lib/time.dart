@@ -1,7 +1,5 @@
 import 'package:intl/intl.dart'; // Time package
-import 'array.dart';
-
-
+import 'main.dart';
 
 // Stores all the time annotations/labels
 List<String> allTimeLabels = ['12AM', '1AM', '2AM', '3AM', '4AM', '5AM', '6AM', '7AM', '8AM', '9AM', '10AM', '11AM', '12PM',
