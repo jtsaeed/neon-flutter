@@ -126,28 +126,28 @@ _setRemainderDialog(context, cellTime)  {
               new ListTile(
                   title: new Text('60 Minutes'),
                   onTap: () {
-                    scheduleNotification(cellTime, 60);
+                    showNotification(cellTime, 60);
                     Navigator.of(context).pop();
                   }
               ),
               new ListTile(
                   title: new Text('30 Minutes'),
                   onTap: () {
-                    scheduleNotification(cellTime, 30);
+                    showNotification(cellTime, 30);
                     Navigator.of(context).pop();
                   }
               ),
               new ListTile(
                   title: new Text('15 Minutes'),
                   onTap: () {
-                    scheduleNotification(cellTime, 15);
+                    showNotification(cellTime, 15);
                     Navigator.of(context).pop();
                   }
               ),
               new ListTile(
                   title: new Text('5 Minutes'),
                   onTap: () {
-                    scheduleNotification(cellTime, 5);
+                    showNotification(cellTime, 5);
                     Navigator.of(context).pop();
                   }
               ),

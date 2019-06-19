@@ -1,12 +1,26 @@
-import 'package:scheduled_notifications/scheduled_notifications.dart';
 import 'time.dart';
 import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'main.dart';
 
-scheduleNotification(cellTime, minsToWait) async {
-  int notificationId = await ScheduledNotifications.scheduleNotification(
-      new DateTime.now().add(new Duration(microseconds: minsToWait)).millisecondsSinceEpoch,
-      "Ticker text",
+
+showNotification(cellTime, minsToWait) async {
+  print('set Reminder:' );
+
+  var scheduledNotificationDateTime = new DateTime.now().add(new Duration(minutes: minsToWait));
+
+  var androidPlatformChannelSpecifics =
+  new AndroidNotificationDetails('your other channel id',
+      'your other channel name', 'your other channel description');
+  var iOSPlatformChannelSpecifics =
+  new IOSNotificationDetails();
+  NotificationDetails platformChannelSpecifics = new NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.schedule(
+      0,
       'Reminder at ${allTimeLabels[cellTime + getCurrentHour()]}',
-      cells[cellTime]);
+      cells[cellTime],
+      scheduledNotificationDateTime,
+      platformChannelSpecifics);
 }

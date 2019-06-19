@@ -4,12 +4,14 @@ import 'palette.dart';
 import 'icon_generator.dart';
 import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'scheduled_notifcations.dart';
 
 
 void main() => runApp(MyApp());
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class MyApp extends StatelessWidget {
   @override
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
+
         body: TableView(),
         // body: Center(
         // child: Blocks(),
@@ -31,8 +34,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//var currentHour = getCurrentHour() - 1; // get the current hour
 
 
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
@@ -43,6 +44,28 @@ class TableView extends StatefulWidget {
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
+
+  void initState() {
+    super.initState();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
+
+    var iOS = new IOSInitializationSettings();
+
+    var initSettings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSettings);
+  }
+
+//  flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: onSelectNotification);
+
+//  Future onSelectNotification(String payload) async {
+//    debugPrint('notification payload: ' + payload);
+//
+//    showDialog(context: context, builder: (_) => new AlertDialog(
+//      title: new Text('Notification'),
+//      content: new Text('$payload'),
+//    )); //AlertDialog
+//  }
 
   @override
     Widget build(BuildContext context) {
@@ -136,6 +159,7 @@ class _TableViewState extends State<TableView> {
       child: GestureDetector(
         onTap: (){
           cells[index] == 'Empty' ? empty() : editDialog(context, index, setState);
+
         },
         child: Card(
           color: Colors.white,
@@ -180,6 +204,9 @@ class _TableViewState extends State<TableView> {
     );
   }
 }
+
+
+
 
 empty() {
   return;

@@ -122,15 +122,3 @@ saveDate() async {// Saving the data with a key called 'today'
   print('saved $value with key: $key');
 }
 
-//String getDay() { // Gets date
-//  DateTime date = DateTime.now();
-//  var prevMonth = new DateTime(date.year, date.month, date.day); // Increment day
-//print(prevMonth);
-//
-//print(date.day);
-//print(prevMonth.subtract(new Duration(days: date.day)));
-//
-//
-//  return DateFormat(' d ').format(prevMonth).toString();
-//
-//}
