@@ -19,28 +19,26 @@ loadCells(setState) async {
 
   if (runOnce == false) {// Run once
 
-    print(getDay);
 
-    if (int.parse(getDay()) - int.parse(prefs.get('dayNumber')) >= 2) { // Been over 2 days, so completely remove old data
-      print("DWIUDUWI");
-      prefs.getKeys().removeAll(prefs.getKeys());
-    }
+    if (prefs.get('date') == getDate(0)) { // Compare cache date to current date, if same then we are still in the same today section AND DO NOT need to update keys
 
-    else if (prefs.get('dayNumber') == getDay()) { // Compare cache date to current date, if same then we are still in the same today section AND DO NOT need to update keys
 
       print('Same day!');
       print('cached Keys: ${prefs.getKeys()}');
       print('cache keys length: ${prefs.getKeys().length}');
       print('CURRENT HOUR IS: ${getCurrentHour()}');
 
-      for (int k = 0; k < prefs.getKeys().length; k++) {
+      var cacheKeys = List.from(prefs.getKeys());
+
+
+      for (int k = 0; k < cacheKeys.length; k++) {
         for (int currentHour = getCurrentHour(); currentHour < timeKeys.length; currentHour++) {
           currentHour = currentHour == -1 ? 0 : currentHour ;
 
           setState(() {
-            if (timeKeys[currentHour].toString() == prefs.getKeys().elementAt(k).toString()) { // If the current hour matches a key from cache
-              cells[currentHour - getCurrentHour()] = prefs.getString(prefs.getKeys().elementAt(k)); // Assign the key's value to the cells array
-              print('With key: ${prefs.getKeys().elementAt(k)}, storing value:  ${prefs.getString(prefs.getKeys().elementAt(k))})');
+            if (timeKeys[currentHour].toString() == cacheKeys.elementAt(k).toString()) { // If the current hour matches a key from cache
+              cells[currentHour - getCurrentHour()] = prefs.getString(cacheKeys.elementAt(k)); // Assign the key's value to the cells array
+              print('With key: ${cacheKeys.elementAt(k)}, storing value:  ${prefs.getString(cacheKeys.elementAt(k))})');
             }
           });
         }
@@ -51,9 +49,9 @@ loadCells(setState) async {
       }
     }
     
-    else {// Now we are in tomorrow, so tomorrows section cells needs to move into today's section
+    else if (prefs.get('date') == getDate(-1)) {// Now we are in tomorrow, so tomorrows section cells needs to move into today's section
       print('different day');
-      prefs.remove('dayNumber'); // Remove the date key as it is for the previous date, we reinitialise it after updating the keys with the current date
+      prefs.remove('date'); // Remove the date key as it is for the previous date, we reinitialise it after updating the keys with the current date
 
       print(prefs.getKeys().length);
       print(prefs.getKeys());
@@ -92,6 +90,13 @@ loadCells(setState) async {
       saveDate(); // Save the current data, as this is the today section now
 
     }
+
+    else { // If the  cached date is equal to the date from 2 days ago or more, then clear cache
+        print('Havent been active for 2days!');
+        prefs.clear();
+        saveDate(); // Save the current data, as this is the today section now
+
+    }
     runOnce = true;
   
 }
@@ -111,17 +116,21 @@ save(index, input) async {// each input with the index passed in (which cell the
 
 saveDate() async {// Saving the data with a key called 'today'
   final prefs = await SharedPreferences.getInstance();
-  final key = 'dayNumber';
-  final value = getDay().toString(); // Save current date
+  final key = 'date';
+  final value = getDate(0).toString(); // Save current date
   prefs.setString(key, value);
   print('saved $value with key: $key');
 }
 
-String getDay() { // Gets date
-  DateTime date = DateTime.now();
-  var prevMonth = new DateTime(date.day); // Increment day
-  print('----- ${DateFormat(' d ').format(prevMonth).toString()}');
-
-  return DateFormat(' d ').format(prevMonth).toString();
-
-}
+//String getDay() { // Gets date
+//  DateTime date = DateTime.now();
+//  var prevMonth = new DateTime(date.year, date.month, date.day); // Increment day
+//print(prevMonth);
+//
+//print(date.day);
+//print(prevMonth.subtract(new Duration(days: date.day)));
+//
+//
+//  return DateFormat(' d ').format(prevMonth).toString();
+//
+//}
