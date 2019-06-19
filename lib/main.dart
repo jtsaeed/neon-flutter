@@ -5,7 +5,6 @@ import 'icon_generator.dart';
 import 'package:neon/widgets/dialogs.dart';
 import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'scheduled_notifcations.dart';
 
 
 void main() => runApp(MyApp());
@@ -204,8 +203,6 @@ class _TableViewState extends State<TableView> {
     );
   }
 }
-
-
 
 
 empty() {

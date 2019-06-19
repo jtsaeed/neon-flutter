@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../scheduled_notifcations.dart';
 import '../time.dart';
 import '../palette.dart';
-import '../main.dart';
 import '../cache_data.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
