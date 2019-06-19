@@ -48,7 +48,7 @@ addDialog(context, index, setState)  {
               setState(() { // This should rerun the build widget and return the updated viewList
                 cells[index] = input == '' ? 'Empty' : input; // If they enter nothing then add empty again
                 save(timeKeys[index + getCurrentHour()],  cells[index]); // Save message and use the hour as the key
-                saveDate('today');
+                saveDate();
                 edit = false;
               });
             },

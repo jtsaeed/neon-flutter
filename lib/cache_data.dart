@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'time.dart';
+import 'package:intl/intl.dart'; // Time package
 
 List<String> cells = List.filled(50, 'Empty');
 
@@ -18,7 +19,14 @@ loadCells(setState) async {
 
   if (runOnce == false) {// Run once
 
-    if (prefs.get('today') == getDate(0)) { // Compare cache date to current date, if same then we are still in the same today section AND DO NOT need to update keys
+    print(getDay);
+
+    if (int.parse(getDay()) - int.parse(prefs.get('dayNumber')) >= 2) { // Been over 2 days, so completely remove old data
+      print("DWIUDUWI");
+      prefs.getKeys().removeAll(prefs.getKeys());
+    }
+
+    else if (prefs.get('dayNumber') == getDay()) { // Compare cache date to current date, if same then we are still in the same today section AND DO NOT need to update keys
 
       print('Same day!');
       print('cached Keys: ${prefs.getKeys()}');
@@ -28,6 +36,7 @@ loadCells(setState) async {
       for (int k = 0; k < prefs.getKeys().length; k++) {
         for (int currentHour = getCurrentHour(); currentHour < timeKeys.length; currentHour++) {
           currentHour = currentHour == -1 ? 0 : currentHour ;
+
           setState(() {
             if (timeKeys[currentHour].toString() == prefs.getKeys().elementAt(k).toString()) { // If the current hour matches a key from cache
               cells[currentHour - getCurrentHour()] = prefs.getString(prefs.getKeys().elementAt(k)); // Assign the key's value to the cells array
@@ -37,24 +46,28 @@ loadCells(setState) async {
         }
       }
       for (int currentHour = 0; currentHour < timeKeys.length; currentHour++) {
-        if (currentHour <= getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
+        if (currentHour <= getCurrentHour() ) // Removing any cache keys that is before the current time as it is not needed anymore
           prefs.remove(timeKeys[currentHour].toString());
       }
     }
     
     else {// Now we are in tomorrow, so tomorrows section cells needs to move into today's section
       print('different day');
-      prefs.remove('today'); // Remove the date key as it is for the previous date, we reinitialise it after updating the keys with the current date
+      prefs.remove('dayNumber'); // Remove the date key as it is for the previous date, we reinitialise it after updating the keys with the current date
 
       print(prefs.getKeys().length);
       print(prefs.getKeys());
-      var count = 0; // Stores the tempKeys array count, using prefs.getKeys.length is dynamic, count is static (similar issue to the cacheLength)
+      var count = 0; // Stores the tempKeys array count, using prefs.getKeys.length is dynamic, count is static
 
-      Set<String> cacheKeys = prefs.getKeys();
+      prefs.remove('23');
+
+      var cacheKeys = List.from(prefs.getKeys());
+
 
         for (int k = 0; k < cacheKeys.length; k++) { // for every key in cache
 
-          if (int.parse(cacheKeys.elementAt(k)) >= 24) { // if the key value is above 24h, then we subtract it by 25 (don't ask)
+
+           if (int.parse(cacheKeys.elementAt(k)) >= 24) { // if the key value is above 24h, then we subtract it by 25 (don't ask)
 
             tempKeys.add(cacheKeys.elementAt(k)); // temporary stores the key
 
@@ -73,10 +86,11 @@ loadCells(setState) async {
 
             prefs.remove(cacheKeys.elementAt(k)); // Remove old key
             count += 1;
-            saveDate('today'); // Save the current data, as this is the today section now
 
           }
         }
+      saveDate(); // Save the current data, as this is the today section now
+
     }
     runOnce = true;
   
@@ -95,10 +109,19 @@ save(index, input) async {// each input with the index passed in (which cell the
   print('saved $value with key: $key');
 }
 
-saveDate(passedInKey) async {// Saving the data with a key called 'today'
+saveDate() async {// Saving the data with a key called 'today'
   final prefs = await SharedPreferences.getInstance();
-  final key = passedInKey;
-  final value = getDate(0); // Save current date
+  final key = 'dayNumber';
+  final value = getDay().toString(); // Save current date
   prefs.setString(key, value);
   print('saved $value with key: $key');
+}
+
+String getDay() { // Gets date
+  DateTime date = DateTime.now();
+  var prevMonth = new DateTime(date.day); // Increment day
+  print('----- ${DateFormat(' d ').format(prevMonth).toString()}');
+
+  return DateFormat(' d ').format(prevMonth).toString();
+
 }
