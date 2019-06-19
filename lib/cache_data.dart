@@ -15,7 +15,7 @@ bool runOnce = false; // Used to make loadArray run once
 
 loadCells(setState) async {
   final prefs = await SharedPreferences.getInstance();
-//  prefs.clear(); // Deletes all cache
+//  prefs.clear();  // Deletes all cache
 
   if (runOnce == false) {// Run once
 
