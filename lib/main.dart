@@ -7,25 +7,23 @@ import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'bottom_navbar.dart';
 
-void main() => runApp(MyApp());
-
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'GoogleSans',
-        primaryColor: primaryColor,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+        theme: ThemeData(
+          fontFamily: 'GoogleSans',
+          primaryColor: primaryColor,
+       ),
+        home: Scaffold(
           backgroundColor: Colors.white,
-          body: TableView(),
-
-      ),
+          body: HomePage(),
+        ),
     );
   }
 }
