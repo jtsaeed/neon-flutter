@@ -28,8 +28,11 @@ dependencies:
   flutter_local_notifications:
 # https://pub:dev/packages/flutter_local_notifications#-installing-tab-:
 
-  # Use with the CupertinoIcons class for iOS style icons.
+  device_calendar: ^0.1.1
+#  https://itnext:io/using-device-calendar-library-in-flutter-to-communicate-with-android-ios-calendar-95b2d8c77b40:
+
   cupertino_icons: ^0.1.2
+  # Use with the CupertinoIcons class for iOS style icons.
 
   intl: ^0.15.8
 
