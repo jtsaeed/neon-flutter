@@ -6,11 +6,16 @@ import './widgets/dialogs.dart';
 import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'bottom_navbar.dart';
+import 'package:preferences/preferences.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-void main() => runApp(MyApp());
+
+main() async {
+  await PrefService.init(prefix: 'pref_');
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -214,58 +219,6 @@ class _TableViewState extends State<TableView> {
   }
 }
 
-empty() {
-  return;
-}
+empty() => false;
 
-
-
-class MyStatefulWidget extends StatefulWidget {
-
-  @override
-  MyStatefulWidgetState createState() => MyStatefulWidgetState();
-}
-
-class MyStatefulWidgetState extends State<MyStatefulWidget> {
-
-  int _selectedIndex = 0;
-//  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
-  final List<Widget> _children = [];
-
-
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    print(_selectedIndex);
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            title: Text('To Do List'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
-            title: Text('Schedule'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.amber[800],
-      ),
-    );
-  }
-}
 

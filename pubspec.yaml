@@ -22,7 +22,7 @@ dependencies:
 
 
 #^ Allows for automatic updating if the latest version will not break the current code
-  shared_preferences: ^0.4.3
+  shared_preferences: ^0.5.2
 #  https://pusher:   com/tutorials/local-data-flutter:
 
   flutter_local_notifications:
@@ -33,6 +33,12 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   # Use with the CupertinoIcons class for iOS style icons.
+
+  preferences: ^4.0.0
+#  https://pub:dev/packages/preferences#-installing-tab-:
+
+  dynamic_theme: ^1.0.1
+#  https://pub: dev/packages/dynamic_theme#-installing-tab-:
 
   intl: ^0.15.8
 

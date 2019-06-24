@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import './widgets/Settings.dart';
 import 'main.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
 
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
   final widgetOptions = [
     Text('To Do List'),
     new TableView(),
-    Text('Settings'),
+    new MyHomePage(),
   ];
 
   @override
