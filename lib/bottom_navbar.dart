@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'settings_page.dart';
-import '../main.dart';
-import '../load_calender.dart';
+import './widgets/Settings.dart';
+import 'main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,10 +8,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
+  int selectedIndex = 2;
   final widgetOptions = [
     Text('To Do List'),
-//    new CalendarPage(),
     new TableView(),
     new MyHomePage(),
   ];
@@ -25,9 +23,12 @@ class HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.list), title: Text('To Do List')),
-          BottomNavigationBarItem(icon: Icon(Icons.schedule), title: Text('Schedule')),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Settings')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.list), title: Text('To Do List')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.schedule), title: Text('Schedule')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), title: Text('Settings')),
         ],
         currentIndex: selectedIndex,
         selectedItemColor: Colors.amber[800],

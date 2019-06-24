@@ -5,11 +5,12 @@ import 'icon_generator.dart';
 import './widgets/dialogs.dart';
 import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:neon/widgets/bottom_navbar.dart';
+import 'bottom_navbar.dart';
 import 'package:preferences/preferences.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
 
 main() async {
   await PrefService.init(prefix: 'pref_');
@@ -20,17 +21,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'GoogleSans',
-        primaryColor: primaryColor,
-      ),
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: HomePage(),
-      ),
+        theme: ThemeData(
+          fontFamily: 'GoogleSans',
+          primaryColor: primaryColor,
+       ),
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: HomePage(),
+        ),
     );
   }
 }
+
+
 
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
@@ -65,7 +68,8 @@ class _TableViewState extends State<TableView> {
 //  }
 
   @override
-  Widget build(BuildContext context) {// Runs every time AFTER a cell is clicked on and setState is called
+  Widget build(BuildContext context) {
+    // Runs every time AFTER a cell is clicked on and setState is called
     return _myListView();
   }
 
@@ -73,14 +77,66 @@ class _TableViewState extends State<TableView> {
   Widget _myListView() {
     loadCells(setState); // Load cell data from cache
 
-    return ListView.builder(// Makes the cells
+    return ListView.builder(
+        // Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
         physics: const BouncingScrollPhysics(),
-        itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
-        itemBuilder: (context, index) {
+        itemCount: getArrayLength(),
+        // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
 
-          if (index == 0 || allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') // Have this here to be a lil efficient, not having to enter the new method to just return false anyway
-            getSectionTitle(index);
+        itemBuilder: (context, index) {
+//               print('Index is: $index');
+//               print(getHours(index));
+
+          if (index == 0) {
+            // First element is today section
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+              child: ListTile(
+                subtitle: Text(
+                  "Today",
+                  style: TextStyle(
+                      fontSize: 34,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.left,
+                ),
+                title: Text(
+                  getDate(0).toUpperCase() + " // BETA 2",
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            );
+          } // if end
+
+          else if (allTimeLabels[index + getCurrentHour()] ==
+              'TomorrowSection') {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+              child: ListTile(
+                subtitle: Text(
+                  "Tomorrow",
+                  style: TextStyle(
+                      fontSize: 34,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.left,
+                ),
+                title: Text(
+                  getDate(1).toUpperCase() + " // BETA 2", // Increments the day
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            );
+          } // else if end
 
           return Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -163,47 +219,6 @@ class _TableViewState extends State<TableView> {
   }
 }
 
-getSectionTitle(index) {
-  if (index == 0) {
-// First element is today section
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
-      child: ListTile(
-        subtitle: Text(
-          "Today",
-          style: TextStyle(
-              fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
-          textAlign: TextAlign.left,
-        ),
-        title: Text(
-          getDate(0).toUpperCase() + " // BETA 2",
-          style: TextStyle(
-              fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
-          textAlign: TextAlign.left,
-        ),
-      ),
-    );
-  } // if end
-
-  else if (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
-      child: ListTile(
-        subtitle: Text(
-          "Tomorrow",
-          style: TextStyle(
-              fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
-          textAlign: TextAlign.left,
-        ),
-        title: Text(
-          getDate(1).toUpperCase() + " // BETA 2", // Increments the day
-          style: TextStyle(
-              fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
-          textAlign: TextAlign.left,
-        ),
-      ),
-    );
-  } // else if end
-}
-
 empty() => false;
+
+
