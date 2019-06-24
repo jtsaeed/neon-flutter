@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// [Personalization]
 
       body: PreferencePage([
         PreferenceTitle('Personalization'),
@@ -53,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
             DynamicTheme.of(context).setBrightness(Brightness.dark);
           },
         ),
+
+        /// [NightMode]
         PreferenceTitle('Night mode'),
         SwitchPreference(
           'Change night hours',
@@ -60,11 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
           desc: 'hide cells 12am - 6am',
         ),
 
+        /// [Feedback]
         PreferenceTitle('Got an issue?'),
         TextFieldPreference(
           'Feedback',
           'user_display_name',
         ),
+
+        /// [Buttons]
         const SizedBox(height: 15),
         new RaisedButton(
           child: const Text('Submit'),
@@ -88,6 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
             //TODO
           },
         ),
+
+
+        /// [Calender // TODO]
         PreferenceTitle('Calendar'),
         CheckboxPreference(
           '---',

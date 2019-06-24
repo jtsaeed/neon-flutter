@@ -35,8 +35,7 @@ class MyApp extends StatelessWidget {
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
-  _TableViewState createState() =>
-      _TableViewState(); // Creating the tableView widget/state
+  _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
 }
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
@@ -44,8 +43,7 @@ class _TableViewState extends State<TableView> {
   void initState() {
     super.initState();
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings(
-        '@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
 
     var iOS = new IOSInitializationSettings();
 
@@ -78,14 +76,48 @@ class _TableViewState extends State<TableView> {
         physics: const BouncingScrollPhysics(),
         itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
-
-          if (index == 0 || allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') // Have this here to be a lil efficient, not having to enter the new method to just return false anyway
-            getSectionTitle(index);
-
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            child: _buildBlock(context, index),
-          );
+          if (index == 0) {// First element is today section
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+              child: ListTile(
+                subtitle: Text(
+                  "Today",
+                  style: TextStyle(
+                      fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.left,
+                ),
+                title: Text(
+                  getDate(0).toUpperCase() + " // BETA 2",
+                  style: TextStyle(
+                      fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            );
+          } // if end
+          else if  (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+              child: ListTile(
+                subtitle: Text(
+                  "Tomorrow",
+                  style: TextStyle(
+                      fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.left,
+                ),
+                title: Text(
+                  getDate(1).toUpperCase() + " // BETA 2", // Increments the day
+                  style: TextStyle(
+                      fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            );
+          } // else if end
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+              child: _buildBlock(context, index),
+            );
         } // Item build // end
         ); // ListView.builder // end
   } // Widget _myListView() // end
@@ -185,7 +217,7 @@ getSectionTitle(index) {
     );
   } // if end
 
-  else if (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
+  else {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
       child: ListTile(

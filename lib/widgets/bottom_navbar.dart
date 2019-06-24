@@ -11,8 +11,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   final widgetOptions = [
-    Text('To Do List'),
-//    new CalendarPage(),
+//    Text('To Do List'),
+    new CalendarPage(),
     new TableView(),
     new MyHomePage(),
   ];
@@ -25,7 +25,7 @@ class HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.list), title: Text('To Do List')),
+          BottomNavigationBarItem(icon: Icon(Icons.list), title: Text('Storing calender here atm')),
           BottomNavigationBarItem(icon: Icon(Icons.schedule), title: Text('Schedule')),
           BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Settings')),
         ],
