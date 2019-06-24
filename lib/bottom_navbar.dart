@@ -3,13 +3,12 @@ import './widgets/Settings.dart';
 import 'main.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 1;
+  int selectedIndex = 2;
   final widgetOptions = [
     Text('To Do List'),
     new TableView(),
@@ -24,9 +23,12 @@ class HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.list), title: Text('To Do List')),
-          BottomNavigationBarItem(icon: Icon(Icons.schedule), title: Text('Schedule')),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Settings')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.list), title: Text('To Do List')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.schedule), title: Text('Schedule')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), title: Text('Settings')),
         ],
         currentIndex: selectedIndex,
         selectedItemColor: Colors.amber[800],
