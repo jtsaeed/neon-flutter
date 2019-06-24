@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //TODO
           },
         ),
-        PreferenceTitle('Calender'),
+        PreferenceTitle('Calendar'),
         CheckboxPreference(
           '---',
           '---',
