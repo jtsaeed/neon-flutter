@@ -10,6 +10,9 @@ List<int> timeKeys = [ // these are the keys for all the cells
   37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
 ];
 
+List<String> tempKeys = [];
+
+
 bool runOnce = false; // Used to make loadArray run once
 
 loadCells(setState) async {
@@ -47,32 +50,49 @@ loadCells(setState) async {
     else { // Now we are in tomorrow, so tomorrows section cells needs to move into today's section
 
       print('different day');
+
       prefs.remove('today'); // Remove the date key, we reinitialise it after updating the keys
 
+      print(prefs.getKeys().length);
+      var cacheLength = prefs.getKeys().length;
+      print(prefs.getKeys());
+      var count = 0; // Stores the tempKeys array count, using prefs.getKeys.length is dynamic, count is static
+
       setState(() {
-        for (int k = 0; k < prefs.getKeys().length; k++) { // for every key
-          print('key: ${prefs.getKeys().elementAt(k)}, stores value:  ${prefs.getString(prefs.getKeys().elementAt(k))})');
+
+        for (int k = 0; k < cacheLength; k++) { // for every key
 
           if (int.parse(prefs.getKeys().elementAt(k)) >= 24 ) { // if the key value is above 24h, then we subtract it by 25 (don't ask)
 
-            String tempKey = prefs.getKeys().elementAt(k); // Gets the key
-            int intKey = int.parse(tempKey); // convert to int
 
-            intKey -= 25;
-            // We do this as: (48 / 2 = 24), thus when this is ran again it divides again, 24/24 = 1, but should be really 23
-            intKey = intKey == 1 ? 23 : intKey;
+            tempKeys.add(prefs.getKeys().elementAt(k)); // Gets the key
+            print('Inside tempkeys: $tempKeys');
+            print(int.parse(tempKeys[count]));
+
+            int intKey = int.parse(tempKeys[count]); // convert to int
+            prefs.remove(tempKeys[count]); // Remove old key
+
+            intKey -= 25; // Go back 24 hours (25 due to rounding down)
+            // ?? We do this as: (48 / 2 = 24), thus when this is ran again it divides again, 24/24 = 1, but should be really 23
+//            intKey = intKey < 0 ? 1 : intKey;
+//            intKey = intKey < 0 ? 23 : intKey;
 
 
-            print('key was changed from $tempKey to $intKey');
-            print('Storing:  ${prefs.getString((prefs.getKeys().elementAt(k)))} with key: $intKey');
+            print('key was changed from ${tempKeys[count]} to $intKey, Storing: ${prefs.getString((prefs.getKeys().elementAt(k)))} with key: $intKey');
 
             prefs.setString(intKey.toString(), prefs.getString((prefs.getKeys().elementAt(k)))); // store old value with new key
             cells[intKey - getCurrentHour()] =  prefs.getString((prefs.getKeys().elementAt(k))); // Update cell array with new key & old value
 
-            prefs.remove(tempKey); // Remove old key
+            count += 1;
+
 
           }
         }
+
+//        for (int k = 0; k < prefs.getKeys().length - 1; k++) { // for every key
+//          prefs.remove(tempKeys[k]); // Remove old key
+//        }
+
         saveDate('today'); // Save the current data, as this is the today section now
 
       });

@@ -4,8 +4,11 @@ import 'time.dart';
 
 scheduleNotification(cellTime, minsToWait) async {
   int notificationId = await ScheduledNotifications.scheduleNotification(
-      new DateTime.now().add(new Duration(minutes: minsToWait)).millisecondsSinceEpoch,
+      new DateTime.now().add(new Duration(seconds: minsToWait)).millisecondsSinceEpoch,
       "Ticker text",
-      'Reminder for ${cells[cellTime]}',
-      allTimeLabels[cellTime + getCurrentHour()]);
+      'Reminder at ${allTimeLabels[cellTime + getCurrentHour()]}',
+      cells[cellTime]);
 }
+
+
+
