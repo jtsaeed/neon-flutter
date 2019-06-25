@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'settings_page.dart';
-import '../main.dart';
 import '../load_calender.dart';
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,11 +9,11 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
   final widgetOptions = [
 //    Text('To Do List'),
-    new CalendarPage(),
-    new TableView(),
+   new CalendarsPage(),
+     new TableView(),
     new MyHomePage(),
   ];
 
