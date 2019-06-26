@@ -5,8 +5,11 @@ Loads the calendar data from calender app into scrollview list
 */
 List<Calendar> calendars;
 List<Event> calendarEvents;
+List<Event> todayCalendarEvents;
+List<Event> tomorrowCalendarEvents;
+
 var calendarsSectionLength =
-    0; // Stores the length when fetching the calender data
+0; // Stores the length when fetching the calender data
 
 DeviceCalendarPlugin _deviceCalendarPlugin = new DeviceCalendarPlugin();
 
@@ -33,11 +36,24 @@ retrieveCalendars() async {
 ///
 retrieveCalendarEvents() async {
   for (int c = 0; c < calendars.length; c++) {
-    final startDate = new DateTime.now().add(new Duration(days: 0));
-    final endDate = new DateTime.now().add(new Duration(days: 1));
-    var calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
+
+    var startDate = new DateTime.now();
+    var  endDate = new DateTime.now().add(new Duration(days: 1));
+    final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
         calendars[c].id,
         new RetrieveEventsParams(startDate: startDate, endDate: endDate));
     calendarEvents = calendarEventsResult?.data;
+    todayCalendarEvents = calendarEventsResult?.data;
+
+
+     startDate = new DateTime.now().add(new Duration(days: 1));
+     endDate = new DateTime.now().add(new Duration(days: 1));
+
+    final calendarEventsResultTomorrow = await _deviceCalendarPlugin.retrieveEvents(
+        calendars[c].id,
+        new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+    tomorrowCalendarEvents = calendarEventsResultTomorrow?.data;
+
+
   }
 }

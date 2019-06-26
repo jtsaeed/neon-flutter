@@ -7,17 +7,18 @@ import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neon/widgets/bottom_navbar.dart';
 import 'package:preferences/preferences.dart';
-import 'load_calender.dart';
+import 'load_calendar.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 var title;
-
+var currentHour = DateTime.now().hour ;
 main() async {
   await retrieveCalendars();
   await retrieveCalendarEvents();
+
   await PrefService.init(prefix: 'pref_');
-   runApp(MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
-  _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
+  _TableViewState createState() =>
+      _TableViewState(); // Creating the tableView widget/state
 }
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
@@ -47,29 +49,31 @@ class _TableViewState extends State<TableView> {
   void initState() {
     super.initState();
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings('@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
+    var android = new AndroidInitializationSettings(
+        '@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
   }
 
-
-
   @override
-  Widget build(BuildContext context) {// Runs every time AFTER a cell is clicked on and setState is called
+  Widget build(BuildContext context) {
+    // Runs every time AFTER a cell is clicked on and setState is called
     return _myListView();
   }
 
   ///*This is like the TableView
   Widget _myListView() {
-
     loadCells(setState); // Load cell data from cache
-    return ListView.builder(// Makes the cells
+    return ListView.builder(
+        // Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
         physics: const BouncingScrollPhysics(),
-        itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
+        itemCount: getArrayLength(),
+        // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
-          if (index == 0) {// First element is today section
+          if (index == 0) {
+            // First element is today section
             title = calendarEvents.isEmpty ? '-' : calendarEvents[0].title;
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
@@ -77,46 +81,74 @@ class _TableViewState extends State<TableView> {
                 subtitle: Text(
                   "Today",
                   style: TextStyle(
-                      fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
+                      fontSize: 34,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800),
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(0).toUpperCase() + " // $title // BETA 2",
+                  getDate(0).toUpperCase() + "  $title // BETA 2",
                   style: TextStyle(
-                      fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,
                 ),
               ),
             );
           } // if end
-          else if  (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
+          else if (allTimeLabels[index + getCurrentHour()] ==
+              'TomorrowSection') {
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
                 subtitle: Text(
                   "Tomorrow",
                   style: TextStyle(
-                      fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
+                      fontSize: 34,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800),
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(1).toUpperCase() + " // BETA 2", // Increments the day
+                  getDate(1).toUpperCase() + "  $title // BETA 2",
                   style: TextStyle(
-                      fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,
                 ),
               ),
             );
           } // else if end
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: _buildBlock(context, index),
-            );
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: _buildBlock(context, index),
+          );
         } // Item build // end
         ); // ListView.builder // end
   } // Widget _myListView() // end
 
+
   Widget _buildBlock(context, index) {
+    for (int i = 0; i < todayCalendarEvents.length; i++) {
+      print(todayCalendarEvents[i].title);
+
+      if (index == todayCalendarEvents[i].start.hour) {
+        print('match ${todayCalendarEvents[i].title}');
+
+        cells[index] = todayCalendarEvents[i].title;
+        var startHour = todayCalendarEvents[i].start.hour;
+
+        while (startHour <= todayCalendarEvents[i].end.hour) {
+          print('start hour is: $startHour, end hour is ${todayCalendarEvents[i].end.hour}');
+          startHour++;
+          cells[startHour] = todayCalendarEvents[i].title;
+        }
+      }
+    }
+
+
     return Container(
       decoration: new BoxDecoration(
           borderRadius: BorderRadius.circular(16),

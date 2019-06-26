@@ -1,30 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:preferences/preferences.dart';
 import 'package:dynamic_theme/dynamic_theme.dart'; // Just for theme example
+import '../load_calendar.dart';
 
-
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new DynamicTheme(
-        defaultBrightness: Brightness.light,
-        data: (brightness) => new ThemeData(
-          primarySwatch: Colors.indigo,
-          brightness: brightness,
-        ),
-        themedWidgetBuilder: (context, theme) {
-          return new MaterialApp(
-            title: 'Preferences Demo',
-            theme: theme,
-          );
-        });
-  }
-}
-
+final list = List.filled(calendars.length, false);
 
 class MyHomePage extends StatefulWidget {
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -80,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
           elevation: 4.0,
           splashColor: Colors.amber[800],
           onPressed: () {
-          //TODO
+            //TODO
           },
         ),
         new RaisedButton(
@@ -94,23 +75,34 @@ class _MyHomePageState extends State<MyHomePage> {
             //TODO
           },
         ),
-
-
-        /// [Calender // TODO]
         PreferenceTitle('Calendar'),
-        CheckboxPreference(
-          '---',
-          '---',
-          onChange: () {
-            setState(() {});
-          },
-          onDisable: () {
-            PrefService.setBool('exp_showos', false);
-          },
-        )
+        new ConstrainedBox(
+          constraints: new BoxConstraints(maxHeight: calendars.length * 50.0),
+          child: new ListView.builder(
+            itemCount: calendars?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              return new GestureDetector(
+                child: new Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: new Row(
+                    children: <Widget>[
+                      Text(calendars[index].name),
+                      Checkbox(
+                        value: list[index],
+                        onChanged: (bool value) {
+                          setState(() {
+                            list[index] = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ]),
     );
   }
 }
-
-

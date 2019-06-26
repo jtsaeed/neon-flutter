@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'settings_page.dart';
-import '../load_calender.dart';
+import '../load_calendar.dart';
 import '../main.dart';
 
 class HomePage extends StatefulWidget {
