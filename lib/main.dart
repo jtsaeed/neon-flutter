@@ -7,22 +7,17 @@ import 'cache_data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neon/widgets/bottom_navbar.dart';
 import 'package:preferences/preferences.dart';
-import 'load_calendar_eventss.dart';
 import 'load_calender.dart';
-import 'package:device_calendar/device_calendar.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 var title;
 
-
 main() async {
-  CalendarsPage();
-  CalendarsPageState();
-  CalendarsPageState().initState();
-
+  await retrieveCalendars();
+  await retrieveCalendarEvents();
   await PrefService.init(prefix: 'pref_');
-  runApp(MyApp());
+   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -51,19 +46,11 @@ class TableView extends StatefulWidget {
 class _TableViewState extends State<TableView> {
   void initState() {
     super.initState();
-
-//  CalendarsPage();
-//    CalendarsPageState().initState();
-
-
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     var android = new AndroidInitializationSettings('@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
-
-
-
   }
 
 
@@ -75,6 +62,7 @@ class _TableViewState extends State<TableView> {
 
   ///*This is like the TableView
   Widget _myListView() {
+
     loadCells(setState); // Load cell data from cache
     return ListView.builder(// Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
@@ -82,10 +70,8 @@ class _TableViewState extends State<TableView> {
         itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
           if (index == 0) {// First element is today section
-            title = calendarEvents == null ? '-' : calendarEvents[0].title;
-
+            title = calendarEvents.isEmpty ? '-' : calendarEvents[0].title;
             return Padding(
-
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
                 subtitle: Text(

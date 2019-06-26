@@ -11,9 +11,9 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   int selectedIndex = 1;
   final widgetOptions = [
-//    Text('To Do List'),
-   new CalendarsPage(),
-     new TableView(),
+//   new CalendarsPage(),
+    new TableView(),
+    new TableView(),
     new MyHomePage(),
   ];
 
