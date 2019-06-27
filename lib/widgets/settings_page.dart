@@ -2,8 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:preferences/preferences.dart';
 import 'package:dynamic_theme/dynamic_theme.dart'; // Just for theme example
 import '../load_calendar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../cache_data.dart';
+import '../main.dart';
+import 'dart:convert';
+import '../time.dart';
+import '../load_calendar.dart';
+import 'package:device_calendar/device_calendar.dart';
+import 'package:flutter/services.dart';
 
-final list = List.filled(calendars.length, false);
+//Map<String, String> calendarMap = new Map.fromIterable(calendarsNames,
+//    key: (calendarName) => calendarName,
+//    value: (calendarSelected) => 'false');
+//var mapString = '';
+
+
+
+Map<String, dynamic> calendarMap = new Map.fromIterable(calendarsNames,
+    key: (calendarName) => calendarName,
+    value: (calendarSelected) => 'true');
+var mapString = '';
+
+
+loadSelectedCalendars() async {
+  final prefs = await SharedPreferences.getInstance();
+
+
+}
+
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -11,10 +37,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      /// [Personalization]
+
+        /// [Personalization]
 
       body: PreferencePage([
         PreferenceTitle('Personalization'),
@@ -88,10 +117,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Text(calendars[index].name),
                       Checkbox(
-                        value: list[index],
+                        value: calendarMap[calendars[index].name] == 'true',
                         onChanged: (bool value) {
                           setState(() {
-                            list[index] = value;
+                            calendarMap[calendarsNames[index]] = calendarMap[calendarsNames[index]] == 'false'
+                                ? 'true'
+                                : 'false';
+                            retrieveCalendarEvents(); // Updates calendar events
+                            updateCells(setState);
+
+                            mapString = json.encode(calendarMap); // convert map to string
+                            save('calendarPrefs', mapString); // cache string list
                           });
                         },
                       ),
@@ -105,4 +141,36 @@ class _MyHomePageState extends State<MyHomePage> {
       ]),
     );
   }
+}
+Future updateCells(setState) async {
+
+  final prefs = await SharedPreferences.getInstance();
+
+   List<Event>tempEventsToDelete;
+
+  for (int i = 0; i < calendars.length; i++) {
+    if (calendarMap[calendarsNames[i]] == 'false') {
+      var startDate = new DateTime.now();
+      var endDate = new DateTime.now().add(new Duration(days: 1));
+
+      DeviceCalendarPlugin _deviceCalendarPlugin = new DeviceCalendarPlugin();
+
+        final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
+            calendars[i].id, new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+         tempEventsToDelete = await calendarEventsResult?.data;
+    }
+  }
+
+  for (int x = 0; x < tempEventsToDelete.length; x++) {
+    for (int h = getCurrentHour(); h < getArrayLength(); h++) {
+      if (tempEventsToDelete[x].start.hour == timeKeys[h]) {
+        setState(() {
+          cells[timeKeys[h - getCurrentHour()]] = 'Empty';
+          prefs.remove(timeKeys[h - getCurrentHour()].toString());
+        });
+      }
+    }
+  }
+
+
 }

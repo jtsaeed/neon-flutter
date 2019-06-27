@@ -8,15 +8,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neon/widgets/bottom_navbar.dart';
 import 'package:preferences/preferences.dart';
 import 'load_calendar.dart';
+import 'package:neon/widgets/to_do_list.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 var title;
-var currentHour = DateTime.now().hour ;
+
 main() async {
+  await loadCalendarPrefs();
   await retrieveCalendars();
   await retrieveCalendarEvents();
-
+  await toDoListMain();
   await PrefService.init(prefix: 'pref_');
   runApp(MyApp());
 }
@@ -40,8 +42,7 @@ class MyApp extends StatelessWidget {
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
-  _TableViewState createState() =>
-      _TableViewState(); // Creating the tableView widget/state
+  _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
 }
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
@@ -54,6 +55,8 @@ class _TableViewState extends State<TableView> {
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
+    loadCalendar(setState);
+    loadCells(setState); // Load cell data from cache
   }
 
   @override
@@ -64,7 +67,7 @@ class _TableViewState extends State<TableView> {
 
   ///*This is like the TableView
   Widget _myListView() {
-    loadCells(setState); // Load cell data from cache
+
     return ListView.builder(
         // Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
@@ -130,23 +133,9 @@ class _TableViewState extends State<TableView> {
   } // Widget _myListView() // end
 
 
+
   Widget _buildBlock(context, index) {
-    for (int i = 0; i < todayCalendarEvents.length; i++) {
-      print(todayCalendarEvents[i].title);
 
-      if (index == todayCalendarEvents[i].start.hour) {
-        print('match ${todayCalendarEvents[i].title}');
-
-        cells[index] = todayCalendarEvents[i].title;
-        var startHour = todayCalendarEvents[i].start.hour;
-
-        while (startHour <= todayCalendarEvents[i].end.hour) {
-          print('start hour is: $startHour, end hour is ${todayCalendarEvents[i].end.hour}');
-          startHour++;
-          cells[startHour] = todayCalendarEvents[i].title;
-        }
-      }
-    }
 
 
     return Container(
@@ -190,9 +179,7 @@ class _TableViewState extends State<TableView> {
                         cells[index],
                         style: TextStyle(
                             fontSize: 24.0,
-                            color: cells[index] == "Empty"
-                                ? grayColor
-                                : Colors.black,
+                            color: cells[index] == "Empty" ? grayColor : Colors.black,
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.left,
                       ),
@@ -200,16 +187,12 @@ class _TableViewState extends State<TableView> {
                   ),
                 ),
                 IconButton(
-                  icon: cells[index] == 'Empty'
-                      ? addIcon
-                      : generateIcon(cells[index]),
+                  icon: cells[index] == 'Empty' ? addIcon : generateIcon(cells[index]),
                   iconSize: 48,
                   color: lightGrayColor,
                   splashColor: Colors.transparent,
                   onPressed: () {
-                    cells[index] == 'Empty'
-                        ? addDialog(context, index, setState)
-                        : editDialog(context, index, setState);
+                    cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
                   },
                 ),
               ],
