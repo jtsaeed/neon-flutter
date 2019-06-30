@@ -4,12 +4,12 @@ import 'package:dynamic_theme/dynamic_theme.dart'; // Just for theme example
 import '../load_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../cache_data.dart';
-import '../main.dart';
 import 'dart:convert';
 import '../time.dart';
-import '../load_calendar.dart';
+import '../palette.dart';
 import 'package:device_calendar/device_calendar.dart';
-import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 //Map<String, String> calendarMap = new Map.fromIterable(calendarsNames,
 //    key: (calendarName) => calendarName,
@@ -46,73 +46,17 @@ class _MyHomePageState extends State<MyHomePage> {
         /// [Personalization]
 
       body: PreferencePage([
-        PreferenceTitle('Personalization'),
-        RadioPreference(
-          'Light Theme',
-          'light',
-          'ui_theme',
-          isDefault: true,
-          onSelect: () {
-            DynamicTheme.of(context).setBrightness(Brightness.light);
-          },
-        ),
-        RadioPreference(
-          'Dark Theme',
-          'dark',
-          'ui_theme',
-          onSelect: () {
-            DynamicTheme.of(context).setBrightness(Brightness.dark);
-          },
-        ),
-
-        /// [NightMode]
-        PreferenceTitle('Night mode'),
-        SwitchPreference(
-          'Change night hours',
-          'exp_showos',
-          desc: 'hide cells 12am - 6am',
-        ),
-
-        /// [Feedback]
-        PreferenceTitle('Got an issue?'),
-        TextFieldPreference(
-          'Feedback',
-          'user_display_name',
-        ),
-
-        /// [Buttons]
-        const SizedBox(height: 15),
-        new RaisedButton(
-          child: const Text('Submit'),
-//          color: Theme.of(context).accentColor,
-          color: Colors.amber[800],
-          textColor: Colors.white,
-          elevation: 4.0,
-          splashColor: Colors.amber[800],
-          onPressed: () {
-            //TODO
-          },
-        ),
-        new RaisedButton(
-          child: const Text('Connect with Twitter'),
-//          color: Theme.of(context).accentColor,
-          color: Colors.amber[800],
-          textColor: Colors.white,
-          elevation: 4.0,
-          splashColor: Colors.amber[800],
-          onPressed: () {
-            //TODO
-          },
-        ),
-        PreferenceTitle('Calendar'),
+        // [Calendar]
+        PreferenceTitle('Calendars'),
         new ConstrainedBox(
-          constraints: new BoxConstraints(maxHeight: calendars.length * 50.0),
+          constraints: new BoxConstraints(maxHeight: calendars.length * 48.0),
           child: new ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: calendars?.length ?? 0,
             itemBuilder: (BuildContext context, int index) {
               return new GestureDetector(
                 child: new Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                   child: new Row(
                     children: <Widget>[
                       Text(calendars[index].name),
@@ -138,8 +82,44 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
+
+
+        /// [Night Hours]
+        PreferenceTitle('Other'),
+        SwitchPreference(
+          'Night Time Hours',
+          'exp_showos',
+          desc: 'Show Hour Blocks between 12am and 6am',
+        ),
+
+        /// [Buttons]
+        new Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: new RaisedButton(
+            child: const Text('Follow me on Twitter for updates'),
+//          color: Theme.of(context).accentColor,
+            color: primaryColor,
+            textColor: Colors.white,
+            elevation: 2.0,
+            splashColor: primaryColor,
+            onPressed: () {
+              _launchURL();
+            },
+          ),
+        ),
+
       ]),
     );
+  }
+
+
+  _launchURL() async {
+    const url = 'https://twitter.com/j_t_saeed';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
 Future updateCells(setState) async {
@@ -171,6 +151,5 @@ Future updateCells(setState) async {
       }
     }
   }
-
 
 }

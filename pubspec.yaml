@@ -25,6 +25,8 @@ dependencies:
   shared_preferences: ^0.5.2
 #  https://pusher:   com/tutorials/local-data-flutter:
 
+  url_launcher: ^5.0.3
+
   flutter_local_notifications:
 # https://pub:dev/packages/flutter_local_notifications#-installing-tab-:
 

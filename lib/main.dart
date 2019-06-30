@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'GoogleSans',
         primaryColor: primaryColor,
+        accentColor: primaryColor,
       ),
       home: Scaffold(
         backgroundColor: Colors.white,
@@ -217,7 +218,7 @@ getSectionTitle(index) {
           textAlign: TextAlign.left,
         ),
         title: Text(
-          getDate(0).toUpperCase() + " // BETA 2",
+          getDate(0).toUpperCase() + " // BETA 3",
           style: TextStyle(
               fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
           textAlign: TextAlign.left,
@@ -237,7 +238,7 @@ getSectionTitle(index) {
           textAlign: TextAlign.left,
         ),
         title: Text(
-          getDate(1).toUpperCase() + " // BETA 2", // Increments the day
+          getDate(1).toUpperCase() + " // BETA 3", // Increments the day
           style: TextStyle(
               fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
           textAlign: TextAlign.left,
