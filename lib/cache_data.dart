@@ -19,34 +19,28 @@ bool runOnce = false; // Used to make loadArray run once
 var startHour = 0;
 
 loadCalendar(setState) async {
-  final prefs = await SharedPreferences.getInstance();
 
   if (runOnce == false) {
-    print('load ccall');
-    print(prefs.getKeys().length);
-    print(prefs.getKeys());
-    print('total events for today: ${calendarEvents.length}');
-
-    for (int i = 0; i < todayCalendarEvents.length; i++) {
-      for (int h = getCurrentHour(); h < getArrayLength(); h++) {
-        if (todayCalendarEvents[i].start.hour > getCurrentHour()) {
-          print('$i -- ${todayCalendarEvents[i].title}');
-          print('Start time: ${todayCalendarEvents[i].start.hour}');
-
+    if (todayCalendarEvents != null) {
+      for (int i = 0; i < todayCalendarEvents.length; i++) {
+        print('Today $i ${todayCalendarEvents[i].title}');
+    
+        for (int h = 0; h < timeKeys.length; h++) {
           if (h == todayCalendarEvents[i].start.hour) {
-            print('match ${todayCalendarEvents[i].title}');
             startHour = todayCalendarEvents[i].start.hour;
+
+//            if (startHour < getCurrentHour()) {
+//              startHour = getCurrentHour();
+//            }
             setState(() {
               cells[startHour - getCurrentHour()] = todayCalendarEvents[i].title;
               save(timeKeys[startHour], todayCalendarEvents[i].title);
             });
-            print(cells);
-
+        
             if (h + 1 == todayCalendarEvents[i].end.hour) {
               print('skip!');
             } else {
-              while (startHour < todayCalendarEvents[i].end.hour) {
-                print('start hour is: $startHour, end hour is ${todayCalendarEvents[i].end.hour}');
+              while (startHour < todayCalendarEvents[i].end.hour - 1) { // Dont use the ending hour for a cell, so subtract 1
                 startHour++;
                 cells[startHour - getCurrentHour()] = todayCalendarEvents[i].title;
                 save(timeKeys[startHour], todayCalendarEvents[i].title);
@@ -57,14 +51,48 @@ loadCalendar(setState) async {
         }
       }
     }
-  }
+    }
 }
+
+
+loadCalendarTomorrow(setState) async {
+  
+  if (runOnce == false) {
+    if (tomorrowCalendarEvents != null) {
+      for (int i = 0; i < tomorrowCalendarEvents.length; i++) {
+        print('Tomorrow: $i ${tomorrowCalendarEvents[i].title}');
+      
+        for (int h = 0; h < timeKeys.length; h++) {
+          if (h == tomorrowCalendarEvents[i].start.hour) {
+            startHour = tomorrowCalendarEvents[i].start.hour;
+            setState(() {
+              cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
+              save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
+            });
+          
+            if (h + 1 == tomorrowCalendarEvents[i].end.hour) {
+              print('skip!');
+            } else {
+              while (startHour < tomorrowCalendarEvents[i].end.hour - 1) {
+                startHour++;
+                cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
+                save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
+              }
+            }
+            startHour = 0;
+          }
+        }
+      }
+    }
+  }
+  
+}
+
 
 loadCalendarPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   if (prefs.containsKey('calendarPrefs') == true)
-    calendarMap = json
-        .decode(prefs.getString('calendarPrefs')); // convert string back to map
+    calendarMap = json.decode(prefs.getString('calendarPrefs')); // convert string back to map
 }
 
 loadCells(setState) async {

@@ -57,6 +57,7 @@ class _TableViewState extends State<TableView> {
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
     loadCalendar(setState);
+    loadCalendarTomorrow(setState);
     loadCells(setState); // Load cell data from cache
   }
 
@@ -78,7 +79,7 @@ class _TableViewState extends State<TableView> {
         itemBuilder: (context, index) {
           if (index == 0) {
             // First element is today section
-            title = calendarEvents.isEmpty ? '-' : calendarEvents[0].title;
+//            title = todayCalendarEvents.isEmpty ? '-' : todayCalendarEvents[0].title;
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(

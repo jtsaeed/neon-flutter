@@ -7,7 +7,6 @@ Loads the calendar data from calender app into scrollview list
 */
 List<String> calendarsNames = [];
 List<Calendar> calendars;
-List<Event> calendarEvents;
 List<Event> todayCalendarEvents;
 List<Event> tomorrowCalendarEvents;
 
@@ -27,10 +26,13 @@ retrieveCalendars() async {
     }
     final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
     calendars = calendarsResult?.data;
+    
 
     for (int c = 0; c < calendars.length; c++)
       calendarsNames.add(calendars[c].name);
 
+    print(calendarsNames);
+    
   } on PlatformException catch (e) {
     print(e);
   }
@@ -38,33 +40,36 @@ retrieveCalendars() async {
 
 ///
 retrieveCalendarEvents() async {
+  
+  if (calendars.length != 0) {
   for (int c = 0; c < calendars.length; c++) {
 
-    var startDate = new DateTime.now();
-    var endDate = new DateTime.now().add(new Duration(days: 1));
+  var startDate = new DateTime.now();
+  var timeDiff = 24 - startDate.hour;
+  var endDate = new DateTime.now().add(new Duration(hours: timeDiff));
 
-    if (calendarMap[calendarsNames[c]] == 'true') {
+  if (calendarMap[calendarsNames[c]] == 'true') {
 
-      final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
-          calendars[c].id,
-          new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+  final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
+  calendars[c].id,
+  new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+  todayCalendarEvents = calendarEventsResult?.data;
 
-      calendarEvents = calendarEventsResult?.data;
-      todayCalendarEvents = calendarEventsResult?.data;
+  startDate = new DateTime.now().add(new Duration(hours: timeDiff));
+  endDate = new DateTime.now().add(new Duration(days: 1));
 
+  final calendarEventsResultTomorrow = await _deviceCalendarPlugin.retrieveEvents(
+  calendars[c].id,
+  new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+  tomorrowCalendarEvents = (calendarEventsResultTomorrow?.data);
+  
+  }
+  else if (calendarMap[calendarsNames[c]] == 'false') {
+  print('not loading: ${calendarsNames[c]}');
+  }
+  }
 
-      startDate = new DateTime.now().add(new Duration(days: 1));
-      endDate = new DateTime.now().add(new Duration(days: 1));
-
-      final calendarEventsResultTomorrow = await _deviceCalendarPlugin
-          .retrieveEvents(
-          calendars[c].id,
-          new RetrieveEventsParams(startDate: startDate, endDate: endDate));
-      tomorrowCalendarEvents = calendarEventsResultTomorrow?.data;
-    }
-    else if (calendarMap[calendarsNames[c]] == 'false') {
-      print('not loading:');
-      print(calendarMap[calendarsNames[c]]);
-    }
+  print(todayCalendarEvents);
+  print(tomorrowCalendarEvents);
   }
 }
