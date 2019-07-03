@@ -91,33 +91,44 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 2.0,
             splashColor: primaryColor,
             onPressed: () {
-              _launchURL();
+              _launchURL('https://twitter.com/j_t_saeed');
             },
           ),
         ),
-              new Container(
-                padding: new EdgeInsets.only(top: 16.0),
-                child: new Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    new Text(
-                      'Developed by Jahan Ulhaque & James Saaed',
-                      style: new TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.grey
+        new Text(
+            'Check the developers out on:\n',
+            textAlign: TextAlign.center
+        ),
 
-                      ),
-                    )
-                  ],
-                ),
-              ),
+        new Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          child: new RaisedButton(
+            child: const Text('Jahan Ulhaque'),
+            color: primaryColor,
+            textColor: Colors.white,
+            splashColor: primaryColor,
+            onPressed: () {
+              _launchURL('https://jahanuol.github.io/');
+            },
+          ),
+        ),
+        new Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          child: new RaisedButton(
+            child: const Text('James Saaed'),
+            color: primaryColor,
+            textColor: Colors.white,
+            splashColor: primaryColor,
+            onPressed: () {
+              _launchURL('http://www.jtsaeed.com/');
+            },
+          ),
+        ),
       ]),
     );
   }
 
-  _launchURL() async {
-    const url = 'https://twitter.com/j_t_saeed';
+  _launchURL(url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -152,10 +163,8 @@ Future removeUpdateCells(setState) async {
 
   for (int x = 0; x < tempEventsToDelete.length; x++) {
     for (int e = 0; e < tempEventsToDelete[x].length; e++) {
-
       for (int h = getCurrentHour(); h < timeKeys.length; h++) {
         if (timeKeys[h] == tempEventsToDelete[x][e].start.hour) {
-
 //          print('Time: ${timeKeys[h]}');
 //          print('Removing: ${tempEventsToDelete[x][e].title}');
 
@@ -204,12 +213,10 @@ Future removeUpdateCellsTomorrow(setState) async {
 
   for (int x = 0; x < tempEventsToDelete.length; x++) {
     for (int e = 0; e < tempEventsToDelete[x].length; e++) {
-
       print(tempEventsToDelete[x][e].title);
 
       for (int h = 0; h < timeKeys.length; h++) {
         if (timeKeys[h] == tempEventsToDelete[x][e].start.hour) {
-
           print('Time: ${timeKeys[h]}');
           print('Removing: ${tempEventsToDelete[x][e].title}');
 
@@ -278,12 +285,7 @@ Future addTodayUpdateCells(setState) async {
     }
   }
   print(cells);
-
-
 }
-
-
-
 
 Future addTodayUpdateCellsTomorrow(setState) async {
   List<List<Event>> tempEventsToAdd = [[]];
