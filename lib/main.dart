@@ -57,7 +57,7 @@ class _TableViewState extends State<TableView> {
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
     loadCalendar(setState);
-    loadCalendarTomorrow(setState);
+//    loadCalendarTomorrow(setState);
     loadCells(setState); // Load cell data from cache
   }
 

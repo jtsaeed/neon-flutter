@@ -29,9 +29,6 @@ loadCalendar(setState) async {
           if (h == todayCalendarEvents[i].start.hour) {
             startHour = todayCalendarEvents[i].start.hour;
 
-//            if (startHour < getCurrentHour()) {
-//              startHour = getCurrentHour();
-//            }
             setState(() {
               cells[startHour - getCurrentHour()] = todayCalendarEvents[i].title;
               save(timeKeys[startHour], todayCalendarEvents[i].title);
@@ -39,7 +36,8 @@ loadCalendar(setState) async {
         
             if (h + 1 == todayCalendarEvents[i].end.hour) {
               print('skip!');
-            } else {
+            }
+            else {
               while (startHour < todayCalendarEvents[i].end.hour - 1) { // Dont use the ending hour for a cell, so subtract 1
                 startHour++;
                 cells[startHour - getCurrentHour()] = todayCalendarEvents[i].title;
@@ -54,39 +52,39 @@ loadCalendar(setState) async {
     }
 }
 
-
-loadCalendarTomorrow(setState) async {
-  
-  if (runOnce == false) {
-    if (tomorrowCalendarEvents != null) {
-      for (int i = 0; i < tomorrowCalendarEvents.length; i++) {
-        print('Tomorrow: $i ${tomorrowCalendarEvents[i].title}');
-      
-        for (int h = 0; h < timeKeys.length; h++) {
-          if (h == tomorrowCalendarEvents[i].start.hour) {
-            startHour = tomorrowCalendarEvents[i].start.hour;
-            setState(() {
-              cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
-              save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
-            });
-          
-            if (h + 1 == tomorrowCalendarEvents[i].end.hour) {
-              print('skip!');
-            } else {
-              while (startHour < tomorrowCalendarEvents[i].end.hour - 1) {
-                startHour++;
-                cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
-                save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
-              }
-            }
-            startHour = 0;
-          }
-        }
-      }
-    }
-  }
-  
-}
+//
+//loadCalendarTomorrow(setState) async {
+//
+//  if (runOnce == false) {
+//    if (tomorrowCalendarEvents != null) {
+//      for (int i = 0; i < tomorrowCalendarEvents.length; i++) {
+//        print('Tomorrow: $i ${tomorrowCalendarEvents[i].title}');
+//
+//        for (int h = 0; h < timeKeys.length; h++) {
+//          if (h == tomorrowCalendarEvents[i].start.hour) {
+//            startHour = tomorrowCalendarEvents[i].start.hour;
+//            setState(() {
+//              cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
+//              save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
+//            });
+//
+//            if (h + 1 == tomorrowCalendarEvents[i].end.hour) {
+//              print('skip!');
+//            } else {
+//              while (startHour < tomorrowCalendarEvents[i].end.hour - 1) {
+//                startHour++;
+//                cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
+//                save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
+//              }
+//            }
+//            startHour = 0;
+//          }
+//        }
+//      }
+//    }
+//  }
+//
+//}
 
 
 loadCalendarPrefs() async {
@@ -108,32 +106,24 @@ loadCells(setState) async {
 
       print('Same day!');
       print('cached Keys: ${prefs.getKeys()}');
-      print('cache keys length: ${prefs.getKeys().length}');
       print('CURRENT HOUR IS: ${getCurrentHour()}');
 
       var cacheKeys = List.from(prefs.getKeys());
 
       for (int k = 0; k < cacheKeys.length; k++) {
-        for (int currentHour = getCurrentHour();
-            currentHour < timeKeys.length;
-            currentHour++) {
+        for (int currentHour = getCurrentHour(); currentHour < timeKeys.length; currentHour++) {
           currentHour = currentHour == -1 ? 0 : currentHour;
 
           setState(() {
-            if (timeKeys[currentHour].toString() ==
-                cacheKeys.elementAt(k).toString()) {
-              // If the current hour matches a key from cache
-              cells[currentHour - getCurrentHour()] = prefs.getString(cacheKeys
-                  .elementAt(k)); // Assign the key's value to the cells array
-              print(
-                  'With key: ${cacheKeys.elementAt(k)}, storing value:  ${prefs.getString(cacheKeys.elementAt(k))})');
+            if (timeKeys[currentHour].toString() == cacheKeys.elementAt(k).toString()) {// If the current hour matches a key from cache
+              cells[currentHour - getCurrentHour()] = prefs.getString(cacheKeys.elementAt(k)); // Assign the key's value to the cells array
+              print('With key: ${cacheKeys.elementAt(k)}, storing value:  ${prefs.getString(cacheKeys.elementAt(k))})');
             }
           });
         }
       }
       for (int currentHour = 0; currentHour < timeKeys.length; currentHour++) {
-        if (currentHour <=
-            getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
+        if (currentHour <= getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
           prefs.remove(timeKeys[currentHour].toString());
       }
     } else if (prefs.get('date') == getDate(-1)) {

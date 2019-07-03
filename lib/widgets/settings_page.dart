@@ -11,8 +11,7 @@ import 'package:device_calendar/device_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Map<String, dynamic> calendarMap = new Map.fromIterable(calendarsNames,
-    key: (calendarName) => calendarName,
-    value: (calendarSelected) => 'true');
+    key: (calendarName) => calendarName, value: (calendarSelected) => 'true');
 var mapString = '';
 
 class MyHomePage extends StatefulWidget {
@@ -21,13 +20,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
-        /// [Personalization]
+      /// [Personalization]
 
       body: PreferencePage([
         // [Calendar]
@@ -48,19 +44,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: calendarMap[calendars[index].name] == 'true',
                         onChanged: (bool value) {
                           setState(() {
-                            calendarMap[calendarsNames[index]] = calendarMap[calendarsNames[index]] == 'false'
-                                ? 'true'
-                                : 'false';
+                            calendarMap[calendarsNames[index]] =
+                                calendarMap[calendarsNames[index]] == 'false'
+                                    ? 'true'
+                                    : 'false';
                             retrieveCalendarEvents(); // Updates calendar events
                             if (calendarMap[calendarsNames[index]] == 'false') {
-                              RemoveUpdateCells(setState);
-                            }
-                            else {
+                              removeUpdateCells(setState);
+                            } else {
                               addUpdateCells(setState);
                             }
-  
-                            mapString = json.encode(calendarMap); // convert map to string
-                            save('calendarPrefs', mapString); // cache string list
+
+                            mapString = json
+                                .encode(calendarMap); // convert map to string
+                            save('calendarPrefs',
+                                mapString); // cache string list
                           });
                         },
                       ),
@@ -71,7 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
-
 
         /// [Night Hours]
         PreferenceTitle('Other'),
@@ -96,11 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
-
       ]),
     );
   }
-
 
   _launchURL() async {
     const url = 'https://twitter.com/j_t_saeed';
@@ -111,67 +106,87 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
-Future RemoveUpdateCells(setState) async {
 
+Future removeUpdateCells(setState) async {
   final prefs = await SharedPreferences.getInstance();
-
-   List<Event>tempEventsToDelete;
+  List<Event> tempEventsToDelete;
 
   for (int i = 0; i < calendars.length; i++) {
     if (calendarMap[calendarsNames[i]] == 'false') {
-      print(calendarsNames[i]);
-      
+      print('remove deets from: ${calendarsNames[i]}');
+
       var startDate = new DateTime.now();
       var endDate = new DateTime.now().add(new Duration(days: 2));
 
       DeviceCalendarPlugin _deviceCalendarPlugin = new DeviceCalendarPlugin();
 
-        final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
-            calendars[i].id, new RetrieveEventsParams(startDate: startDate, endDate: endDate));
-         tempEventsToDelete = calendarEventsResult?.data;
+      final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
+          calendars[i].id,
+          new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+      tempEventsToDelete = calendarEventsResult?.data;
     }
   }
   for (int x = 0; x < tempEventsToDelete.length; x++) {
-    for (int h = 0; h < timeKeys.length; h++) {
-      if (tempEventsToDelete[x].start.hour == timeKeys[h]) {
+    for (int h = getCurrentHour(); h < timeKeys.length; h++) {
+      if (timeKeys[h] == tempEventsToDelete[x].start.hour) {
+        print('Time: ${timeKeys[h]}');
+        print('Removing: ${tempEventsToDelete[x].title}');
+
+        var tempKey = tempEventsToDelete[x].start.hour;
+
         setState(() {
-          cells[timeKeys[h - getCurrentHour()]] = 'Empty';
-          prefs.remove(timeKeys[h - getCurrentHour()].toString());
+          cells[h - getCurrentHour()] = 'Empty';
+          prefs.remove(timeKeys[h].toString());
         });
+
+        while (tempKey < tempEventsToDelete[x].end.hour - 1) {
+          tempKey++;
+          cells[tempKey - getCurrentHour()] = 'Empty';
+          prefs.remove(timeKeys[tempKey].toString());
+        }
       }
     }
   }
 
+  print(cells);
 }
 
-
 Future addUpdateCells(setState) async {
-  
-  List<Event>tempEventsToAdd;
-  
+  List<Event> tempEventsToAdd;
+
   for (int i = 0; i < calendars.length; i++) {
     if (calendarMap[calendarsNames[i]] == 'true') {
       print(calendarsNames[i]);
-      
+
       var startDate = new DateTime.now();
       var endDate = new DateTime.now().add(new Duration(days: 2));
-      
+
       DeviceCalendarPlugin _deviceCalendarPlugin = new DeviceCalendarPlugin();
-      
+
       final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
-          calendars[i].id, new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+          calendars[i].id,
+          new RetrieveEventsParams(startDate: startDate, endDate: endDate));
       tempEventsToAdd = calendarEventsResult?.data;
     }
   }
   for (int x = 0; x < tempEventsToAdd.length; x++) {
-    for (int h = 0; h < timeKeys.length; h++) {
+    for (int h = getCurrentHour(); h < timeKeys.length; h++) {
       if (tempEventsToAdd[x].start.hour == timeKeys[h]) {
         setState(() {
-          cells[timeKeys[h - getCurrentHour()]] = tempEventsToAdd[x].title;
-          save(timeKeys[h - getCurrentHour()], tempEventsToAdd[x].title);
+            var tempKey = tempEventsToAdd[x].start.hour;
+
+            cells[timeKeys[h - getCurrentHour()]] = tempEventsToAdd[x].title;
+            save(timeKeys[h], tempEventsToAdd[x].title);
+
+            while (tempKey < tempEventsToAdd[x].end.hour - 1) {
+              tempKey++;
+              cells[tempKey - getCurrentHour()] =  tempEventsToAdd[x].title;
+              save(timeKeys[tempKey], tempEventsToAdd[x].title);
+            }
+
         });
       }
     }
   }
-  
+  print(cells);
 }
