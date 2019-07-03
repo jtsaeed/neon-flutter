@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 : 'false';
                             retrieveCalendarEvents(); // Updates calendar events
                             if (calendarMap[calendarsNames[index]] == 'false') {
-                              RemoveUpdateCells(setState);
+                              removeUpdateCells(setState);
                             }
                             else {
                               addUpdateCells(setState);
@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
-Future RemoveUpdateCells(setState) async {
+Future removeUpdateCells(setState) async {
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -119,8 +119,9 @@ Future RemoveUpdateCells(setState) async {
 
   for (int i = 0; i < calendars.length; i++) {
     if (calendarMap[calendarsNames[i]] == 'false') {
+      print('removing cells from: ');
       print(calendarsNames[i]);
-      
+
       var startDate = new DateTime.now();
       var endDate = new DateTime.now().add(new Duration(days: 2));
 
@@ -132,12 +133,19 @@ Future RemoveUpdateCells(setState) async {
     }
   }
   for (int x = 0; x < tempEventsToDelete.length; x++) {
-    for (int h = 0; h < timeKeys.length; h++) {
+    for (int h = getCurrentHour(); h < timeKeys.length; h++) {
       if (tempEventsToDelete[x].start.hour == timeKeys[h]) {
+        var startHour = timeKeys[h];
         setState(() {
-          cells[timeKeys[h - getCurrentHour()]] = 'Empty';
-          prefs.remove(timeKeys[h - getCurrentHour()].toString());
+          cells[h - getCurrentHour()] = 'Empty';
+          prefs.remove(timeKeys[h].toString());
         });
+
+        while (startHour < tempEventsToDelete[x].end.hour - 1) { // Dont use the ending hour for a cell, so subtract 1
+          startHour++;
+          cells[h - getCurrentHour()] = 'Empty';
+          prefs.remove(timeKeys[startHour].toString());
+        }
       }
     }
   }
@@ -164,11 +172,11 @@ Future addUpdateCells(setState) async {
     }
   }
   for (int x = 0; x < tempEventsToAdd.length; x++) {
-    for (int h = 0; h < timeKeys.length; h++) {
+    for (int h = getCurrentHour(); h < timeKeys.length; h++) {
       if (tempEventsToAdd[x].start.hour == timeKeys[h]) {
         setState(() {
-          cells[timeKeys[h - getCurrentHour()]] = tempEventsToAdd[x].title;
-          save(timeKeys[h - getCurrentHour()], tempEventsToAdd[x].title);
+          cells[h - getCurrentHour()] = tempEventsToAdd[x].title;
+          save(timeKeys[h] - getCurrentHour(), tempEventsToAdd[x].title);
         });
       }
     }
