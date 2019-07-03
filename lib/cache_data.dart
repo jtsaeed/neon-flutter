@@ -6,7 +6,8 @@ import 'dart:convert';
 
 List<String> cells = List.filled(50, 'Empty');
 
-List<int> timeKeys = [ // these are the keys for all the cells
+List<int> timeKeys = [
+  // these are the keys for all the cells
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
   13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
   25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
@@ -19,78 +20,103 @@ bool runOnce = false; // Used to make loadArray run once
 var startHour = 0;
 
 loadCalendar(setState) async {
-
   if (runOnce == false) {
     if (todayCalendarEvents != null) {
-      for (int i = 0; i < todayCalendarEvents.length; i++) {
-        print('Today $i ${todayCalendarEvents[i].title}');
-    
-        for (int h = 0; h < timeKeys.length; h++) {
-          if (h == todayCalendarEvents[i].start.hour) {
-            startHour = todayCalendarEvents[i].start.hour;
 
-            setState(() {
-              cells[startHour - getCurrentHour()] = todayCalendarEvents[i].title;
-              save(timeKeys[startHour], todayCalendarEvents[i].title);
-            });
-        
-            if (h + 1 == todayCalendarEvents[i].end.hour) {
-              print('skip!');
-            }
-            else {
-              while (startHour < todayCalendarEvents[i].end.hour - 1) { // Dont use the ending hour for a cell, so subtract 1
-                startHour++;
-                cells[startHour - getCurrentHour()] = todayCalendarEvents[i].title;
-                save(timeKeys[startHour], todayCalendarEvents[i].title);
-              }
-            }
+      for (int i = 0; i < todayCalEvents.length; i++) {
+        for (int e = 0; e < todayCalEvents[i].length; e++) {
+
+          print('Today $i ${todayCalEvents[i][e].title}');
+
+          for (int h = getCurrentHour(); h < timeKeys.length; h++) {
+
+           if (h == todayCalEvents[i][e].start.hour) {
+             startHour = todayCalEvents[i][e].start.hour;
+
+             if (tomorrowCalEvents[i][e].title != tomorrowTitle &&
+                 tomorrowCalEvents[i][e].title != todayTitle) {
+                 setState(() {
+                   print('updating:');
+                   cells[startHour - getCurrentHour()] =
+                       todayCalEvents[i][e].title;
+                   save(timeKeys[startHour], todayCalEvents[i][e].title);
+                 });
+
+
+               if (h + 1 == todayCalEvents[i][e].end.hour) {
+                 print('skip!');
+               } else {
+                 while (startHour < todayCalEvents[i][e].end.hour - 1) {
+                   // Dont use the ending hour for a cell, so subtract 1
+                   startHour++;
+                   cells[startHour - getCurrentHour()] =
+                       todayCalEvents[i][e].title;
+                   save(timeKeys[startHour], todayCalEvents[i][e].title);
+                 }
+               }
+             }
+           }
             startHour = 0;
           }
         }
       }
     }
-    }
+  }
 }
 
-//
-//loadCalendarTomorrow(setState) async {
-//
-//  if (runOnce == false) {
-//    if (tomorrowCalendarEvents != null) {
-//      for (int i = 0; i < tomorrowCalendarEvents.length; i++) {
-//        print('Tomorrow: $i ${tomorrowCalendarEvents[i].title}');
-//
-//        for (int h = 0; h < timeKeys.length; h++) {
-//          if (h == tomorrowCalendarEvents[i].start.hour) {
-//            startHour = tomorrowCalendarEvents[i].start.hour;
-//            setState(() {
-//              cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
-//              save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
-//            });
-//
-//            if (h + 1 == tomorrowCalendarEvents[i].end.hour) {
-//              print('skip!');
-//            } else {
-//              while (startHour < tomorrowCalendarEvents[i].end.hour - 1) {
-//                startHour++;
-//                cells[startHour - getCurrentHour() + 25] = tomorrowCalendarEvents[i].title;
-//                save(timeKeys[startHour + 25], tomorrowCalendarEvents[i].title);
-//              }
-//            }
-//            startHour = 0;
-//          }
-//        }
-//      }
-//    }
-//  }
-//
-//}
+loadCalendarTomorrow(setState) async {
+  if (runOnce == false) {
+    if (tomorrowCalendarEvents != null) {
+
+      for (int i = 0; i < tomorrowCalEvents.length; i++) {
+        for (int e = 0; e < tomorrowCalEvents[i].length; e++) {
+
+          print('tomorrow $i ${tomorrowCalEvents[i][e].title}');
+
+
+            for (int h = 0; h < timeKeys.length; h++) {
+              if (h == tomorrowCalEvents[i][e].start.hour) {
+                startHour = tomorrowCalEvents[i][e].start.hour;
+
+                if (tomorrowCalEvents[i][e].title != tomorrowTitle && tomorrowCalEvents[i][e].title != todayTitle) {
+                  setState(() {
+                    print('in tomorrow: updating: ${tomorrowCalEvents[i][e].title}');
+                    cells[startHour - getCurrentHour() + 25] =
+                        tomorrowCalEvents[i][e].title;
+                    save(timeKeys[startHour + 25],
+                        tomorrowCalEvents[i][e].title);
+                  });
+
+
+                  if (h + 1 == tomorrowCalEvents[i][e].end.hour) {
+                    print('skip!');
+                  } else {
+                    while (startHour < tomorrowCalEvents[i][e].end.hour - 1) {
+                      // Dont use the ending hour for a cell, so subtract 1
+                      startHour++;
+                      cells[startHour - getCurrentHour() + 25] =
+                          tomorrowCalEvents[i][e].title;
+                      save(timeKeys[startHour + 25],
+                          tomorrowCalEvents[i][e].title);
+                    }
+                  }
+                }
+              }
+            startHour = 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 
 loadCalendarPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   if (prefs.containsKey('calendarPrefs') == true)
-    calendarMap = json.decode(prefs.getString('calendarPrefs')); // convert string back to map
+    calendarMap = json
+        .decode(prefs.getString('calendarPrefs')); // convert string back to map
 }
 
 loadCells(setState) async {
@@ -111,19 +137,26 @@ loadCells(setState) async {
       var cacheKeys = List.from(prefs.getKeys());
 
       for (int k = 0; k < cacheKeys.length; k++) {
-        for (int currentHour = getCurrentHour(); currentHour < timeKeys.length; currentHour++) {
+        for (int currentHour = getCurrentHour();
+            currentHour < timeKeys.length;
+            currentHour++) {
           currentHour = currentHour == -1 ? 0 : currentHour;
 
           setState(() {
-            if (timeKeys[currentHour].toString() == cacheKeys.elementAt(k).toString()) {// If the current hour matches a key from cache
-              cells[currentHour - getCurrentHour()] = prefs.getString(cacheKeys.elementAt(k)); // Assign the key's value to the cells array
-              print('With key: ${cacheKeys.elementAt(k)}, storing value:  ${prefs.getString(cacheKeys.elementAt(k))})');
+            if (timeKeys[currentHour].toString() ==
+                cacheKeys.elementAt(k).toString()) {
+              // If the current hour matches a key from cache
+              cells[currentHour - getCurrentHour()] = prefs.getString(cacheKeys
+                  .elementAt(k)); // Assign the key's value to the cells array
+              print(
+                  'With key: ${cacheKeys.elementAt(k)}, storing value:  ${prefs.getString(cacheKeys.elementAt(k))})');
             }
           });
         }
       }
       for (int currentHour = 0; currentHour < timeKeys.length; currentHour++) {
-        if (currentHour <= getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
+        if (currentHour <=
+            getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
           prefs.remove(timeKeys[currentHour].toString());
       }
     } else if (prefs.get('date') == getDate(-1)) {

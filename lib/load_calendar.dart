@@ -2,10 +2,19 @@ import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/services.dart';
 import 'widgets/settings_page.dart';
 
+var todayTitle;
+var tomorrowTitle;
+
 /*
 Loads the calendar data from calender app into scrollview list
 */
 List<String> calendarsNames = [];
+List<List<Event>> todayCalEvents = [[]];
+
+///NSFW this naughty code
+List<List<Event>> tomorrowCalEvents = [[]];
+
+///NSFW this naughty code
 List<Calendar> calendars;
 List<Event> todayCalendarEvents;
 List<Event> tomorrowCalendarEvents;
@@ -48,22 +57,39 @@ retrieveCalendarEvents() async {
         final calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
             calendars[c].id,
             new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+
         todayCalendarEvents = calendarEventsResult?.data;
+        todayCalEvents.add(calendarEventsResult.data);
+
+        for (int e = 0; e < todayCalendarEvents.length; e++) {
+          if (todayCalendarEvents[e].allDay == true) {
+            print('allDay');
+            print(todayCalendarEvents[e].title);
+            todayTitle = todayCalendarEvents[e].title;
+          }
+        }
 
         startDate = new DateTime.now().add(new Duration(hours: timeDiff));
         endDate = new DateTime.now().add(new Duration(days: 1));
 
-        final calendarEventsResultTomorrow = await _deviceCalendarPlugin.retrieveEvents(
+        final calendarEventsResultTomorrow =
+            await _deviceCalendarPlugin.retrieveEvents(
                 calendars[c].id,
-            new RetrieveEventsParams(startDate: startDate, endDate: endDate));
+                new RetrieveEventsParams(
+                    startDate: startDate, endDate: endDate));
         tomorrowCalendarEvents = (calendarEventsResultTomorrow?.data);
+        tomorrowCalEvents.add(calendarEventsResultTomorrow.data);
 
-      }
-
-      else if (calendarMap[calendarsNames[c]] == 'false') {
+        for (int e = 0; e < tomorrowCalendarEvents.length; e++) {
+          if (tomorrowCalendarEvents[e].allDay == true) {
+            print('allDay');
+            print(tomorrowCalendarEvents[e].title);
+            tomorrowTitle = tomorrowCalendarEvents[e].title;
+          }
+        }
+      } else if (calendarMap[calendarsNames[c]] == 'false') {
         print('not loading: ${calendarsNames[c]}');
       }
     }
-
   }
 }

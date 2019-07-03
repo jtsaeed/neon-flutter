@@ -12,7 +12,7 @@ import 'package:neon/widgets/to_do_list.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-var title;
+
 
 main() async {
   await loadCalendarPrefs();
@@ -57,7 +57,7 @@ class _TableViewState extends State<TableView> {
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
     loadCalendar(setState);
-//    loadCalendarTomorrow(setState);
+    loadCalendarTomorrow(setState);
     loadCells(setState); // Load cell data from cache
   }
 
@@ -77,9 +77,7 @@ class _TableViewState extends State<TableView> {
         itemCount: getArrayLength(),
         // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
-          if (index == 0) {
-            // First element is today section
-//            title = todayCalendarEvents.isEmpty ? '-' : todayCalendarEvents[0].title;
+          if (index == 0) {// First element is today section
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
@@ -92,7 +90,7 @@ class _TableViewState extends State<TableView> {
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(0).toUpperCase() + "  $title // BETA 2",
+                  getDate(0).toUpperCase() + " ${todayTitle ?? ''} // BETA 3",
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -102,8 +100,7 @@ class _TableViewState extends State<TableView> {
               ),
             );
           } // if end
-          else if (allTimeLabels[index + getCurrentHour()] ==
-              'TomorrowSection') {
+          else if (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
@@ -116,7 +113,7 @@ class _TableViewState extends State<TableView> {
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(1).toUpperCase() + "  $title // BETA 2",
+                  getDate(1).toUpperCase() + " ${tomorrowTitle ?? ''} // BETA 3",
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
