@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         new Text(
-            'Check the developers out on:\n',
+            'Check out the developers:\n',
             textAlign: TextAlign.center
         ),
 

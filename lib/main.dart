@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'GoogleSans',
         primaryColor: primaryColor,
@@ -155,8 +156,7 @@ class _TableViewState extends State<TableView> {
         child: Card(
           color: Colors.white,
           elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
             child: Row(

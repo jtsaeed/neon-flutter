@@ -84,11 +84,7 @@ editDialog(context, currentHourKey, setState) async  {
                     Navigator.of(context).pop();
                     setState(() {
                         cells[currentHourKey] = 'Empty';
-//                        print('editing cell: $currentHourKey');
                         prefs.remove(timeKeys[currentHourKey + getCurrentHour()].toString()); // Remove key from cache
-//                        print('REMOVED: ${timeKeys[currentHourKey].toString()}');
-
-
                     });
                   }
               ),
