@@ -270,8 +270,9 @@ Future addTodayUpdateCells(setState) async {
   for (int x = 0; x < tempEventsToAdd.length; x++) {
     for (int e = 0; e < tempEventsToAdd[x].length; e++) {
       for (int h = getCurrentHour(); h < timeKeys.length; h++) {
-        if (tomorrowCalEvents[x][e].title != tomorrowTitle &&
-            tomorrowCalEvents[x][e].title != todayTitle) {
+        if ( todayCalEvents[x] != null)
+        if (todayCalEvents[x][e].title != tomorrowTitle &&
+            todayCalEvents[x][e].title != todayTitle) {
           if (tempEventsToAdd[x][e].start.hour == timeKeys[h]) {
             setState(() {
               var tempKey = tempEventsToAdd[x][e].start.hour;
@@ -318,6 +319,9 @@ Future addTodayUpdateCellsTomorrow(setState) async {
     for (int e = 0; e < tempEventsToAdd[x].length; e++) {
       for (int h = 0; h < timeKeys.length; h++) {
         if (tempEventsToAdd[x][e].start.hour == timeKeys[h]) {
+
+          if ( tomorrowCalEvents[x] != null)
+
           if (tomorrowCalEvents[x][e].title != tomorrowTitle &&
               tomorrowCalEvents[x][e].title != todayTitle) {
             setState(() {

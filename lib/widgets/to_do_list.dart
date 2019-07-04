@@ -3,7 +3,7 @@ import '../cache_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../time.dart';
 import '../palette.dart';
-
+import '../icon_generator.dart';
 List<String> todoItems = [];
 
 toDoListMain() async {
@@ -85,7 +85,7 @@ class TodoListState extends State<TodoList> {
         itemCount = todoItems.length == 1 ? '' : itemCount; // If empty
 
         if (todoItems.length > 1) // If have 1 item, then display message
-           message = '${todoItems.length - 1}  $itemCount';
+          message = '${todoItems.length - 1}  $itemCount';
 
         if (index == 0) {
           return Padding(
@@ -135,19 +135,18 @@ class TodoListState extends State<TodoList> {
         child: Card(
           color: Colors.white,
           elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
             child: Row(
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "NO PRIORITY",
+                        index.toString(),
                         style: TextStyle(
                             fontSize: 14,
                             color: grayColor,
@@ -155,15 +154,22 @@ class TodoListState extends State<TodoList> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        toDoText,
+                        todoItems[index],
                         style: TextStyle(
                             fontSize: 24.0,
-                            color: Colors.black,
+                            color: cells[index] == "Empty" ? grayColor : Colors.black,
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.left,
                       ),
                     ],
                   ),
+                ),
+                IconButton(
+                  icon: generateIcon(todoItems[index]),
+                  iconSize: 48,
+                  color: lightGrayColor,
+                  splashColor: Colors.transparent,
+
                 ),
               ],
             ),
