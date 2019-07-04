@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'to_do_list.dart';
 import '../palette.dart';
+import 'bottom_navbar.dart';
 
 // move the dialog into it's own stateful widget.
 // It's completely independent from your page
@@ -35,7 +36,6 @@ class _AddDialogState extends State<AddDialog> {
   }
 
   _updateLabel() {
-
     if (sliderVal > 2 && sliderVal < 5)
       priorityLabel = 'Low Priority';
     else if (sliderVal > 4 && sliderVal < 7)
@@ -46,7 +46,6 @@ class _AddDialogState extends State<AddDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: new Text('What\'s on your to do list?'),
@@ -63,11 +62,13 @@ class _AddDialogState extends State<AddDialog> {
                 cursorColor: primaryLightColor,
                 autofocus: true,
                 decoration: new InputDecoration(hintText: 'e.g. Revise maths'),
-                onChanged: (value) => input = value // Update the empty label array with the value they have entered
+                onChanged: (value) => input =
+                    value // Update the empty label array with the value they have entered
                 ),
             new Slider(
               value: sliderVal,
               label: priorityLabel,
+
               /// SOME colors for you to play with
               activeColor: primaryColor,
               inactiveColor: lightGrayColor,
@@ -101,6 +102,11 @@ class _AddDialogState extends State<AddDialog> {
             _addTodoItem(input);
             _addPriority(priorityLabel);
             Navigator.pop(context, sliderVal);
+            selectedIndex = 0;
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+//            Navigator.pop(
+//                context, MaterialPageRoute(builder: (context) => TodoList()));
           },
         ),
       ],

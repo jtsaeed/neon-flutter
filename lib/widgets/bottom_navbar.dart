@@ -5,13 +5,14 @@ import '../main.dart';
 import '../palette.dart';
 import 'package:neon/widgets/to_do_list.dart';
 
+int selectedIndex = 1;
+
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 1;
   final widgetOptions = [
 
     new TodoList(),
