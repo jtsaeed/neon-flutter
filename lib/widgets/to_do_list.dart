@@ -3,14 +3,18 @@ import '../cache_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../time.dart';
 import '../palette.dart';
-import '../icon_generator.dart';
+import 'add_to_do_item.dart';
+
 List<String> todoItems = [];
+List<String> priorityList = [];
 
 toDoListMain() async {
   final prefs = await SharedPreferences.getInstance();
   todoItems = prefs.getStringList('savedToDoList');
-  if (todoItems == null) {
+  priorityList = prefs.getStringList('savedToDoPriorities');
+  if (todoItems == null || priorityList == null) {
     todoItems = [];
+    priorityList = [];
   }
 }
 
@@ -20,19 +24,17 @@ class TodoList extends StatefulWidget {
 }
 
 class TodoListState extends State<TodoList> {
-  void _addTodoItem(String task) {
-    if (task.length > 0) {
-      setState(() => todoItems.add(task));
-      saveList('savedToDoList', todoItems);
-    }
-  }
+
 
   void _removeTodoItem(int index) {
     setState(() => todoItems.removeAt(index));
+    setState(() => priorityList.removeAt(index));
+
   }
 
   void _promptRemoveTodoItem(int index) {
     var toDoItem = todoItems[index];
+    var toDoPriority = priorityList[index];
 
     showModalBottomSheet(
         context: context,
@@ -56,6 +58,7 @@ class TodoListState extends State<TodoList> {
                     onTap: () {
                       _removeTodoItem(index);
                       saveList('savedToDoList', todoItems);
+                      saveList('savedToDoPriorities', priorityList);
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
@@ -80,10 +83,10 @@ class TodoListState extends State<TodoList> {
       padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
+
         var message = '';
         var itemCount = todoItems.length > 2 ? 'ITEMS' : 'ITEM'; // 1 item or 2
         itemCount = todoItems.length == 1 ? '' : itemCount; // If empty
-
         if (todoItems.length > 1) // If have 1 item, then display message
           message = '${todoItems.length - 1}  $itemCount';
 
@@ -110,15 +113,14 @@ class TodoListState extends State<TodoList> {
             ),
           );
         }
-
-        if (index < todoItems.length ?? 0) {
-          return _buildTodoItem(todoItems[index], index);
+        if (index < todoItems.length && index < priorityList.length) {
+          return _buildTodoItem(todoItems[index], priorityList[index], index);
         }
       },
     );
   }
 
-  Widget _buildTodoItem(String toDoText, int index) {
+  Widget _buildTodoItem(String toDoText, String priority, int index) {
     return Container(
       decoration: new BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -135,18 +137,19 @@ class TodoListState extends State<TodoList> {
         child: Card(
           color: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
             child: Row(
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        index.toString(),
+                        priority,
                         style: TextStyle(
                             fontSize: 14,
                             color: grayColor,
@@ -154,69 +157,18 @@ class TodoListState extends State<TodoList> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        todoItems[index],
+                        toDoText,
                         style: TextStyle(
                             fontSize: 24.0,
-                            color: cells[index] == "Empty" ? grayColor : Colors.black,
+                            color: Colors.black,
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.left,
                       ),
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: generateIcon(todoItems[index]),
-                  iconSize: 48,
-                  color: lightGrayColor,
-                  splashColor: Colors.transparent,
-
-                ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Build a single todo item
-  Widget _buildTodoItemOld(String todoText, int index) {
-    return Container(
-      decoration: new BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            new BoxShadow(
-              color: Colors.black.withOpacity(0.075),
-              blurRadius: 8,
-            )
-          ]),
-      child: GestureDetector(
-        onTap: () => _promptRemoveTodoItem(index),
-        child: Card(
-          color: Colors.white,
-          elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: Row(children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      todoText,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
-                ),
-              ),
-            ]),
           ),
         ),
       ),
@@ -247,7 +199,6 @@ class TodoListState extends State<TodoList> {
               ],
             ),
             actions: <Widget>[
-              // usually buttons at the bottom of the dialog
               new FlatButton(
                 textColor: Colors.grey,
                 child: new Text("Close"),
@@ -259,8 +210,12 @@ class TodoListState extends State<TodoList> {
                 textColor: primaryColor,
                 child: new Text("Add"),
                 onPressed: () {
-                  Navigator.of(context).pop();
                   setState(() => todoItems[index] = input);
+                  setState(() => priorityList[index] = input);
+                  print(todoItems);
+                  print(priorityList);
+                  Navigator.of(context).pop();
+
                 },
               ),
             ],
@@ -268,7 +223,16 @@ class TodoListState extends State<TodoList> {
         });
   }
 
-  Image addIcon = new Image.asset("resources/androidAdd@3x.png");
+  void _showAddDialog() async {
+    // <-- note the async keyword here
+
+    // this will contain the result from Navigator.pop(context, result)
+    await showDialog<double>(
+      // Waits for the result of the slider
+      context: context,
+      builder: (context) => AddDialog(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,68 +241,18 @@ class TodoListState extends State<TodoList> {
         floatingActionButton: Padding(
           padding: EdgeInsets.all(16),
           child: new FloatingActionButton(
-              onPressed: _pushAddTodoScreen,
-              tooltip: 'Add To Do List item',
+              onPressed: _showAddDialog,
               backgroundColor: primaryColor,
               foregroundColor: Colors.white,
               elevation: 4.0,
               child: new Icon(Icons.add)),
         ));
   }
+}
 
-  _pushAddTodoScreen() {
-    // Push this page onto the stack
-    String input = "";
-
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: new Text('What\'s on your to do list?'),
-          content: new Row(
-            children: <Widget>[
-              new Expanded(
-                child: new TextField(
-                    cursorColor: Colors.orange,
-                    autofocus: true,
-                    decoration:
-                        new InputDecoration(hintText: 'e.g. Revise maths'),
-                    onChanged: (value) => input =
-                        value // Update the empty label array with the value they have entered
-                    ),
-              )
-            ],
-          ),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              textColor: Colors.grey,
-              child: new Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              textColor: primaryColor,
-              child: new Text("Add"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _addTodoItem(input);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  saveList(listName, listValues) async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = listName;
-    final value = listValues;
-    prefs.setStringList(key, value);
-  }
+saveList(listName, listValues) async {
+  final prefs = await SharedPreferences.getInstance();
+  final key = listName;
+  final value = listValues;
+  prefs.setStringList(key, value);
 }
