@@ -47,6 +47,7 @@ retrieveCalendars() async {
 
 ///
 retrieveCalendarEvents() async {
+  if (calendars != null)
   if (calendars.length != 0) {
     for (int c = 0; c < calendars.length; c++) {
       var startDate = new DateTime.now();

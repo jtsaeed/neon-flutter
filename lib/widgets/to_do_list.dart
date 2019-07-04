@@ -80,6 +80,37 @@ class TodoListState extends State<TodoList> {
       padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
+        var message = '';
+        var itemCount = todoItems.length > 2 ? 'ITEMS' : 'ITEM'; // 1 item or 2
+        itemCount = todoItems.length == 1 ? '' : itemCount; // If empty
+
+        if (todoItems.length > 1) // If have 1 item, then display message
+           message = '${todoItems.length - 1}  $itemCount';
+
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+            child: ListTile(
+              subtitle: Text(
+                "To Do List",
+                style: TextStyle(
+                    fontSize: 34,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800),
+                textAlign: TextAlign.left,
+              ),
+              title: Text(
+                '$message // BETA 3',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w600),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          );
+        }
+
         if (index < todoItems.length ?? 0) {
           return _buildTodoItem(todoItems[index], index);
         }
@@ -104,7 +135,8 @@ class TodoListState extends State<TodoList> {
         child: Card(
           color: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
             child: Row(
@@ -235,18 +267,17 @@ class TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: _buildTodoList(),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.all(16),
-        child: new FloatingActionButton(
-            onPressed: _pushAddTodoScreen,
-            tooltip: 'Add To Do List item',
-            backgroundColor: primaryColor,
-            foregroundColor: Colors.white,
-            elevation: 4.0,
-            child: new Icon(Icons.add)),
-      )
-    );
+        body: _buildTodoList(),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.all(16),
+          child: new FloatingActionButton(
+              onPressed: _pushAddTodoScreen,
+              tooltip: 'Add To Do List item',
+              backgroundColor: primaryColor,
+              foregroundColor: Colors.white,
+              elevation: 4.0,
+              child: new Icon(Icons.add)),
+        ));
   }
 
   _pushAddTodoScreen() {

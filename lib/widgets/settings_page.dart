@@ -19,17 +19,19 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
   @override
+
+  final cal = calendars != null ? 'Calendars' : 'Settings';
+  final height = calendars != null ? calendars.length * 48.0 : 0;
+
   Widget build(BuildContext context) {
     return Scaffold(
-      /// [Personalization]
-
       body: PreferencePage([
-        // [Calendar]
-        PreferenceTitle('Calendars'),
+        PreferenceTitle(cal),
         new ConstrainedBox(
-          constraints: new BoxConstraints(maxHeight: calendars.length * 48.0),
+          constraints: new BoxConstraints(maxHeight: height),
           child: new ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: calendars?.length ?? 0,
@@ -122,6 +124,12 @@ class _MyHomePageState extends State<MyHomePage> {
               _launchURL('http://www.jtsaeed.com/');
             },
           ),
+        ),
+        new Text(
+            '\n\nMore features to come!',
+            textAlign: TextAlign.center,
+
+
         ),
       ]),
     );
