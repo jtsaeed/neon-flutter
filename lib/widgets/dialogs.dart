@@ -93,7 +93,7 @@ editDialog(context, currentHourKey, setState) async  {
                 title: new Text('Set Reminder'),
                 onTap: () {
                  Navigator.of(context).pop();
-                 _setRemainderDialog(context, currentHourKey);
+                 _setReminderDialog(context, currentHourKey);
                   }
               ),
               new ListTile(
@@ -110,7 +110,7 @@ editDialog(context, currentHourKey, setState) async  {
   );
 }
 
-_setRemainderDialog(context, cellTime)  {
+_setReminderDialog(context, cellTime)  {
 
   showModalBottomSheet(
       context: context,

@@ -85,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(16.0),
           child: new RaisedButton(
             child: const Text('Follow me on Twitter for updates'),
-//          color: Theme.of(context).accentColor,
             color: primaryColor,
             textColor: Colors.white,
             elevation: 2.0,

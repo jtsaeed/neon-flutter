@@ -42,7 +42,7 @@ class TodoListState extends State<TodoList> {
               children: <Widget>[
                 new ListTile(
                     trailing: new Icon(Icons.arrow_forward),
-                    title: new Text('Assign to current hour blocks'),
+                    title: new Text('Add to Current Hour Block'),
                     onTap: () {
                       setState(() {
                         cells[1] = toDoItem;
@@ -52,7 +52,7 @@ class TodoListState extends State<TodoList> {
                     }),
                 new ListTile(
                     trailing: new Icon(Icons.done),
-                    title: new Text('Mark "$toDoItem" as done?'),
+                    title: new Text('Clear'),
                     onTap: () {
                       _removeTodoItem(index);
                       saveList('savedToDoList', todoItems);
@@ -77,6 +77,8 @@ class TodoListState extends State<TodoList> {
   // Build the whole list of todo items
   Widget _buildTodoList() {
     return new ListView.builder(
+      padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         if (index < todoItems.length ?? 0) {
           return _buildTodoItem(todoItems[index], index);
@@ -85,8 +87,62 @@ class TodoListState extends State<TodoList> {
     );
   }
 
+  Widget _buildTodoItem(String toDoText, int index) {
+    return Container(
+      decoration: new BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            new BoxShadow(
+              color: Colors.black.withOpacity(0.075),
+              blurRadius: 8,
+            )
+          ]),
+      child: GestureDetector(
+        onTap: () {
+          _promptRemoveTodoItem(index);
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "NO PRIORITY",
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: grayColor,
+                            fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        toDoText,
+                        style: TextStyle(
+                            fontSize: 24.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   // Build a single todo item
-  Widget _buildTodoItem(String todoText, int index) {
+  Widget _buildTodoItemOld(String todoText, int index) {
     return Container(
       decoration: new BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -172,19 +228,22 @@ class TodoListState extends State<TodoList> {
         });
   }
 
+  Image addIcon = new Image.asset("resources/androidAdd@3x.png");
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        backgroundColor: Colors.orange[800],
-        title: new Text('Todo List'),
-      ),
       body: _buildTodoList(),
-      floatingActionButton: new FloatingActionButton(
-          onPressed: _pushAddTodoScreen,
-          tooltip: 'Add task',
-          backgroundColor: Colors.orange[800],
-          child: new Icon(Icons.add)),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.all(16),
+        child: new FloatingActionButton(
+            onPressed: _pushAddTodoScreen,
+            tooltip: 'Add To Do List item',
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+            elevation: 4.0,
+            child: new Icon(Icons.add)),
+      )
     );
   }
 

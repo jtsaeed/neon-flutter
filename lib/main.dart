@@ -135,9 +135,6 @@ class _TableViewState extends State<TableView> {
 
 
   Widget _buildBlock(context, index) {
-
-
-
     return Container(
       decoration: new BoxDecoration(
           borderRadius: BorderRadius.circular(16),
