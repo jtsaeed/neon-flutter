@@ -22,8 +22,8 @@ class TodoList extends StatefulWidget {
 class TodoListState extends State<TodoList> {
   void _addTodoItem(String task) {
     if (task.length > 0) {
-      saveList('savedToDoList', todoItems);
       setState(() => todoItems.add(task));
+      saveList('savedToDoList', todoItems);
     }
   }
 
@@ -61,7 +61,7 @@ class TodoListState extends State<TodoList> {
                 new ListTile(
                   trailing: new Icon(Icons.edit),
                   title: new Text('Edit'),
-                  onTap: () => _displayDialog(context, index),
+                  onTap: () => _editDialog(context, index),
                 ),
                 new ListTile(
                   trailing: new Icon(Icons.cancel),
@@ -101,7 +101,8 @@ class TodoListState extends State<TodoList> {
         child: Card(
           color: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Row(children: [
@@ -128,17 +129,16 @@ class TodoListState extends State<TodoList> {
     );
   }
 
-  _displayDialog(BuildContext context, index) async {
+  _editDialog(BuildContext context, index) async {
     var input = '';
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16)),
-            title: new Text(
-                'What\'s on your to do list?'),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: new Text('What\'s on your to do list?'),
             content: new Row(
               children: <Widget>[
                 new Expanded(
@@ -146,12 +146,14 @@ class TodoListState extends State<TodoList> {
                       cursorColor: primaryColor,
                       autofocus: true,
                       decoration: new InputDecoration(hintText: cells[index]),
-                      onChanged: (value) => input = value // Update the empty label array with the value they have entered
-                  ),
+                      onChanged: (value) => input =
+                          value // Update the empty label array with the value they have entered
+                      ),
                 )
               ],
             ),
-            actions: <Widget>[ // usually buttons at the bottom of the dialog
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
               new FlatButton(
                 textColor: Colors.grey,
                 child: new Text("Close"),
@@ -188,29 +190,53 @@ class TodoListState extends State<TodoList> {
     );
   }
 
-  void _pushAddTodoScreen() {
+  _pushAddTodoScreen() {
     // Push this page onto the stack
-    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-      return new Scaffold(
-          appBar: new AppBar(
-            title: new Text('Add a new task'),
-            backgroundColor: Colors.orange[800],
+    String input = "";
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: new Text('What\'s on your to do list?'),
+          content: new Row(
+            children: <Widget>[
+              new Expanded(
+                child: new TextField(
+                    cursorColor: Colors.orange,
+                    autofocus: true,
+                    decoration:
+                        new InputDecoration(hintText: 'e.g. Revise maths'),
+                    onChanged: (value) => input =
+                        value // Update the empty label array with the value they have entered
+                    ),
+              )
+            ],
           ),
-          body: new TextField(
-            autofocus: true,
-            onSubmitted: (val) {
-              _addTodoItem(val);
-              Navigator.pop(context); // Close the add todo screen
-            },
-            decoration: new InputDecoration(
-              hintText: 'Enter something to do...',
-              contentPadding: const EdgeInsets.all(16.0),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.orange[800]),
-              ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              textColor: Colors.grey,
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-          ));
-    }));
+            new FlatButton(
+              textColor: primaryColor,
+              child: new Text("Add"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _addTodoItem(input);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   saveList(listName, listValues) async {
