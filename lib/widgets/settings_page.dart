@@ -83,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //        ),
 
         /// [Buttons]
+        /*
         new Padding(
           padding: const EdgeInsets.all(16.0),
           child: new RaisedButton(
@@ -131,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
         ),
+        */
       ]),
     );
   }

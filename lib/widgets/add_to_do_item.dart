@@ -36,7 +36,9 @@ class _AddDialogState extends State<AddDialog> {
   }
 
   _updateLabel() {
-    if (sliderVal > 2 && sliderVal < 5)
+    if  (sliderVal <= 2) {
+      priorityLabel = 'No Priority';
+    } else if (sliderVal > 2 && sliderVal < 5)
       priorityLabel = 'Low Priority';
     else if (sliderVal > 4 && sliderVal < 7)
       priorityLabel = 'Medium Priority';
@@ -61,7 +63,7 @@ class _AddDialogState extends State<AddDialog> {
             new TextField(
                 cursorColor: primaryLightColor,
                 autofocus: true,
-                decoration: new InputDecoration(hintText: 'e.g. Revise maths'),
+                decoration: new InputDecoration(hintText: 'e.g. Clean the house'),
                 onChanged: (value) => input =
                     value // Update the empty label array with the value they have entered
                 ),
@@ -70,7 +72,7 @@ class _AddDialogState extends State<AddDialog> {
               label: priorityLabel,
 
               /// SOME colors for you to play with
-              activeColor: primaryColor,
+              activeColor: getPriorityColor(priorityLabel),
               inactiveColor: lightGrayColor,
               min: 0,
               max: 10,

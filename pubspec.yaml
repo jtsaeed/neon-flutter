@@ -65,6 +65,28 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - resources/androidAdd@3x.png
+    - resources/icons/bank@3x.png
+    - resources/icons/brush@3x.png
+    - resources/icons/calendar@3x.png
+    - resources/icons/code@3x.png
+    - resources/icons/commute@3x.png
+    - resources/icons/couch@3x.png
+    - resources/icons/default@3x.png
+    - resources/icons/education@3x.png
+    - resources/icons/food@3x.png
+    - resources/icons/game@3x.png
+    - resources/icons/gym@3x.png
+    - resources/icons/health@3x.png
+    - resources/icons/home@3x.png
+    - resources/icons/love@3x.png
+    - resources/icons/movie@3x.png
+    - resources/icons/music@3x.png
+    - resources/icons/pencil@3x.png
+    - resources/icons/people@3x.png
+    - resources/icons/sleep@3x.png
+    - resources/icons/store@3x.png
+    - resources/icons/sun@3x.png
+    - resources/icons/work@3x.png
   #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

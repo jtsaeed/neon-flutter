@@ -84,11 +84,8 @@ class TodoListState extends State<TodoList> {
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
 
-        var message = '';
-        var itemCount = todoItems.length > 2 ? 'ITEMS' : 'ITEM'; // 1 item or 2
-        itemCount = todoItems.length == 1 ? '' : itemCount; // If empty
-        if (todoItems.length > 1) // If have 1 item, then display message
-          message = '${todoItems.length - 1}  $itemCount';
+        var itemCount = todoItems.length - 1;
+        var message = '${itemCount} ${ itemCount == 1 ? 'ITEM' : 'ITEMS'}';
 
         if (index == 0) {
           return Padding(
@@ -114,7 +111,10 @@ class TodoListState extends State<TodoList> {
           );
         }
         if (index < todoItems.length && index < priorityList.length) {
-          return _buildTodoItem(todoItems[index], priorityList[index], index);
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: _buildTodoItem(todoItems[index], priorityList[index], index),
+          );
         }
       },
     );
@@ -149,10 +149,10 @@ class TodoListState extends State<TodoList> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        priority,
+                        priority.toUpperCase(),
                         style: TextStyle(
                             fontSize: 14,
-                            color: grayColor,
+                            color: getPriorityColor(priority),
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.left,
                       ),
