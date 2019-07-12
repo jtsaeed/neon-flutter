@@ -13,7 +13,6 @@ import 'package:neon/widgets/to_do_list.dart';
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-
 main() async {
   await loadCalendarPrefs();
   await retrieveCalendars();
@@ -44,33 +43,38 @@ class MyApp extends StatelessWidget {
 ///*This is like the TableViewDelegate - Creates a widget state, which is stateful / mutable
 class TableView extends StatefulWidget {
   @override
-  _TableViewState createState() => _TableViewState(); // Creating the tableView widget/state
+  _TableViewState createState() =>
+      _TableViewState(); // Creating the tableView widget/state
 }
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
   void initState() {
+    // Called before the Listview is created
     super.initState();
+
+    /// Setup notifications
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings(
-        '@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
+
+    /// load Calendar data and cell data
     loadCalendar(setState);
     loadCalendarTomorrow(setState);
-    loadCells(setState); // Load cell data from cache
+    loadCells(setState); // Load cell data from shared preference
   }
 
   @override
   Widget build(BuildContext context) {
     // Runs every time AFTER a cell is clicked on and setState is called
+    // SetState updates the ListView, thus we call this to rebuild the ListView
     return _myListView();
   }
 
-  ///*This is like the TableView
+  ///*This is like the TableView / ListView
   Widget _myListView() {
-
     return ListView.builder(
         // Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
@@ -78,7 +82,8 @@ class _TableViewState extends State<TableView> {
         itemCount: getArrayLength(),
         // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
-          if (index == 0) {// First element is today section
+          if (index == 0) {
+            // First element is today section
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
@@ -101,7 +106,8 @@ class _TableViewState extends State<TableView> {
               ),
             );
           } // if end
-          else if (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
+          else if (allTimeLabels[index + getCurrentHour()] ==
+              'TomorrowSection') {
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
@@ -114,7 +120,8 @@ class _TableViewState extends State<TableView> {
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(1).toUpperCase() + " ${tomorrowTitle ?? ''} // BETA 3",
+                  getDate(1).toUpperCase() +
+                      " ${tomorrowTitle ?? ''} // BETA 3",
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -124,6 +131,7 @@ class _TableViewState extends State<TableView> {
               ),
             );
           } // else if end
+
           return Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: _buildBlock(context, index),
@@ -132,10 +140,11 @@ class _TableViewState extends State<TableView> {
         ); // ListView.builder // end
   } // Widget _myListView() // end
 
-
-
+  /// Build each cell/block
   Widget _buildBlock(context, index) {
     return Container(
+      // Create outer body for the cell/block
+      // UI Design
       decoration: new BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
@@ -144,16 +153,16 @@ class _TableViewState extends State<TableView> {
               blurRadius: 8,
             )
           ]),
-      child: GestureDetector(
+
+      child: GestureDetector( // When tap on anywhere on cell
         onTap: () {
-          cells[index] == 'Empty'
-              ? empty()
-              : editDialog(context, index, setState);
+          cells[index] == 'Empty' ? empty() : editDialog(context, index, setState);
         },
         child: Card(
           color: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
             child: Row(
@@ -188,7 +197,9 @@ class _TableViewState extends State<TableView> {
                   color: lightGrayColor,
                   splashColor: Colors.transparent,
                   onPressed: () {
-                    cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
+                    cells[index] == 'Empty'
+                        ? addDialog(context, index, setState)
+                        : editDialog(context, index, setState);
                   },
                 ),
               ],
