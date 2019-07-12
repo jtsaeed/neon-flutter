@@ -169,19 +169,26 @@ Future removeUpdateCells(setState) async {
     }
   }
 //  print('Temp event to delete: ${tempEventsToDelete}');
+  
 
   for (int x = 0; x < tempEventsToDelete.length; x++) {
     for (int e = 0; e < tempEventsToDelete[x].length; e++) {
+      
       for (int h = getCurrentHour(); h < timeKeys.length; h++) {
         if (timeKeys[h] == tempEventsToDelete[x][e].start.hour) {
-//          print('Time: ${timeKeys[h]}');
-//          print('Removing: ${tempEventsToDelete[x][e].title}');
-
+          print('Time: ${timeKeys[h]}');
+          print('Removing: ${tempEventsToDelete[x][e].title}');
           var tempKey = tempEventsToDelete[x][e].start.hour;
 
+         
+          
           setState(() {
             cells[h - getCurrentHour()] = 'Empty';
             prefs.remove(timeKeys[h].toString());
+            if (tempEventsToDelete[x][e].title == todayTitle) {
+              print('allDay');
+              todayTitle = "";
+            }
           });
 
           while (tempKey < tempEventsToDelete[x][e].end.hour - 1) {
@@ -234,6 +241,10 @@ Future removeUpdateCellsTomorrow(setState) async {
           setState(() {
             cells[h - getCurrentHour() + 25] = 'Empty';
             prefs.remove(timeKeys[h + 25].toString());
+            if (tempEventsToDelete[x][e].title == tomorrowTitle) {
+              print('allDay');
+              tomorrowTitle = "";
+            }
           });
 
           while (tempKey < tempEventsToDelete[x][e].end.hour - 1) {
