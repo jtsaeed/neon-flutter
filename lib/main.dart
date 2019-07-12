@@ -181,7 +181,7 @@ class _TableViewState extends State<TableView> {
                         textAlign: TextAlign.left,
                       ),
                       AutoSizeText(
-                        cells[index],
+                        capitalisedTitle(cells[index]),
                         minFontSize: 17,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -213,6 +213,22 @@ class _TableViewState extends State<TableView> {
       ),
     );
   }
+
+  String capitalisedTitle(String title) {
+    var capitalisedTitle = "";
+    var words = title.split(" ");
+
+    for (String word in words) {
+      capitalisedTitle += capitaliseWord(word);
+      capitalisedTitle += " ";
+    }
+
+    capitalisedTitle = capitalisedTitle.substring(0, capitalisedTitle.length - 1);
+
+    return capitalisedTitle;
+  }
+
+  String capitaliseWord(String s) => s[0].toUpperCase() + s.substring(1);
 
   _empty() => false;
   
