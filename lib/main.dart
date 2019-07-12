@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'time.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:preferences/preferences.dart';
+
+import './widgets/dialogs.dart';
+import 'package:neon/widgets/to_do_list.dart';
+import 'package:neon/widgets/bottom_navbar.dart';
+
 import 'palette.dart';
 import 'icon_generator.dart';
-import './widgets/dialogs.dart';
+import 'time.dart';
 import 'cache_data.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:neon/widgets/bottom_navbar.dart';
-import 'package:preferences/preferences.dart';
 import 'load_calendar.dart';
-import 'package:neon/widgets/to_do_list.dart';
 
 Image addIcon = new Image.asset("resources/androidAdd@3x.png");
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-
 main() async {
-  await loadCalendarPrefs();
-  await retrieveCalendars();
-  await retrieveCalendarEvents();
-  await toDoListMain();
+  await loadCalendarPrefs(); // Load calendar prefs, (which calendars they want to load in)
+  await retrieveCalendars(); // Then retrieve the calendars they want based on the prefs
+  await retrieveCalendarEvents(); // Now we load the events for each of the calendars they want
+  await toDoListMain(); // initialize the to do list and load prefs data
   await PrefService.init(prefix: 'pref_');
   runApp(MyApp());
 }
@@ -50,33 +51,35 @@ class TableView extends StatefulWidget {
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
   void initState() {
+    // Called before the Listview is created
     super.initState();
+    
+    /// Setup notifications
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings(
-        '@mipmap/ic_launcher'); // Cant seem to use the hourblocks logo :/
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
+    
+    /// load Calendar data and cell data
     loadCalendar(setState);
     loadCalendarTomorrow(setState);
-    loadCells(setState); // Load cell data from cache
+    loadCells(setState); // Load cell data from shared preference
   }
-
+  
   @override
   Widget build(BuildContext context) {
     // Runs every time AFTER a cell is clicked on and setState is called
+    // SetState updates the ListView, thus we call this to rebuild the ListView
     return _myListView();
   }
-
-  ///*This is like the TableView
+  
+  ///*This is like the TableView / ListView
   Widget _myListView() {
-
-    return ListView.builder(
-        // Makes the cells
+    return ListView.builder(// Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
         physics: const BouncingScrollPhysics(),
-        itemCount: getArrayLength(),
-        // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
+        itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
           if (index == 0) {// First element is today section
             return Padding(
@@ -101,6 +104,7 @@ class _TableViewState extends State<TableView> {
               ),
             );
           } // if end
+          
           else if (allTimeLabels[index + getCurrentHour()] == 'TomorrowSection') {
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
@@ -114,7 +118,8 @@ class _TableViewState extends State<TableView> {
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(1).toUpperCase() + " ${tomorrowTitle ?? ''} // BETA 3",
+                  getDate(1).toUpperCase() +
+                      " ${tomorrowTitle ?? ''} // BETA 3",
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -124,18 +129,20 @@ class _TableViewState extends State<TableView> {
               ),
             );
           } // else if end
+          
           return Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: _buildBlock(context, index),
           );
         } // Item build // end
-        ); // ListView.builder // end
+    ); // ListView.builder // end
   } // Widget _myListView() // end
-
-
-
+  
+  /// Build each cell/block
   Widget _buildBlock(context, index) {
     return Container(
+      // Create outer body for the cell/block
+      // UI Design
       decoration: new BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
@@ -144,24 +151,25 @@ class _TableViewState extends State<TableView> {
               blurRadius: 8,
             )
           ]),
-      child: GestureDetector(
+      
+      child: GestureDetector( // When tap on anywhere on cell
         onTap: () {
-          cells[index] == 'Empty'
-              ? empty()
-              : editDialog(context, index, setState);
+          cells[index] == 'Empty' ? _empty() : editDialog(context, index, setState);
         },
+        // Design for inner body of the block/cell
         child: Card(
           color: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 0, // Flattens cell so they are essentially on one layer, merged together
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 16, 12),
             child: Row(
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         getHours(index),
@@ -179,68 +187,30 @@ class _TableViewState extends State<TableView> {
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.left,
                       ),
-                    ],
-                  ),
-                ),
+                    ], // Sub children end
+                  ), // Column end
+                ), // Expanded end
+                
                 IconButton(
                   icon: cells[index] == 'Empty' ? addIcon : generateIcon(cells[index]),
                   iconSize: 48,
                   color: lightGrayColor,
                   splashColor: Colors.transparent,
                   onPressed: () {
-                    cells[index] == 'Empty' ? addDialog(context, index, setState) : editDialog(context, index, setState);
+                    cells[index] == 'Empty'
+                        ? addDialog(context, index, setState)
+                        : editDialog(context, index, setState);
                   },
                 ),
-              ],
-            ),
+              ], // Parent children end
+            ), // Row end
           ),
         ),
       ),
     );
   }
+
+  _empty() => false;
+  
 }
 
-getSectionTitle(index) {
-  if (index == 0) {
-// First element is today section
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
-      child: ListTile(
-        subtitle: Text(
-          "Today",
-          style: TextStyle(
-              fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
-          textAlign: TextAlign.left,
-        ),
-        title: Text(
-          getDate(0).toUpperCase() + " // BETA 3",
-          style: TextStyle(
-              fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
-          textAlign: TextAlign.left,
-        ),
-      ),
-    );
-  } // if end
-
-  else {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
-      child: ListTile(
-        subtitle: Text(
-          "Tomorrow",
-          style: TextStyle(
-              fontSize: 34, color: Colors.black, fontWeight: FontWeight.w800),
-          textAlign: TextAlign.left,
-        ),
-        title: Text(
-          getDate(1).toUpperCase() + " // BETA 3", // Increments the day
-          style: TextStyle(
-              fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
-          textAlign: TextAlign.left,
-        ),
-      ),
-    );
-  } // else if end
-}
-
-empty() => false;

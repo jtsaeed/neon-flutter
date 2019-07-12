@@ -14,7 +14,6 @@ List<List<Event>> todayCalEvents = [[]];
 ///NSFW this naughty code
 List<List<Event>> tomorrowCalEvents = [[]];
 
-///NSFW this naughty code
 List<Calendar> calendars;
 List<Event> todayCalendarEvents;
 List<Event> tomorrowCalendarEvents;
