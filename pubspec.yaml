@@ -44,6 +44,9 @@ dependencies:
 
   intl: ^0.15.8
 
+  firebase_core: ^0.2.5       # This dependency was added during initial configuration.
+  firebase_analytics: ^1.0.4
+
   # The following section is specific to Flutter.
 
 

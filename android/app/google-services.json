@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "439001065174",
+    "firebase_url": "https://hour-blocks.firebaseio.com",
+    "project_id": "hour-blocks",
+    "storage_bucket": "hour-blocks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439001065174:android:da7aec1464e7ba4b",
+        "android_client_info": {
+          "package_name": "com.jtsaeed.neon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439001065174-j7gra9ubkbnst4rc2lfunon9n0ov6rh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwj6aYxGp4soGPwLrNf5BDPttnY7b0zmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439001065174-j7gra9ubkbnst4rc2lfunon9n0ov6rh2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "439001065174-1b75r3u1a622cbh4i2cjp6km7kgkp11r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.evh98.neon"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
