@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:preferences/preferences.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import './widgets/dialogs.dart';
 import 'package:neon/widgets/to_do_list.dart';
@@ -179,8 +180,11 @@ class _TableViewState extends State<TableView> {
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.left,
                       ),
-                      Text(
+                      AutoSizeText(
                         cells[index],
+                        minFontSize: 17,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 24.0,
                             color: cells[index] == "Empty" ? grayColor : Colors.black,

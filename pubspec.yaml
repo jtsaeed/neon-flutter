@@ -44,6 +44,8 @@ dependencies:
 
   intl: ^0.15.8
 
+  auto_size_text: ^2.0.2
+
   firebase_core: ^0.2.5       # This dependency was added during initial configuration.
   firebase_analytics: ^1.0.4
 
