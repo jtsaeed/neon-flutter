@@ -211,7 +211,7 @@ class TodoListState extends State<TodoList> {
                 child: new Text("Add"),
                 onPressed: () {
                   setState(() => todoItems[index] = input);
-                  setState(() => priorityList[index] = input);
+//                  setState(() => priorityList[index] = toDoPriority);
                   print(todoItems);
                   print(priorityList);
                   Navigator.of(context).pop();

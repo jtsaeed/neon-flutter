@@ -21,7 +21,7 @@ main() async {
   await retrieveCalendars(); // Then retrieve the calendars they want based on the prefs
   await retrieveCalendarEvents(); // Now we load the events for each of the calendars they want
   await toDoListMain(); // initialize the to do list and load prefs data
-  await PrefService.init(prefix: 'pref_');
+  await PrefService.init(prefix: 'pref_'); // Load settings page 
   runApp(MyApp());
 }
 
