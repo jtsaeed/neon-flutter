@@ -24,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
 
   final cal = calendars != null ? 'Calendars' : 'Settings';
-  final height = calendars != null ? calendars.length * 48.0 : 0;
+  final height = calendars != null ? calendars.length * 48.0 : 0.0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,22 +173,23 @@ Future removeUpdateCells(setState) async {
 
   for (int x = 0; x < tempEventsToDelete.length; x++) {
     for (int e = 0; e < tempEventsToDelete[x].length; e++) {
+  
+      if (tempEventsToDelete[x][e].title == todayTitle) {
+        setState(() {
+          todayTitle = "";
+          print('allDay today');
+        });
+      }
       
       for (int h = getCurrentHour(); h < timeKeys.length; h++) {
         if (timeKeys[h] == tempEventsToDelete[x][e].start.hour) {
           print('Time: ${timeKeys[h]}');
           print('Removing: ${tempEventsToDelete[x][e].title}');
           var tempKey = tempEventsToDelete[x][e].start.hour;
-
-         
           
           setState(() {
             cells[h - getCurrentHour()] = 'Empty';
             prefs.remove(timeKeys[h].toString());
-            if (tempEventsToDelete[x][e].title == todayTitle) {
-              print('allDay');
-              todayTitle = "";
-            }
           });
 
           while (tempKey < tempEventsToDelete[x][e].end.hour - 1) {
@@ -231,6 +232,13 @@ Future removeUpdateCellsTomorrow(setState) async {
     for (int e = 0; e < tempEventsToDelete[x].length; e++) {
       print(tempEventsToDelete[x][e].title);
 
+      if (tempEventsToDelete[x][e].title == tomorrowTitle) {
+        setState(() {
+          tomorrowTitle = "";
+          print('allDay tomorrow');
+        });
+      }
+
       for (int h = 0; h < timeKeys.length; h++) {
         if (timeKeys[h] == tempEventsToDelete[x][e].start.hour) {
           print('Time: ${timeKeys[h]}');
@@ -241,10 +249,6 @@ Future removeUpdateCellsTomorrow(setState) async {
           setState(() {
             cells[h - getCurrentHour() + 25] = 'Empty';
             prefs.remove(timeKeys[h + 25].toString());
-            if (tempEventsToDelete[x][e].title == tomorrowTitle) {
-              print('allDay');
-              tomorrowTitle = "";
-            }
           });
 
           while (tempKey < tempEventsToDelete[x][e].end.hour - 1) {
@@ -283,9 +287,9 @@ Future addTodayUpdateCells(setState) async {
   for (int x = 0; x < tempEventsToAdd.length; x++) {
     for (int e = 0; e < tempEventsToAdd[x].length; e++) {
       for (int h = getCurrentHour(); h < timeKeys.length; h++) {
-        if ( todayCalEvents[x] != null)
-        if (todayCalEvents[x][e].title != tomorrowTitle &&
-            todayCalEvents[x][e].title != todayTitle) {
+        if (tempEventsToAdd[x][e] != null)
+        if (tempEventsToAdd[x][e].title != tomorrowTitle &&
+            tempEventsToAdd[x][e].title != todayTitle) {
           if (tempEventsToAdd[x][e].start.hour == timeKeys[h]) {
             setState(() {
               var tempKey = tempEventsToAdd[x][e].start.hour;
@@ -333,10 +337,10 @@ Future addTodayUpdateCellsTomorrow(setState) async {
       for (int h = 0; h < timeKeys.length; h++) {
         if (tempEventsToAdd[x][e].start.hour == timeKeys[h]) {
 
-          if ( tomorrowCalEvents[x] != null)
+          if (tempEventsToAdd[x][e] != null)
 
-          if (tomorrowCalEvents[x][e].title != tomorrowTitle &&
-              tomorrowCalEvents[x][e].title != todayTitle) {
+          if (tempEventsToAdd[x][e].title != tomorrowTitle &&
+              tempEventsToAdd[x][e].title != todayTitle) {
             setState(() {
               var tempKey = tempEventsToAdd[x][e].start.hour;
 

@@ -9,17 +9,12 @@ var tomorrowTitle;
 Loads the calendar data from calender app into scrollview list
 */
 List<String> calendarsNames = [];
-List<List<Event>> todayCalEvents = [[]];
-
 ///NSFW this naughty code
+List<List<Event>> todayCalEvents = [[]];
 List<List<Event>> tomorrowCalEvents = [[]];
-
 List<Calendar> calendars;
-List<Event> todayCalendarEvents;
-List<Event> tomorrowCalendarEvents;
 
-var calendarsSectionLength =
-    0; // Stores the length when fetching the calender data
+var calendarsSectionLength = 0; // Stores the length when fetching the calender data
 
 DeviceCalendarPlugin _deviceCalendarPlugin = new DeviceCalendarPlugin();
 
@@ -58,7 +53,7 @@ retrieveCalendarEvents() async {
             calendars[c].id,
             new RetrieveEventsParams(startDate: startDate, endDate: endDate));
 
-        todayCalendarEvents = calendarEventsResult?.data;
+        var todayCalendarEvents = calendarEventsResult?.data;
         todayCalEvents.add(calendarEventsResult.data);
 
         for (int e = 0; e < todayCalendarEvents.length; e++) {
@@ -77,7 +72,7 @@ retrieveCalendarEvents() async {
                 calendars[c].id,
                 new RetrieveEventsParams(
                     startDate: startDate, endDate: endDate));
-        tomorrowCalendarEvents = (calendarEventsResultTomorrow?.data);
+        var tomorrowCalendarEvents = calendarEventsResultTomorrow?.data;
         tomorrowCalEvents.add(calendarEventsResultTomorrow.data);
 
         for (int e = 0; e < tomorrowCalendarEvents.length; e++) {
