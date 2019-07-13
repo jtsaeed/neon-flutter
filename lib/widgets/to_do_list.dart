@@ -26,7 +26,7 @@ class TodoList extends StatefulWidget {
 class TodoListState extends State<TodoList> {
 
 
-  void _removeTodoItem(int index) {
+  void _removeTodoItemAndPriority(int index) {
     setState(() => todoItems.removeAt(index));
     setState(() => priorityList.removeAt(index));
 
@@ -34,7 +34,6 @@ class TodoListState extends State<TodoList> {
 
   void _promptRemoveTodoItem(int index) {
     var toDoItem = todoItems[index];
-    var toDoPriority = priorityList[index];
 
     showModalBottomSheet(
         context: context,
@@ -56,7 +55,7 @@ class TodoListState extends State<TodoList> {
                     trailing: new Icon(Icons.done),
                     title: new Text('Clear'),
                     onTap: () {
-                      _removeTodoItem(index);
+                      _removeTodoItemAndPriority(index);
                       saveList('savedToDoList', todoItems);
                       saveList('savedToDoPriorities', priorityList);
                       Navigator.of(context).pop();
@@ -84,8 +83,8 @@ class TodoListState extends State<TodoList> {
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
 
-        var itemCount = todoItems.length - 1;
-        var message = '${itemCount} ${ itemCount == 1 ? 'ITEM' : 'ITEMS'}';
+        var itemCount = todoItems.length;
+        var message = '$itemCount ${ itemCount <= 1 ? 'ITEM' : 'ITEMS'}';
 
         if (index == 0) {
           return Padding(
@@ -110,10 +109,11 @@ class TodoListState extends State<TodoList> {
             ),
           );
         }
-        if (index < todoItems.length && index < priorityList.length) {
+        // Have to reset index back to 0 since technically, because of the section title, the index is 1, which aint good broooo
+        if (index - 1 < todoItems.length && index - 1 < priorityList.length) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            child: _buildTodoItem(todoItems[index], priorityList[index], index),
+            child: _buildTodoItem(todoItems[index - 1], priorityList[index - 1], index - 1),
           );
         }
       },

@@ -20,19 +20,19 @@ class _AddDialogState extends State<AddDialog> {
   var input = '';
 
   void _addTodoItem(String task) {
-    if (task.length > 0) {
+//    if (task.length > 0) {
       setState(() => todoItems.add(task));
       saveList('savedToDoList', todoItems);
       print(todoItems);
-    }
+//    }
   }
 
   void _addPriority(String priority) {
-    if (priority.length > 0) {
+//    if (priority.length > 0) {
       setState(() => priorityList.add(priority));
       saveList('savedToDoPriorities', priorityList);
       print(priorityList);
-    }
+//    }
   }
 
   _updateLabel() {
