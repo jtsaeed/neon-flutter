@@ -50,7 +50,16 @@ Image _work =
 Image generateIcon(String s) {
   var title = s.toLowerCase();
 
-  checkIfCalendarEvent(title);
+  for (int c = 0; c < todayCalEvents.length; c++)
+    for (int e = 0; e < todayCalEvents[c].length; e++)
+      if (title.contains(todayCalEvents[c][e].title))
+        return _calendar;
+
+  for (int c = 0; c < tomorrowCalEvents.length; c++)
+    for (int e = 0; e < tomorrowCalEvents[c].length; e++)
+      if (title.contains(tomorrowCalEvents[c][e].title))
+        return _calendar;
+
 
   if (title.contains("bank") ||
       title.contains("finance") ||
@@ -159,16 +168,3 @@ Image generateIcon(String s) {
   }
 }
 
-Image checkIfCalendarEvent(String s) {
-  for (int c = 0; c < todayCalEvents.length; c++)
-    for (int e = 0; e < todayCalEvents[c].length; e++)
-      if (s.contains(todayCalEvents[c][e].title))
-        return _calendar;
-
-  for (int c = 0; c < tomorrowCalEvents.length; c++)
-    for (int e = 0; e < tomorrowCalEvents[c].length; e++)
-      if (s.contains(tomorrowCalEvents[c][e].title))
-        return _calendar;
-
-  return generateIcon(s);
-}
