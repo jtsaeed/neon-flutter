@@ -9,6 +9,8 @@ import '../time.dart';
 import '../palette.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:neon/ads.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 Map<String, dynamic> calendarMap = new Map.fromIterable(calendarsNames,
     key: (calendarName) => calendarName, value: (calendarSelected) => 'true');
@@ -72,6 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
+        ),
+
+        AdmobBanner(
+          adUnitId: getBannerId(),
+          adSize: AdmobBannerSize.BANNER,
         ),
 
 //        /// [Night Hours]

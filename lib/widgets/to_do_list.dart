@@ -84,7 +84,7 @@ class TodoListState extends State<TodoList> {
       itemBuilder: (context, index) {
 
         var itemCount = todoItems.length;
-        var message = '$itemCount ${ itemCount <= 1 ? 'ITEM' : 'ITEMS'}';
+        var message = '$itemCount ${ itemCount == 1 ? 'ITEM' : 'ITEMS'}';
 
         if (index == 0) {
           return Padding(
