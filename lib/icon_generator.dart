@@ -167,5 +167,12 @@ Image checkIfCalendarEvent(String s) {
       }
     }
   }
+  for (int c = 0; c < tomorrowCalEvents.length; c++) {
+    for (int e = 0; e < tomorrowCalEvents[c].length; e++) {
+      if (s.contains(tomorrowCalEvents[c][e].title)) {
+        return _calendar;
+      }
+    }
+  }
   return generateIcon(s);
 }
