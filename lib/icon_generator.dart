@@ -1,31 +1,56 @@
 import 'package:flutter/material.dart';
 import 'palette.dart';
+import 'load_calendar.dart';
 
-Image _bank = new Image.asset("resources/icons/bank@3x.png", color: lightGrayColor);
-Image _brush = new Image.asset("resources/icons/brush@3x.png", color: lightGrayColor);
-Image _calendar = new Image.asset("resources/icons/calendar@3x.png", color: lightGrayColor);
-Image _code = new Image.asset("resources/icons/code@3x.png", color: lightGrayColor);
-Image _commute = new Image.asset("resources/icons/commute@3x.png", color: lightGrayColor);
-Image _couch = new Image.asset("resources/icons/couch@3x.png", color: lightGrayColor);
-Image _default = new Image.asset("resources/icons/default@3x.png", color: lightGrayColor);
-Image _education = new Image.asset("resources/icons/education@3x.png", color: lightGrayColor);
-Image _food = new Image.asset("resources/icons/food@3x.png", color: lightGrayColor);
-Image _game = new Image.asset("resources/icons/game@3x.png", color: lightGrayColor);
-Image _gym = new Image.asset("resources/icons/gym@3x.png", color: lightGrayColor);
-Image _health = new Image.asset("resources/icons/health@3x.png", color: lightGrayColor);
-Image _home = new Image.asset("resources/icons/home@3x.png", color: lightGrayColor);
-Image _love = new Image.asset("resources/icons/love@3x.png", color: lightGrayColor);
-Image _movie = new Image.asset("resources/icons/movie@3x.png", color: lightGrayColor);
-Image _music = new Image.asset("resources/icons/music@3x.png", color: lightGrayColor);
-Image _pencil = new Image.asset("resources/icons/pencil@3x.png", color: lightGrayColor);
-Image _people = new Image.asset("resources/icons/people@3x.png", color: lightGrayColor);
-Image _sleep = new Image.asset("resources/icons/sleep@3x.png", color: lightGrayColor);
-Image _store = new Image.asset("resources/icons/store@3x.png", color: lightGrayColor);
-Image _sun = new Image.asset("resources/icons/music@3x.png", color: lightGrayColor);
-Image _work = new Image.asset("resources/icons/work@3x.png", color: lightGrayColor);
+Image _bank =
+    new Image.asset("resources/icons/bank@3x.png", color: lightGrayColor);
+Image _brush =
+    new Image.asset("resources/icons/brush@3x.png", color: lightGrayColor);
+Image _calendar =
+    new Image.asset("resources/icons/calendar@3x.png", color: lightGrayColor);
+Image _code =
+    new Image.asset("resources/icons/code@3x.png", color: lightGrayColor);
+Image _commute =
+    new Image.asset("resources/icons/commute@3x.png", color: lightGrayColor);
+Image _couch =
+    new Image.asset("resources/icons/couch@3x.png", color: lightGrayColor);
+Image _default =
+    new Image.asset("resources/icons/default@3x.png", color: lightGrayColor);
+Image _education =
+    new Image.asset("resources/icons/education@3x.png", color: lightGrayColor);
+Image _food =
+    new Image.asset("resources/icons/food@3x.png", color: lightGrayColor);
+Image _game =
+    new Image.asset("resources/icons/game@3x.png", color: lightGrayColor);
+Image _gym =
+    new Image.asset("resources/icons/gym@3x.png", color: lightGrayColor);
+Image _health =
+    new Image.asset("resources/icons/health@3x.png", color: lightGrayColor);
+Image _home =
+    new Image.asset("resources/icons/home@3x.png", color: lightGrayColor);
+Image _love =
+    new Image.asset("resources/icons/love@3x.png", color: lightGrayColor);
+Image _movie =
+    new Image.asset("resources/icons/movie@3x.png", color: lightGrayColor);
+Image _music =
+    new Image.asset("resources/icons/music@3x.png", color: lightGrayColor);
+Image _pencil =
+    new Image.asset("resources/icons/pencil@3x.png", color: lightGrayColor);
+Image _people =
+    new Image.asset("resources/icons/people@3x.png", color: lightGrayColor);
+Image _sleep =
+    new Image.asset("resources/icons/sleep@3x.png", color: lightGrayColor);
+Image _store =
+    new Image.asset("resources/icons/store@3x.png", color: lightGrayColor);
+Image _sun =
+    new Image.asset("resources/icons/music@3x.png", color: lightGrayColor);
+Image _work =
+    new Image.asset("resources/icons/work@3x.png", color: lightGrayColor);
 
 Image generateIcon(String s) {
   var title = s.toLowerCase();
+
+  checkIfCalendarEvent(title);
 
   if (title.contains("bank") ||
       title.contains("finance") ||
@@ -132,4 +157,15 @@ Image generateIcon(String s) {
   } else {
     return _default;
   }
+}
+
+Image checkIfCalendarEvent(String s) {
+  for (int c = 0; c < todayCalEvents.length; c++) {
+    for (int e = 0; e < todayCalEvents[c].length; e++) {
+      if (s.contains(todayCalEvents[c][e].title)) {
+        return _calendar;
+      }
+    }
+  }
+  return generateIcon(s);
 }

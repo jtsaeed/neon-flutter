@@ -45,8 +45,7 @@ loadCalendar(setState) async {
                   while (startHour < todayCalEvents[i][e].end.hour - 1) {
                     // Dont use the ending hour for a cell, so subtract 1
                     startHour++;
-                    cells[startHour - getCurrentHour()] =
-                        todayCalEvents[i][e].title;
+                    cells[startHour - getCurrentHour()] = todayCalEvents[i][e].title;
                     save(timeKeys[startHour], todayCalEvents[i][e].title);
                   }
                 }
