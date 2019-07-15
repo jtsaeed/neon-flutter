@@ -33,7 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
     _bannerAd = createBannerAd()..load()..show(
       anchorType: AnchorType.bottom,
       anchorOffset: 64.0,
@@ -103,9 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
 //        ),
 
         /// [Buttons]
-        /*
         new Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: new RaisedButton(
             child: const Text('Follow me on Twitter for updates'),
             color: primaryColor,
@@ -117,6 +115,22 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
+
+        new Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: new RaisedButton(
+            child: const Text('Check out the developer'),
+            color: primaryColor,
+            textColor: Colors.white,
+            elevation: 2.0,
+            splashColor: primaryColor,
+            onPressed: () {
+              _launchURL('https://jahanuol.github.io');
+            },
+          ),
+        ),
+
+        /*
         new Text(
             'Check out the developers:\n',
             textAlign: TextAlign.center
