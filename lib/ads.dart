@@ -1,10 +1,8 @@
-// Debug: ca-app-pub-3940256099942544~3347511713
-// Production: ca-app-pub-3031375681685379~5217094167
+// App ID: ca-app-pub-3031375681685379~5217094167
+// Banner ID: ca-app-pub-3031375681685379/9660215137
 
 String getAppId() {
-  return "ca-app-pub-3940256099942544~3347511713";
-  // Production
-//  return "ca-app-pub-3031375681685379~5217094167";
+  return "ca-app-pub-3031375681685379~5217094167";
 }
 
 String getBannerId() {

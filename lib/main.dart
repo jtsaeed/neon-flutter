@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:preferences/preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 
 import './widgets/dialogs.dart';
 import 'package:neon/widgets/to_do_list.dart';
@@ -24,7 +23,6 @@ main() async {
   await retrieveCalendarEvents(); // Now we load the events for each of the calendars they want
   await toDoListMain(); // initialize the to do list and load prefs data
   await PrefService.init(prefix: 'pref_'); // Load settings page
-  Admob.initialize(getAppId());
   runApp(MyApp());
 }
 

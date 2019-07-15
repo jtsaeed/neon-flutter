@@ -10,7 +10,7 @@ import '../palette.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:neon/ads.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 Map<String, dynamic> calendarMap = new Map.fromIterable(calendarsNames,
     key: (calendarName) => calendarName, value: (calendarSelected) => 'true');
@@ -27,6 +27,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final cal = calendars != null ? 'Calendars' : 'Settings';
   final height = calendars != null ? calendars.length * 48.0 : 0.0;
+  BannerAd _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+    _bannerAd = createBannerAd()..load()..show(
+      anchorType: AnchorType.bottom,
+      anchorOffset: 64.0,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bannerAd.dispose();
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,11 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
-        ),
-
-        AdmobBanner(
-          adUnitId: getBannerId(),
-          adSize: AdmobBannerSize.BANNER,
         ),
 
 //        /// [Night Hours]
@@ -151,6 +164,13 @@ class _MyHomePageState extends State<MyHomePage> {
       throw 'Could not launch $url';
     }
   }
+}
+
+BannerAd createBannerAd() {
+  return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner
+  );
 }
 
 Future removeUpdateCells(setState) async {
