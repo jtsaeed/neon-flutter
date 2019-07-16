@@ -98,7 +98,7 @@ class _TableViewState extends State<TableView> {
                   textAlign: TextAlign.left,
                 ),
                 title: Text(
-                  getDate(0).toUpperCase() + " ${todayTitle ?? ''} // BETA 3",
+                  getDate(0).toUpperCase() + " ${todayTitle ?? ''}",
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -123,7 +123,7 @@ class _TableViewState extends State<TableView> {
                 ),
                 title: Text(
                   getDate(1).toUpperCase() +
-                      " ${tomorrowTitle ?? ''} // BETA 3",
+                      " ${tomorrowTitle ?? ''}",
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,

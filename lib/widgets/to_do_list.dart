@@ -99,7 +99,7 @@ class TodoListState extends State<TodoList> {
                 textAlign: TextAlign.left,
               ),
               title: Text(
-                '$message // BETA 3',
+                message,
                 style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
@@ -157,7 +157,7 @@ class TodoListState extends State<TodoList> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        toDoText,
+                        capitalisedTitle(toDoText),
                         style: TextStyle(
                             fontSize: 24.0,
                             color: Colors.black,
@@ -249,6 +249,22 @@ class TodoListState extends State<TodoList> {
         ));
   }
 }
+
+String capitalisedTitle(String title) {
+  var capitalisedTitle = "";
+  var words = title.split(" ");
+
+  for (String word in words) {
+    capitalisedTitle += capitaliseWord(word);
+    capitalisedTitle += " ";
+  }
+
+  capitalisedTitle = capitalisedTitle.substring(0, capitalisedTitle.length - 1);
+
+  return capitalisedTitle;
+}
+
+String capitaliseWord(String s) => s[0].toUpperCase() + s.substring(1);
 
 saveList(listName, listValues) async {
   final prefs = await SharedPreferences.getInstance();
