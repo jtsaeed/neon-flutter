@@ -23,13 +23,56 @@ class TodoList extends StatefulWidget {
   createState() => new TodoListState();
 }
 
+
 class TodoListState extends State<TodoList> {
 
+  // Build the whole list of todo items // MAIN widget for to do list
+  Widget _buildTodoList() {
+    return new ListView.builder(
+      padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
+      physics: const BouncingScrollPhysics(),
+      itemBuilder: (context, index) {
+        var itemCount = todoItems.length;
+        var message = '$itemCount ${itemCount == 1 ? 'ITEM' : 'ITEMS'}';
+
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
+            child: ListTile(
+              subtitle: Text(
+                "To Do List",
+                style: TextStyle(
+                    fontSize: 34,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800),
+                textAlign: TextAlign.left,
+              ),
+              title: Text(
+                message,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w600),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          );
+        }
+        // Have to reset index back to 0 since technically, because of the section title, the index is 1, which aint good broooo
+        if (index - 1 < todoItems.length && index - 1 < priorityList.length) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: _buildTodoItem(
+                todoItems[index - 1], priorityList[index - 1], index - 1),
+          );
+        }
+      },
+    );
+  }
 
   void _removeTodoItemAndPriority(int index) {
     setState(() => todoItems.removeAt(index));
     setState(() => priorityList.removeAt(index));
-
   }
 
   void _promptRemoveTodoItem(int index) {
@@ -76,50 +119,6 @@ class TodoListState extends State<TodoList> {
         });
   }
 
-  // Build the whole list of todo items
-  Widget _buildTodoList() {
-    return new ListView.builder(
-      padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-
-        var itemCount = todoItems.length;
-        var message = '$itemCount ${ itemCount == 1 ? 'ITEM' : 'ITEMS'}';
-
-        if (index == 0) {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
-            child: ListTile(
-              subtitle: Text(
-                "To Do List",
-                style: TextStyle(
-                    fontSize: 34,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800),
-                textAlign: TextAlign.left,
-              ),
-              title: Text(
-                message,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w600),
-                textAlign: TextAlign.left,
-              ),
-            ),
-          );
-        }
-        // Have to reset index back to 0 since technically, because of the section title, the index is 1, which aint good broooo
-        if (index - 1 < todoItems.length && index - 1 < priorityList.length) {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            child: _buildTodoItem(todoItems[index - 1], priorityList[index - 1], index - 1),
-          );
-        }
-      },
-    );
-  }
-
   Widget _buildTodoItem(String toDoText, String priority, int index) {
     return Container(
       decoration: new BoxDecoration(
@@ -157,7 +156,8 @@ class TodoListState extends State<TodoList> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        capitalisedTitle(toDoText),
+                        toDoText,
+//                        capitalisedTitle(toDoText),
                         style: TextStyle(
                             fontSize: 24.0,
                             color: Colors.black,
@@ -215,7 +215,6 @@ class TodoListState extends State<TodoList> {
                   print(todoItems);
                   print(priorityList);
                   Navigator.of(context).pop();
-
                 },
               ),
             ],

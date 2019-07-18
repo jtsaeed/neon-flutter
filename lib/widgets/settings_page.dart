@@ -12,8 +12,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:neon/ads.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
-Map<String, dynamic> calendarMap = new Map.fromIterable(calendarsNames,
-    key: (calendarName) => calendarName, value: (calendarSelected) => 'true');
+Map<String, String> calendarMap = new Map.fromIterable(calendarsNames,
+    key: (calendarName) => calendarName,
+    value: (calendarSelected) => 'true');
+
 var mapString = '';
 
 class MyHomePage extends StatefulWidget {
@@ -25,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
 
-  final cal = calendars != null ? 'Calendars' : 'Settings';
+  final cal = calendars != null ? 'Calendars' : 'Information';
   final height = calendars != null ? calendars.length * 48.0 : 0.0;
   BannerAd _bannerAd;
 
@@ -78,10 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               addTodayUpdateCellsTomorrow(setState);
                             }
 
-                            mapString = json
-                                .encode(calendarMap); // convert map to string
-                            save('calendarPrefs',
-                                mapString); // cache string list
+                            mapString = json.encode(calendarMap); // convert map to string
+                            save('calendarPrefs', mapString); // cache string list
                           });
                         },
                       ),
@@ -129,44 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
-
-        /*
-        new Text(
-            'Check out the developers:\n',
-            textAlign: TextAlign.center
-        ),
-
-        new Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: new RaisedButton(
-            child: const Text('Jahan Ulhaque'),
-            color: primaryColor,
-            textColor: Colors.white,
-            splashColor: primaryColor,
-            onPressed: () {
-              _launchURL('https://jahanuol.github.io/');
-            },
-          ),
-        ),
-        new Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: new RaisedButton(
-            child: const Text('James Saaed'),
-            color: primaryColor,
-            textColor: Colors.white,
-            splashColor: primaryColor,
-            onPressed: () {
-              _launchURL('http://www.jtsaeed.com/');
-            },
-          ),
-        ),
-        new Text(
-            '\n\nMore features to come!',
-            textAlign: TextAlign.center,
-
-
-        ),
-        */
       ]),
     );
   }
@@ -189,7 +151,6 @@ BannerAd createBannerAd() {
 
 Future removeUpdateCells(setState) async {
   final prefs = await SharedPreferences.getInstance();
-//  List<Event> tempEventsToDelete;
   List<List<Event>> tempEventsToDelete = [[]];
 
   for (int i = 0; i < calendars.length; i++) {
@@ -210,7 +171,7 @@ Future removeUpdateCells(setState) async {
     }
   }
 //  print('Temp event to delete: ${tempEventsToDelete}');
-  
+
 
   for (int x = 0; x < tempEventsToDelete.length; x++) {
     for (int e = 0; e < tempEventsToDelete[x].length; e++) {

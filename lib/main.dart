@@ -184,7 +184,8 @@ class _TableViewState extends State<TableView> {
                         textAlign: TextAlign.left,
                       ),
                       AutoSizeText(
-                        capitalisedTitle(cells[index]),
+                        cells[index],
+//                        capitalisedTitle(cells[index]),
                         minFontSize: 17,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

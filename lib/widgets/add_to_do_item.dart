@@ -3,9 +3,9 @@ import 'to_do_list.dart';
 import '../palette.dart';
 import 'bottom_navbar.dart';
 
+List<String> priorityLabels = ['No Priority', 'Low Priority', 'Medium Priority', 'High Priority'];
 // move the dialog into it's own stateful widget.
 // It's completely independent from your page
-// this is good practice
 class AddDialog extends StatefulWidget {
   /// initial selection for the slider
 
@@ -16,34 +16,58 @@ class AddDialog extends StatefulWidget {
 class _AddDialogState extends State<AddDialog> {
   /// current selection of the slider
   double sliderVal = 0;
-  var priorityLabel = 'No Priority';
+  var displayPriorityLabel = 'No Priority';
   var input = '';
 
-  void _addTodoItem(String task) {
-//    if (task.length > 0) {
-      setState(() => todoItems.add(task));
-      saveList('savedToDoList', todoItems);
-      print(todoItems);
-//    }
-  }
 
-  void _addPriority(String priority) {
-//    if (priority.length > 0) {
-      setState(() => priorityList.add(priority));
-      saveList('savedToDoPriorities', priorityList);
-      print(priorityList);
-//    }
+  void _sortList() {
+    List<String> noP = [];
+    List<String> lowP = [];
+    List<String> medP = [];
+    List<String> highP = [];
+
+    List<String> taskNoP = [];
+    List<String> taskLowP = [];
+    List<String> taskMedP = [];
+    List<String> taskHighP = [];
+
+    for (int p = 0; p < priorityList.length; p++) {
+      
+      if (priorityList[p] == priorityLabels[0]) {
+        noP.add(priorityList[p]);
+        taskNoP.add(todoItems[p]);
+      }
+      else if (priorityList[p] == priorityLabels[1]) {
+        lowP.add(priorityList[p]);
+        taskLowP.add(todoItems[p]);
+      }
+      else if (priorityList[p] == priorityLabels[2]) {
+        medP.add(priorityList[p]);
+        taskMedP.add(todoItems[p]);
+      }
+      else if (priorityList[p] == priorityLabels[3]) {
+        highP.add(priorityList[p]);
+        taskHighP.add(todoItems[p]);
+      }
+    }
+
+    todoItems = [taskHighP, taskMedP, taskLowP, taskNoP].expand((x) => x).toList();
+    priorityList = [highP, medP, lowP, noP].expand((x) => x).toList();
+    saveList('savedToDoList', todoItems);
+    saveList('savedToDoPriorities', priorityList);
+
+
   }
 
   _updateLabel() {
     if  (sliderVal <= 2) {
-      priorityLabel = 'No Priority';
+      displayPriorityLabel = priorityLabels[0];
     } else if (sliderVal > 2 && sliderVal < 5)
-      priorityLabel = 'Low Priority';
+      displayPriorityLabel = priorityLabels[1];
     else if (sliderVal > 4 && sliderVal < 7)
-      priorityLabel = 'Medium Priority';
+      displayPriorityLabel = priorityLabels[2];
     else
-      priorityLabel = 'High Priority';
+      displayPriorityLabel = priorityLabels[3];
   }
 
   @override
@@ -69,10 +93,8 @@ class _AddDialogState extends State<AddDialog> {
                 ),
             new Slider(
               value: sliderVal,
-              label: priorityLabel,
-
-              /// SOME colors for you to play with
-              activeColor: getPriorityColor(priorityLabel),
+              label: displayPriorityLabel,
+              activeColor: getPriorityColor(displayPriorityLabel),
               inactiveColor: lightGrayColor,
               min: 0,
               max: 10,
@@ -101,19 +123,28 @@ class _AddDialogState extends State<AddDialog> {
           textColor: primaryColor,
           child: new Text("Add"),
           onPressed: () {
-            _addTodoItem(input);
-            _addPriority(priorityLabel);
+            /// SORT THEM
+
+            setState(() => todoItems.add(input));
+            setState(() => priorityList.add(displayPriorityLabel));
+            _sortList();
+
+
             Navigator.pop(context, sliderVal);
             selectedIndex = 0;
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomePage()));
-//            Navigator.pop(
-//                context, MaterialPageRoute(builder: (context) => TodoList()));
           },
         ),
       ],
-
       ///Buttons end
     );
   }
 }
+
+//class ToDoItemClass { // Create objects
+//  final String task;
+//  final String priority;
+//  ToDoItemClass(this.task, this.priority);
+//}
+

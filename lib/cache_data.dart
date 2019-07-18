@@ -34,8 +34,7 @@ loadCalendar(setState) async {
                   todayCalEvents[i][e].title != todayTitle) {
                 setState(() {
                   print('updating:');
-                  cells[startHour - getCurrentHour()] =
-                      todayCalEvents[i][e].title;
+                  cells[startHour - getCurrentHour()] = todayCalEvents[i][e].title;
                   save(timeKeys[startHour], todayCalEvents[i][e].title);
                 });
 
