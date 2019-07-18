@@ -156,8 +156,7 @@ class TodoListState extends State<TodoList> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        toDoText,
-//                        capitalisedTitle(toDoText),
+                        _capitalisedTitle(toDoText),
                         style: TextStyle(
                             fontSize: 24.0,
                             color: Colors.black,
@@ -249,12 +248,12 @@ class TodoListState extends State<TodoList> {
   }
 }
 
-String capitalisedTitle(String title) {
+String _capitalisedTitle(String title) {
   var capitalisedTitle = "";
   var words = title.split(" ");
 
   for (String word in words) {
-    capitalisedTitle += capitaliseWord(word);
+    capitalisedTitle += _capitaliseWord(word);
     capitalisedTitle += " ";
   }
 
@@ -263,7 +262,12 @@ String capitalisedTitle(String title) {
   return capitalisedTitle;
 }
 
-String capitaliseWord(String s) => s[0].toUpperCase() + s.substring(1);
+String _capitaliseWord(String original) {
+  if (original == null || original.length == 0) {
+    return original;
+  }
+  return original.substring(0, 1).toUpperCase() + original.substring(1);
+}
 
 saveList(listName, listValues) async {
   final prefs = await SharedPreferences.getInstance();

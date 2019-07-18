@@ -32,7 +32,8 @@ class _AddDialogState extends State<AddDialog> {
     List<String> taskHighP = [];
 
     for (int p = 0; p < priorityList.length; p++) {
-      
+
+
       if (priorityList[p] == priorityLabels[0]) {
         noP.add(priorityList[p]);
         taskNoP.add(todoItems[p]);
