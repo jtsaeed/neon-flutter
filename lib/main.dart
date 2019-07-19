@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:preferences/preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 import './widgets/dialogs.dart';
 import 'package:neon/widgets/to_do_list.dart';
@@ -24,7 +24,7 @@ main() async {
   await retrieveCalendarEvents(); // Now we load the events for each of the calendars they want
   await toDoListMain(); // initialize the to do list and load prefs data
   await PrefService.init(prefix: 'pref_'); // Load settings page
-  FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+  Admob.initialize(getAppId());
   runApp(MyApp());
 }
 
@@ -54,6 +54,7 @@ class TableView extends StatefulWidget {
 
 ///* This is like the TableViewDataSource / This handles the widgets data and what is doing
 class _TableViewState extends State<TableView> {
+
   void initState() {
     // Called before the Listview is created
     super.initState();
@@ -83,7 +84,7 @@ class _TableViewState extends State<TableView> {
     return ListView.builder(// Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
         physics: const BouncingScrollPhysics(),
-        itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
+        itemCount: getArrayLength() + 1, // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
           if (index == 0) {// First element is today section
             return Padding(

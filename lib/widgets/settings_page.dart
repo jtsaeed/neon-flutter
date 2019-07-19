@@ -10,7 +10,7 @@ import '../palette.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:neon/ads.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 Map<String, String> calendarMap = new Map.fromIterable(calendarsNames,
     key: (calendarName) => calendarName,
@@ -25,28 +25,10 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-  @override
-
   final cal = calendars != null ? 'Calendars' : 'Information';
   final height = calendars != null ? calendars.length * 48.0 : 0.0;
-  BannerAd _bannerAd;
 
   @override
-  void initState() {
-    super.initState();
-
-    _bannerAd = createBannerAd()..load()..show(
-      anchorType: AnchorType.bottom,
-      anchorOffset: 64.0,
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _bannerAd.dispose();
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: PreferencePage([
@@ -129,6 +111,14 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
+
+        new Padding(
+          padding: const EdgeInsets.fromLTRB(0, 32, 0, 0),
+          child: new AdmobBanner(
+            adUnitId: getBannerTestId(),
+            adSize: AdmobBannerSize.LARGE_BANNER,
+          ),
+        )
       ]),
     );
   }
@@ -140,13 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
       throw 'Could not launch $url';
     }
   }
-}
-
-BannerAd createBannerAd() {
-  return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.banner
-  );
 }
 
 Future removeUpdateCells(setState) async {
