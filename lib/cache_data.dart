@@ -4,14 +4,14 @@ import 'load_calendar.dart';
 import 'widgets/settings_page.dart';
 import 'dart:convert';
 
-List<String> cells = List.filled(50, 'Empty');
+List<String> cells = List.filled(allTimeLabels.length, 'Empty');
 
 List<int> timeKeys = [
   // these are the keys for all the cells
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
   13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
   25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
-  37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+  37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50
 ];
 List<String> tempKeys =
     []; // When the day changes, we want to update all the tomorrow cell keys and convert them into today
@@ -109,7 +109,7 @@ loadCalendarPrefs() async {
 
 loadCells(setState) async {
   final prefs = await SharedPreferences.getInstance();
-//prefs.clear();  // Deletes all cache
+//  prefs.clear();  // Deletes all cache
 
   if (runOnce == false) {
     // Run once
@@ -143,51 +143,38 @@ loadCells(setState) async {
         }
       }
       for (int currentHour = 0; currentHour < timeKeys.length; currentHour++) {
-        if (currentHour <=
-            getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
+        if (currentHour <= getCurrentHour()) // Removing any cache keys that is before the current time as it is not needed anymore
           prefs.remove(timeKeys[currentHour].toString());
       }
     } else if (prefs.get('date') == getDate(-1)) {
       // Now we are in tomorrow, so tomorrows section cells needs to move into today's section
       print('different day');
-      prefs.remove(
-          'date'); // Remove the date key as it is for the previous date, we reinitialise it after updating the keys with the current date
+      prefs.remove('date'); // Remove the date key as it is for the previous date, we reinitialise it after updating the keys with the current date
 
       print(prefs.getKeys().length);
       print(prefs.getKeys());
-      var count =
-          0; // Stores the tempKeys array count, using prefs.getKeys.length is dynamic, count is static
+      var count = 0; // Stores the tempKeys array count, using prefs.getKeys.length is dynamic, count is static
 
       prefs.remove('23');
 
       var cacheKeys = List.from(prefs.getKeys());
 
-      for (int k = 0; k < cacheKeys.length; k++) {
-        // for every key in cache
-
-        if (int.parse(cacheKeys.elementAt(k)) >= 24) {
-          // if the key value is above 24h, then we subtract it by 25 (don't ask)
+      for (int k = 0; k < cacheKeys.length; k++) {// for every key in cache
+        if (int.parse(cacheKeys.elementAt(k)) >= 25) {// if the key value is above 24h, then we subtract it by 25 (don't ask)
 
           tempKeys.add(cacheKeys.elementAt(k)); // temporary stores the key
-
           print('Inside tempkeys: $tempKeys');
           print(tempKeys[count]);
 
           int intKey = int.parse(tempKeys[count]); // convert key to Int
-          intKey -=
-              25; // Go back 24 hours (tomorrow section counts as a day, so need to subtract 25, not 24)
+          intKey -= 26; // Go back 24 hours (tomorrow section counts as a day, so need to subtract 25, not 24)
 
-          print(
-              'key was changed from ${tempKeys[count]} to $intKey, Storing: ${prefs.getString(cacheKeys.elementAt(k))} with key: $intKey');
-          prefs.setString(
-              intKey.toString(),
-              prefs.getString(
-                  (cacheKeys.elementAt(k)))); // store old value with new key
+          print('key was changed from ${tempKeys[count]} to $intKey, Storing: ${prefs.getString(cacheKeys.elementAt(k))} with key: $intKey');
+          prefs.setString(intKey.toString(), prefs.getString((cacheKeys.elementAt(k)))); // store old value with new key
 
           setState(() {
-            cells[intKey - getCurrentHour()] = prefs.getString(cacheKeys
-                .elementAt(k)); // Update cell array with new key & old value
-          });
+            cells[intKey - getCurrentHour()] = prefs.getString(cacheKeys.elementAt(k)); // Update cell array with new key & old value
+           });
 
           prefs.remove(cacheKeys.elementAt(k)); // Remove old key
           count += 1;

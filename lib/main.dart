@@ -65,7 +65,7 @@ class _TableViewState extends State<TableView> {
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings);
-    
+
     /// load Calendar data and cell data
     loadCalendar(setState);
     loadCalendarTomorrow(setState);
@@ -84,9 +84,9 @@ class _TableViewState extends State<TableView> {
     return ListView.builder(// Makes the cells
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
         physics: const BouncingScrollPhysics(),
-        itemCount: getArrayLength() + 1, // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
+        itemCount: getArrayLength(), // from 0 to the amount of cells there should be (current hour until tomorrow 11pm)
         itemBuilder: (context, index) {
-          if (index == 0) {// First element is today section
+          if (allTimeLabels[index] == allTimeLabels[0]) {// First element is today section
             return Padding(
               padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
               child: ListTile(
@@ -134,11 +134,24 @@ class _TableViewState extends State<TableView> {
               ),
             );
           } // else if end
-          
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            child: _buildBlock(context, index),
-          );
+
+          else if (allTimeLabels[index + getCurrentHour()] == 'adsBanner') {
+            print('ADS');
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 32, 0, 0),
+              child: new AdmobBanner(
+                adUnitId: getBannerTestId(),
+                adSize: AdmobBannerSize.BANNER,
+              ),
+            );
+          }
+
+          else {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+              child: _buildBlock(context, index),
+            );
+          }
         } // Item build // end
     ); // ListView.builder // end
   } // Widget _myListView() // end
