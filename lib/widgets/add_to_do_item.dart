@@ -29,7 +29,6 @@ TextEditingController _placeHolder(cellValue) {
   return textController;
 }
 
-
 class AddDialog extends StatefulWidget {
   /// initial selection for the slider
 
