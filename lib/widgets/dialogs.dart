@@ -7,6 +7,12 @@ import '../cache_data.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
 
+TextEditingController placeHolder(cellValue) {
+  var textController = new TextEditingController();
+  textController.text = edit == true ? cellValue : '';
+  return textController;
+
+}
 addDialog(context, index, setState)  {
   String input = "";
 
@@ -22,11 +28,12 @@ addDialog(context, index, setState)  {
         content: new Row(
           children: <Widget>[
             new Expanded(
-              child: new TextField(
-                cursorColor: Colors.orange,
-                autofocus: true,
-                decoration: new InputDecoration(hintText: edit == true ? cells[index] : 'e.g. Have breakfast'),
-                onChanged: (value) => input = value // Update the empty label array with the value they have entered
+              child:  new TextField(
+                  decoration: new InputDecoration(hintText: 'e.g. Doctors Appointment'),
+                  controller: placeHolder(cells[index]),
+                  cursorColor: Colors.orange,
+                  autofocus: true,
+                  onChanged: (value) => input = value // Update the empty label array with the value they have entered
               ),
             )
           ],
@@ -74,6 +81,7 @@ editDialog(context, currentHourKey, setState) async  {
                   onTap: () {
                     Navigator.of(context).pop();
                     edit = true;
+                    placeHolder(cells[currentHourKey]);
                     addDialog(context, currentHourKey, setState);
                   }
               ),
