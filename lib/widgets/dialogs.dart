@@ -9,9 +9,7 @@ var edit = false; // Check if user is editing a cell and not adding, used to edi
 
 TextEditingController placeHolder(cellValue) {
   var textController = new TextEditingController();
-
   textController.text = edit == true ? cellValue : '';
-  
   return textController;
 
 }
