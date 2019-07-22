@@ -138,7 +138,7 @@ class _TableViewState extends State<TableView> {
           else if (allTimeLabels[index + getCurrentHour()] == 'adsBanner') {
             print('ADS');
             return Padding(
-              padding: const EdgeInsets.fromLTRB(0, 32, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
               child: new AdmobBanner(
                 adUnitId: getBannerTestId(),
                 adSize: AdmobBannerSize.BANNER,
