@@ -6,15 +6,15 @@ import '../palette.dart';
 import '../cache_data.dart';
 
 var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
+var textController = new TextEditingController();
 
 TextEditingController placeHolder(cellValue) {
-  var textController = new TextEditingController();
   textController.text = edit == true ? cellValue : '';
   return textController;
-
 }
+
 addDialog(context, index, setState)  {
-  String input = "";
+  String input = placeHolder(cells[index]).text;
 
   return showDialog<void>(
     context: context,
@@ -29,8 +29,8 @@ addDialog(context, index, setState)  {
           children: <Widget>[
             new Expanded(
               child:  new TextField(
-                  decoration: new InputDecoration(hintText: 'e.g. Doctors Appointment'),
                   controller: placeHolder(cells[index]),
+                  decoration: new InputDecoration(hintText: 'e.g. Breakfast'),
                   cursorColor: Colors.orange,
                   autofocus: true,
                   onChanged: (value) => input = value // Update the empty label array with the value they have entered
@@ -43,6 +43,7 @@ addDialog(context, index, setState)  {
             textColor: Colors.grey,
             child: new Text("Close"),
             onPressed: () {
+              edit = false;
               Navigator.of(context).pop();
             },
           ),
@@ -67,7 +68,6 @@ addDialog(context, index, setState)  {
 
 editDialog(context, currentHourKey, setState) async  {
   final prefs = await SharedPreferences.getInstance();
-
   showModalBottomSheet(
       context: context,
       builder: (BuildContext bc){
@@ -81,7 +81,6 @@ editDialog(context, currentHourKey, setState) async  {
                   onTap: () {
                     Navigator.of(context).pop();
                     edit = true;
-                    placeHolder(cells[currentHourKey]);
                     addDialog(context, currentHourKey, setState);
                   }
               ),

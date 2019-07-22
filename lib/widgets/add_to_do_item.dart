@@ -3,9 +3,33 @@ import 'to_do_list.dart';
 import '../palette.dart';
 import 'bottom_navbar.dart';
 
+var input = '';
+var placeHolderVar = _placeHolder('');
+var runOnce = false;
+
 List<String> priorityLabels = ['No Priority', 'Low Priority', 'Medium Priority', 'High Priority'];
 // move the dialog into it's own stateful widget.
 // It's completely independent from your page
+
+
+checkInput() {
+   if (edit == true && editIndex != -1){
+    input = _placeHolder(todoItems[editIndex]).text;
+    placeHolderVar = _placeHolder(todoItems[editIndex]);
+  }
+   else {
+     input = _placeHolder('').text;
+     placeHolderVar = _placeHolder('');
+   }
+}
+
+TextEditingController _placeHolder(cellValue) {
+  if (cellValue != null || cellValue != '')
+    textController.text = edit == true ? cellValue : '';
+  return textController;
+}
+
+
 class AddDialog extends StatefulWidget {
   /// initial selection for the slider
 
@@ -17,7 +41,16 @@ class _AddDialogState extends State<AddDialog> {
   /// current selection of the slider
   double sliderVal = 0;
   var displayPriorityLabel = 'No Priority';
-  var input = '';
+
+  void _addItemAndPriority() {
+    setState(() => edit == true ? // If
+    todoItems[editIndex] = input : // True
+    todoItems.add(input)); // False
+
+    setState(() => edit == true ?
+    priorityList[editIndex] = displayPriorityLabel :
+    priorityList.add(displayPriorityLabel));
+  }
 
 
   void _sortList() {
@@ -25,7 +58,6 @@ class _AddDialogState extends State<AddDialog> {
     List<String> lowP = [];
     List<String> medP = [];
     List<String> highP = [];
-
     List<String> taskNoP = [];
     List<String> taskLowP = [];
     List<String> taskMedP = [];
@@ -56,14 +88,13 @@ class _AddDialogState extends State<AddDialog> {
     priorityList = [highP, medP, lowP, noP].expand((x) => x).toList();
     saveList('savedToDoList', todoItems);
     saveList('savedToDoPriorities', priorityList);
-
-
   }
 
   _updateLabel() {
     if  (sliderVal <= 2) {
       displayPriorityLabel = priorityLabels[0];
-    } else if (sliderVal > 2 && sliderVal < 5)
+    }
+    else if (sliderVal > 2 && sliderVal < 5)
       displayPriorityLabel = priorityLabels[1];
     else if (sliderVal > 4 && sliderVal < 7)
       displayPriorityLabel = priorityLabels[2];
@@ -71,8 +102,17 @@ class _AddDialogState extends State<AddDialog> {
       displayPriorityLabel = priorityLabels[3];
   }
 
+
   @override
   Widget build(BuildContext context) {
+
+    /// if we keep running check input then when we interact with the widget,
+    /// the place holder value resets
+    if (runOnce == false) {
+      checkInput();
+      runOnce = true;
+    }
+
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: new Text('What\'s on your to do list?'),
@@ -88,9 +128,9 @@ class _AddDialogState extends State<AddDialog> {
             new TextField(
                 cursorColor: primaryLightColor,
                 autofocus: true,
+                controller: placeHolderVar,
                 decoration: new InputDecoration(hintText: 'e.g. Clean the house'),
-                onChanged: (value) => input =
-                    value // Update the empty label array with the value they have entered
+                onChanged: (value) => input = value // Update the empty label array with the value they have entered
                 ),
             new Slider(
               value: sliderVal,
@@ -117,6 +157,9 @@ class _AddDialogState extends State<AddDialog> {
           textColor: Colors.grey,
           child: new Text("Close"),
           onPressed: () {
+            edit = false;
+            editIndex = -1;
+            runOnce = false;
             Navigator.of(context).pop();
           },
         ),
@@ -124,15 +167,12 @@ class _AddDialogState extends State<AddDialog> {
           textColor: primaryColor,
           child: new Text("Add"),
           onPressed: () {
-            /// SORT THEM
-
-            setState(() => todoItems.add(input));
-            setState(() => priorityList.add(displayPriorityLabel));
+            _addItemAndPriority();
             _sortList();
-
-
+            edit = false;
+            editIndex = -1;
+            runOnce = false;
             Navigator.pop(context, sliderVal);
-            selectedIndex = 0;
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomePage()));
           },

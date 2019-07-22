@@ -8,6 +8,11 @@ import 'add_to_do_item.dart';
 List<String> todoItems = [];
 List<String> priorityList = [];
 
+// Used for the placeholder text
+var textController = new TextEditingController();
+var edit = false; // Check if user is editing a cell and not adding, used to edit the hintText message
+var editIndex = -1;
+
 toDoListMain() async {
   final prefs = await SharedPreferences.getInstance();
   todoItems = prefs.getStringList('savedToDoList');
@@ -85,15 +90,14 @@ class TodoListState extends State<TodoList> {
             child: new Wrap(
               children: <Widget>[
                 new ListTile(
-                    trailing: new Icon(Icons.arrow_forward),
-                    title: new Text('Add to Current Hour Block'),
-                    onTap: () {
-                      setState(() {
-                        cells[1] = toDoItem;
-                      });
-                      save(timeKeys[getCurrentHour() + 1], toDoItem);
-                      Navigator.of(context).pop();
-                    }),
+                  trailing: new Icon(Icons.edit),
+                  title: new Text('Edit'), /// IMPORTANT
+                  onTap: () {
+                    edit = true; // Set edit mode to true
+                    editIndex = index; // Store index of the selected cell
+                    _showAddDialog();
+                  }
+                ),
                 new ListTile(
                     trailing: new Icon(Icons.done),
                     title: new Text('Clear'),
@@ -104,10 +108,15 @@ class TodoListState extends State<TodoList> {
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
-                  trailing: new Icon(Icons.edit),
-                  title: new Text('Edit'),
-                  onTap: () => _editDialog(context, index),
-                ),
+                    trailing: new Icon(Icons.arrow_forward),
+                    title: new Text('Add to Current Hour Block'),
+                    onTap: () {
+                      setState(() {
+                        cells[1] = toDoItem;
+                      });
+                      save(timeKeys[getCurrentHour() + 1], toDoItem);
+                      Navigator.of(context).pop();
+                    }),
                 new ListTile(
                   trailing: new Icon(Icons.cancel),
                   title: new Text('Cancel'),
@@ -174,56 +183,56 @@ class TodoListState extends State<TodoList> {
     );
   }
 
-  _editDialog(BuildContext context, index) async {
-    var input = '';
-
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: new Text('What\'s on your to do list?'),
-            content: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new TextField(
-                      cursorColor: primaryColor,
-                      autofocus: true,
-                      decoration: new InputDecoration(hintText: cells[index]),
-                      onChanged: (value) => input =
-                          value // Update the empty label array with the value they have entered
-                      ),
-                )
-              ],
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                textColor: Colors.grey,
-                child: new Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              new FlatButton(
-                textColor: primaryColor,
-                child: new Text("Add"),
-                onPressed: () {
-                  setState(() => todoItems[index] = input);
-//                  setState(() => priorityList[index] = toDoPriority);
-                  print(todoItems);
-                  print(priorityList);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
-  }
+//  _editDialog(BuildContext context, index) async {
+////    var input = _placeHolder(todoItems[index]).text;
+//
+//    return showDialog(
+//        context: context,
+//        builder: (context) {
+//          return AlertDialog(
+//            shape:
+//                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+//            title: new Text('What\'s on your to do list?'),
+//            content: new Row(
+//              children: <Widget>[
+//                new Expanded(
+//                  child: new TextField(
+//                      cursorColor: primaryColor,
+//                      autofocus: true,
+////                      controller: _placeHolder(todoItems[index]),
+////                      onChanged: (value) => input = value // Update the empty label array with the value they have entered
+//                      ),
+//                )
+//              ],
+//            ),
+//            actions: <Widget>[
+//              new FlatButton(
+//                textColor: Colors.grey,
+//                child: new Text("Close"),
+//                onPressed: () {
+//                  edit = false;
+//                  Navigator.of(context).pop();
+//                },
+//              ),
+//              new FlatButton(
+//                textColor: primaryColor,
+//                child: new Text("Add"),
+//                onPressed: () {
+////                  setState(() => todoItems[index] = input);
+////                  setState(() => priorityList[index] = toDoPriority);
+//                  print(todoItems);
+//                  print(priorityList);
+//                  Navigator.of(context).pop();
+//                  Navigator.of(context).pop();
+//
+//                },
+//              ),
+//            ],
+//          );
+//        });
+//  }
 
   void _showAddDialog() async {
-    // <-- note the async keyword here
-
     // this will contain the result from Navigator.pop(context, result)
     await showDialog<double>(
       // Waits for the result of the slider
@@ -247,6 +256,13 @@ class TodoListState extends State<TodoList> {
         ));
   }
 }
+
+//TextEditingController _placeHolder(cellValue) {
+//  textController.text = cellValue;
+//  return textController;
+//}
+
+
 
 String _capitalisedTitle(String title) {
   var capitalisedTitle = "";
