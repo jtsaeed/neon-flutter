@@ -185,7 +185,9 @@ loadCells(setState) async {
     } else {
       // If the  cached date is equal to the date from 2 days ago or more, then clear cache
       print('Havent been active for 2days!');
-      prefs.clear();
+      for (int k = 0; k < timeKeys.length; k++) { // Just remove cached keys, not TODO items, calendars etc!
+        prefs.remove((timeKeys[k].toString()));
+      }
       saveDate(); // Save the current data, as this is the today section now
 
     }
