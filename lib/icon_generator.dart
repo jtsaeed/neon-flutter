@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'palette.dart';
 import 'load_calendar.dart';
 
+
 Image _bank =
     new Image.asset("resources/icons/bank@3x.png", color: lightGrayColor);
 Image _brush =
@@ -48,17 +49,19 @@ Image _work =
     new Image.asset("resources/icons/work@3x.png", color: lightGrayColor);
 
 Image generateIcon(String s) {
+
+
   var title = s.toLowerCase();
 
-  for (int c = 0; c < todayCalEvents.length; c++)
-    for (int e = 0; e < todayCalEvents[c].length; e++)
-      if (title.contains(todayCalEvents[c][e].title))
-        return _calendar;
-
-  for (int c = 0; c < tomorrowCalEvents.length; c++)
-    for (int e = 0; e < tomorrowCalEvents[c].length; e++)
-      if (title.contains(tomorrowCalEvents[c][e].title))
-        return _calendar;
+//  for (int c = 0; c < todayCalEvents.length; c++)
+//    for (int e = 0; e < todayCalEvents[c].length; e++)
+//      if (title.contains(todayCalEvents[c][e].title.toLowerCase()))
+//        return _calendar;
+//
+//  for (int c = 0; c < tomorrowCalEvents.length; c++)
+//    for (int e = 0; e < tomorrowCalEvents[c].length; e++)
+//      if (title.contains(tomorrowCalEvents[c][e].title))
+//        return _calendar;
 
 
   if (title.contains("bank") ||
